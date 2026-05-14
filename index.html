@@ -1,9 +1,178 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Entre Rios – Tradição agrícola e sustentabilidade no coração do Paraná." />
+  <title>Entre Rios – Tradição & Sustentabilidade</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Google Fonts: Playfair Display + Source Serif 4 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet" />
 </head>
+<body>
+
+  <!-- ===== ACESSIBILIDADE: Barra de ferramentas ===== -->
+  <div class="a11y-bar" role="toolbar" aria-label="Ferramentas de acessibilidade">
+    <button class="a11y-btn" id="btn-font-dec" aria-label="Diminuir tamanho da fonte">A−</button>
+    <button class="a11y-btn" id="btn-font-inc" aria-label="Aumentar tamanho da fonte">A+</button>
+    <button class="a11y-btn" id="btn-contrast" aria-label="Alternar alto contraste">◐</button>
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar" role="banner">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo" aria-label="Início – Entre Rios">
+        <span class="logo-mark" aria-hidden="true">❧</span>
+        <span class="logo-text">Entre Rios</span>
+      </a>
+      <button class="navbar__toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menu de navegação">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </button>
+      <nav id="nav-menu" class="navbar__nav" role="navigation" aria-label="Navegação principal">
+        <ul class="nav__list" role="list">
+          <li><a href="index.html"    class="nav__link active" aria-current="page">Início</a></li>
+          <li><a href="historia.html" class="nav__link">História</a></li>
+          <li><a href="minijogo.html" class="nav__link">MiniJogo</a></li>
+          <li><a href="autor.html"    class="nav__link">Sobre o Autor</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__bg" aria-hidden="true">
+        <div class="hero__grain"></div>
+        <div class="hero__overlay"></div>
+        <!-- Partículas de trigo animadas -->
+        <div class="hero__particles" id="hero-particles"></div>
+      </div>
+      <div class="hero__content reveal">
+        <p class="hero__eyebrow">Guarapuava · Paraná · Brasil</p>
+        <h1 id="hero-title" class="hero__title">
+          A Terra que<br />
+          <em>Alimenta</em> o Futuro
+        </h1>
+        <p class="hero__subtitle">Entre Rios une a força da tradição agrícola centenária dos Suábios do Danúbio com práticas sustentáveis que moldam o amanhã.</p>
+        <a href="historia.html" class="btn-primary" aria-label="Conhecer a história de Entre Rios">Conhecer a História</a>
+      </div>
+      <div class="hero__scroll-hint" aria-hidden="true">
+        <span class="scroll-line"></span>
+        <span class="scroll-text">Role para explorar</span>
+      </div>
+    </section>
+
+    <!-- ===== NÚMEROS / STATS ===== -->
+    <section class="stats-band reveal" aria-label="Dados sobre Entre Rios">
+      <div id="stats-container" class="stats-grid" role="list">
+        <!-- Renderizado via JS -->
+      </div>
+    </section>
+
+    <!-- ===== SOBRE ===== -->
+    <section class="about section-pad reveal" aria-labelledby="about-title">
+      <div class="container grid-2col">
+        <div class="about__text">
+          <span class="section-tag" aria-hidden="true">Quem somos</span>
+          <h2 id="about-title" class="section-title">Uma comunidade<br />enraizada na terra</h2>
+          <p>Fundada em 1951 por imigrantes suábios do Danúbio que chegaram ao Brasil após a Segunda Guerra Mundial, Entre Rios se tornou um dos mais importantes núcleos agrícolas do Sul do país.</p>
+          <p>Hoje, com uma população de cerca de 6.000 habitantes distribuídos em seis colônias, a cooperativa AGRÁRIA lidera um modelo de desenvolvimento que combina alta produtividade com responsabilidade ambiental.</p>
+          <a href="historia.html" class="btn-secondary">Ver linha do tempo →</a>
+        </div>
+        <figure class="about__visual" aria-label="Campos de trigo de Entre Rios ao entardecer">
+          <div class="about__img-frame">
+            <div class="img-placeholder img-placeholder--golden" role="img" aria-label="Campos dourados de trigo com silos ao fundo">
+              <span class="img-icon" aria-hidden="true">🌾</span>
+            </div>
+          </div>
+          <figcaption class="about__caption">Campos de trigo – Colônia Vitória · AGRÁRIA</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ===== PILARES (TABS / ACORDEÃO) ===== -->
+    <section class="pillars section-pad" aria-labelledby="pillars-title">
+      <div class="container">
+        <span class="section-tag" aria-hidden="true">Pilares</span>
+        <h2 id="pillars-title" class="section-title section-title--center">O que nos move</h2>
+
+        <!-- Abas desktop, acordeão mobile -->
+        <div class="tabs reveal" role="tablist" aria-label="Pilares de Entre Rios">
+          <!-- Tab buttons renderizados via JS -->
+          <div id="tab-buttons" role="tablist"></div>
+          <div id="tab-panels" class="tabs__panels"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== GALERIA / CARROSSEL ===== -->
+    <section class="gallery section-pad" aria-labelledby="gallery-title">
+      <div class="container">
+        <span class="section-tag" aria-hidden="true">Galeria</span>
+        <h2 id="gallery-title" class="section-title section-title--center">Entre Rios em imagens</h2>
+        <div class="carousel reveal" role="region" aria-label="Carrossel de fotos de Entre Rios" aria-roledescription="carrossel">
+          <div class="carousel__track" id="carousel-track">
+            <!-- Renderizado via JS -->
+          </div>
+          <div class="carousel__controls">
+            <button class="carousel__btn" id="carousel-prev" aria-label="Slide anterior">&#8592;</button>
+            <div class="carousel__dots" id="carousel-dots" role="tablist" aria-label="Navegação do carrossel"></div>
+            <button class="carousel__btn" id="carousel-next" aria-label="Próximo slide">&#8594;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SUSTENTABILIDADE (CARDS DINÂMICOS) ===== -->
+    <section class="sustentabilidade section-pad" aria-labelledby="sust-title">
+      <div class="container">
+        <span class="section-tag" aria-hidden="true">Sustentabilidade</span>
+        <h2 id="sust-title" class="section-title section-title--center">Práticas para o futuro</h2>
+        <div class="cards-grid reveal" id="cards-container" role="list">
+          <!-- Renderizado via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CTA BANNER ===== -->
+    <section class="cta-band reveal" aria-labelledby="cta-title">
+      <div class="container cta-band__inner">
+        <div>
+          <h2 id="cta-title" class="cta-band__title">Explore a história completa</h2>
+          <p class="cta-band__sub">Da chegada dos imigrantes às conquistas do século XXI.</p>
+        </div>
+        <a href="historia.html" class="btn-primary btn-primary--light" aria-label="Ir para página de história">Ir para História →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <span class="logo-mark" aria-hidden="true">❧</span>
+        <span class="logo-text">Entre Rios</span>
+        <p class="footer__tagline">Tradição agrícola e sustentabilidade.</p>
+      </div>
+      <nav class="footer__nav" aria-label="Links do rodapé">
+        <ul role="list">
+          <li><a href="index.html">Início</a></li>
+          <li><a href="historia.html">História</a></li>
+          <li><a href="minijogo.html">MiniJogo</a></li>
+          <li><a href="autor.html">Sobre o Autor</a></li>
+        </ul>
+      </nav>
+      <p class="footer__copy">© 2025 Entre Rios · Guarapuava, PR</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
