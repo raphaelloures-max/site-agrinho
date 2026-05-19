@@ -481,21 +481,28 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
     track.appendChild(el);
   });
 
-  // Renderiza dots
-  CAROUSEL_DATA.forEach((_, i) => {
-    const dot = createElement('button', {
-      class: `carousel__dot${i === 0 ? ' active' : ''}`,
-      role:  'tab',
-      'aria-label': `Ir para slide ${i + 1}`,
-      'aria-selected': i === 0 ? 'true' : 'false',
-    });
-    dot.addEventListener('click', () => goTo(i));
-    dotsEl && dotsEl.appendChild(dot);
-  });
-
   function getVisibleCount() {
     return window.innerWidth >= 960 ? 3 : 1;
   }
+
+  // Renderiza dots apenas para posições alcançáveis (não um por slide)
+  function buildDots() {
+    if (!dotsEl) return;
+    dotsEl.innerHTML = '';
+    const positions = CAROUSEL_DATA.length - getVisibleCount() + 1;
+    for (let i = 0; i < positions; i++) {
+      const dot = createElement('button', {
+        class: `carousel__dot${i === 0 ? ' active' : ''}`,
+        role:  'tab',
+        'aria-label': `Ir para posição ${i + 1}`,
+        'aria-selected': i === 0 ? 'true' : 'false',
+      });
+      dot.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(dot);
+    }
+  }
+
+  buildDots();
 
   function goTo(index) {
     const max = CAROUSEL_DATA.length - getVisibleCount();
@@ -545,8 +552,8 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
     stopAuto();
   });
 
-  // Responsividade
-  window.addEventListener('resize', () => goTo(current));
+  // Responsividade – reconstrói dots pois a qtd visível muda
+  window.addEventListener('resize', () => { buildDots(); goTo(current); });
 
   startAuto();
 })();
@@ -559,12 +566,13 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
   if (!container) return;
 
   ACCORDION_DATA.forEach((item, i) => {
+    const isFirst = i === 0;
     const el = createElement('div', { class: 'accordion__item reveal', role: 'listitem' });
     el.innerHTML = `
       <button
         class="accordion__trigger"
         id="${item.id}-btn"
-        aria-expanded="${i === 0 ? 'true' : 'false'}"
+        aria-expanded="${isFirst ? 'true' : 'false'}"
         aria-controls="${item.id}-panel"
       >
         ${item.title}
@@ -575,17 +583,14 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
         class="accordion__panel"
         role="region"
         aria-labelledby="${item.id}-btn"
-        aria-hidden="${i === 0 ? 'false' : 'true'}"
+        aria-hidden="${isFirst ? 'false' : 'true'}"
+        style="${isFirst ? 'display:block;' : 'display:none;'}"
       >
         ${item.content}
       </div>
     `;
     container.appendChild(el);
   });
-
-  // Abre o primeiro por padrão
-  const firstPanel = container.querySelector('.accordion__panel');
-  if (firstPanel) firstPanel.style.display = 'block';
 
   // Interatividade
   $$('.accordion__trigger', container).forEach(btn => {
@@ -594,7 +599,7 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
       const panelId  = btn.getAttribute('aria-controls');
       const panel    = document.getElementById(panelId);
 
-      // Fecha todos (comportamento accordion)
+      // Fecha todos
       $$('.accordion__trigger', container).forEach(b => {
         b.setAttribute('aria-expanded', 'false');
         const p = document.getElementById(b.getAttribute('aria-controls'));
