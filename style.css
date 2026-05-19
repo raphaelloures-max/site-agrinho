@@ -1050,8 +1050,6 @@ body.high-contrast .btn-secondary { border-color: #000; color: #000; }
   animation: fadeSlideIn var(--dur-med) var(--ease-out);
 }
 
-.accordion__panel[aria-hidden="false"] { display: block; }
-
 /* ============================================================
    19. FOOTER
    ============================================================ */
