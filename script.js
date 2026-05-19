@@ -11,47 +11,47 @@
    ============================================================ */
 
 const STATS_DATA = [
-  { number: '6.000',  label: 'habitantes' },
-  { number: '6',      label: 'colônias' },
+  { number: '~9.000', label: 'habitantes' },
+  { number: '5',      label: 'colônias' },
   { number: '1951',   label: 'ano de fundação' },
-  { number: '70+',    label: 'anos de história' },
+  { number: '74+',    label: 'anos de história' },
 ];
 
 const CARDS_DATA = [
   {
     icon: '🌱',
     title: 'Plantio Direto',
-    text: 'A AGRÁRIA foi pioneira no Brasil na adoção do sistema plantio direto, que conserva o solo, reduz a erosão e sequestra carbono.',
+    text: 'A AGRÁRIA foi pioneira no Brasil na adoção do sistema de plantio direto, desenvolvido nos anos 1970, que conserva o solo, reduz a erosão e hoje abrange milhões de hectares no país.',
     tag: 'Solo',
   },
   {
+    icon: '🌾',
+    title: 'Cevada e Malte',
+    text: 'Entre Rios é o principal polo de cevada do Brasil. A Agrária Malte, localizada em Grandes Rios (PR), é a maior maltaria da América Latina, abastecendo as principais cervejarias do país.',
+    tag: 'Produção',
+  },
+  {
+    icon: '🌿',
+    title: 'Pesquisa Agropecuária',
+    text: 'A FAPA (Fundação Agrária de Pesquisa Agropecuária) desenvolve variedades adaptadas ao clima subtropical de Guarapuava, elevando a produtividade de trigo, soja, milho e cevada.',
+    tag: 'Pesquisa',
+  },
+  {
     icon: '💧',
-    title: 'Gestão de Recursos Hídricos',
-    text: 'Corredores de vegetação nativa protegem nascentes e rios. O uso racional da água é monitorado em toda a cadeia produtiva.',
+    title: 'Preservação Hídrica',
+    text: 'Corredores de vegetação nativa protegem as nascentes dos rios Jordão e Pinhão, que delimitam o distrito. O uso racional da água é monitorado em toda a cadeia produtiva da cooperativa.',
     tag: 'Água',
   },
   {
-    icon: '☀️',
-    title: 'Energia Renovável',
-    text: 'Painéis solares e biodigestores transformam resíduos agrícolas em energia limpa, reduzindo a pegada de carbono das operações.',
-    tag: 'Energia',
-  },
-  {
-    icon: '🌾',
-    title: 'Agricultura de Precisão',
-    text: 'Tecnologia de sensoriamento remoto e drones orientam a aplicação de insumos, evitando desperdício e aumentando a eficiência.',
-    tag: 'Tecnologia',
-  },
-  {
     icon: '🌳',
-    title: 'Reflorestamento',
-    text: 'Mais de 3.000 hectares de matas nativas foram restaurados ao longo dos afluentes do Rio Jordão, preservando a biodiversidade.',
+    title: 'Mata Nativa',
+    text: 'Mais de 30% da área do distrito é coberta por vegetação nativa, superando as exigências do Código Florestal. O horto florestal da Agrária, ativo desde 1992, distribui mudas para toda a região.',
     tag: 'Biodiversidade',
   },
   {
     icon: '🤝',
-    title: 'Economia Solidária',
-    text: 'A cooperativa distribui resultados entre os associados, investe em educação e mantém serviços de saúde para toda a comunidade.',
+    title: 'Cooperativismo',
+    text: 'A Cooperativa Agrária distribui resultados entre os associados e mantém serviços de saúde, educação e cultura para toda a comunidade das cinco colônias de Entre Rios.',
     tag: 'Comunidade',
   },
 ];
@@ -95,28 +95,28 @@ const PILLARS_DATA = [
     label: '🌾 Agricultura',
     icon: '🌾',
     title: 'Excelência Agrícola',
-    text: 'Entre Rios é uma das maiores produtoras de trigo do Brasil. A AGRÁRIA introduziu variedades adaptadas ao clima subtropical, combinando genética avançada com o respeito à rotação de culturas e à saúde do solo.',
+    text: 'Entre Rios é um dos maiores polos produtores de trigo e cevada do Brasil. A AGRÁRIA introduziu variedades adaptadas ao clima subtropical de Guarapuava, combinando genética avançada com rotação de culturas e saúde do solo. As culturas principais são soja, milho, trigo e cevada.',
   },
   {
     id: 'pilar-2',
-    label: '🏫 Educação',
-    icon: '🏫',
-    title: 'Educação de Qualidade',
-    text: 'A Fundação Educacional de Entre Rios (FUNDETEC) opera escolas de ensino fundamental ao técnico, formando jovens agricultores com visão de mundo global e raízes locais.',
+    label: '🏘️ As Colônias',
+    icon: '🏘️',
+    title: 'As Cinco Colônias',
+    text: 'O distrito de Entre Rios é formado por cinco colônias eslavo-germânicas: Vitória (sede da Cooperativa Agrária), Jordãozinho, Cachoeira, Socorro e Samambaia. Cada uma preserva sua identidade, dialeto e tradições trazidas da Europa pelos 500 famílias pioneiras.',
   },
   {
     id: 'pilar-3',
     label: '🌿 Meio Ambiente',
     icon: '🌿',
     title: 'Compromisso Ambiental',
-    text: 'Desde a década de 1970, Entre Rios investe em preservação ambiental. Hoje, mais de 30% de sua área é coberta por vegetação nativa, superando exigências do Código Florestal.',
+    text: 'Mais de 30% da área do distrito é coberta por vegetação nativa, superando as exigências do Código Florestal. O distrito é delimitado pelos rios Jordão e Pinhão, e o horto florestal da Agrária, ativo desde 1992, já recebeu doações de espécies de todo o Brasil e da Europa.',
   },
   {
     id: 'pilar-4',
     label: '🎭 Cultura',
     icon: '🎭',
     title: 'Identidade Cultural',
-    text: 'As festas tradicionais, a gastronomia suábia, a arquitetura enxaimel e o dialeto dos mais velhos mantêm viva a memória de um povo que reconstruiu sua vida em terras paranaenses.',
+    text: 'Os festivais tradicionais, a gastronomia suábia (Schnitzel, Maultaschen, Strudel), a arquitetura enxaimel e o dialeto Donauschwäbisch dos mais velhos mantêm viva a memória de um povo que reconstruiu sua vida nas terras do Paraná. A Fundação Cultural Suábio-Brasileira (FCSB), criada em 2001, coordena essa preservação.',
   },
 ];
 
@@ -124,32 +124,32 @@ const TIMELINE_DATA = [
   {
     year: '1945–1950',
     title: 'A diáspora suábia',
-    text: 'Com o fim da Segunda Guerra, cerca de 4.500 famílias suábias são expulsas do leste europeu. Após anos em campos de refugiados na Alemanha Ocidental, negociam com o governo brasileiro a vinda ao Paraná.',
+    text: 'Com o fim da Segunda Guerra, o regime comunista expulsou os suábios do leste europeu (Hungria, Croácia, Romênia). Acolhidos na Áustria, após sete anos em campos de refugiados, a "Ajuda Suíça à Europa" negocia sua vinda ao Brasil. O engenheiro agrônomo Michael Moor lidera a seleção das famílias e das terras em Guarapuava.',
   },
   {
-    year: '1951',
+    year: 'Maio de 1951',
     title: 'Chegada e fundação',
-    text: 'Em 26 de março, os primeiros colonos chegam à região de Guarapuava. Encontram mata fechada e precisam abrir caminhos, construir casas e preparar a terra antes do inverno.',
+    text: 'As primeiras 500 famílias suábias chegam à região de Guarapuava, delimitada pelos rios Jordão e Pinhão. Encontram mata fechada e campos nativos. Antes mesmo de construir as casas, fundam a Cooperativa Agrária Mista de Entre Rios, presidida por Michael Moor. As cinco colônias — Vitória, Jordãozinho, Cachoeira, Socorro e Samambaia — começam a ser formadas.',
   },
   {
-    year: '1959',
-    title: 'Criação da AGRÁRIA',
-    text: 'A Cooperativa Agrária Mista Entre Rios Ltda. é fundada para organizar a produção, comercialização e beneficiamento dos produtos agrícolas, especialmente o trigo.',
+    year: '1962',
+    title: 'Criação oficial do distrito',
+    text: 'Pela lei estadual nº 4.583, de 27 de junho de 1962, o distrito de Entre Rios é oficialmente criado e anexado ao município de Guarapuava, situado a 18 km da sede municipal.',
   },
   {
     year: '1970s',
     title: 'Revolução do plantio direto',
-    text: 'Técnicos da AGRÁRIA e agricultores locais pioneiram o sistema plantio direto no Brasil, técnica que hoje está presente em 35 milhões de hectares no país.',
+    text: 'Técnicos da AGRÁRIA e agricultores locais são pioneiros do sistema de plantio direto no Brasil, técnica que hoje está presente em dezenas de milhões de hectares no país. A soja se consolida como cultura principal ao lado do trigo.',
   },
   {
-    year: '1990s',
-    title: 'Diversificação produtiva',
-    text: 'A cooperativa expande para cevada (abastecendo cervejarias), malte, aves e suínos, consolidando Entre Rios como polo agroindustrial completo.',
+    year: '1980s–1990s',
+    title: 'Diversificação e cevada',
+    text: 'A cooperativa expande para a cevada, abastecendo cervejarias, e inaugura a Agrária Malte, que se tornará a maior maltaria da América Latina, responsável por cerca de 30% da demanda nacional de malte.',
   },
   {
-    year: '2000s–hoje',
-    title: 'Era da sustentabilidade',
-    text: 'Certificações internacionais, energia renovável, agricultura de precisão e programas de educação ambiental posicionam Entre Rios como referência global em agropecuária sustentável.',
+    year: '2001 – hoje',
+    title: 'Cultura, pesquisa e sustentabilidade',
+    text: 'Criação da Fundação Cultural Suábio-Brasileira (FCSB) em Vitória para preservar o patrimônio suábio. A FAPA (Fundação Agrária de Pesquisa Agropecuária) posiciona Entre Rios como referência em pesquisa agrícola no Brasil, com certificações internacionais e agricultura de precisão.',
   },
 ];
 
@@ -157,22 +157,22 @@ const ACCORDION_DATA = [
   {
     id: 'acc-1',
     title: '🏠 Arquitetura enxaimel',
-    content: 'As casas de enxaimel (Fachwerkhaus) trazidas da Europa central distinguem as colônias de Entre Rios. Com estruturas de madeira expostas preenchidas por tijolos, o estilo sobreviveu e se adapta ao clima paranaense, sendo hoje patrimônio arquitetônico da região.',
+    content: 'As casas de enxaimel (Fachwerkhaus) trazidas da Europa central são marca registrada das colônias de Entre Rios. Com estruturas de madeira expostas preenchidas por tijolos, o estilo sobreviveu e se adaptou ao clima do Paraná, sendo hoje patrimônio arquitetônico da região. A Colônia Vitória concentra os exemplares mais bem preservados.',
   },
   {
     id: 'acc-2',
     title: '🥘 Gastronomia suábia',
-    content: 'Pratos como Schnitzel, Maultaschen (espécie de ravióli), Sauerkraut (chucrute artesanal) e Strudel convivem com a culinária paranaense, criando uma fusão única. Nos festivais, vinhos artesanais e cervejas produzidas localmente completam a mesa.',
+    content: 'Pratos como Schnitzel, Maultaschen (ravióli suábio), Sauerkraut artesanal e Strudel são parte do cotidiano das famílias. A ABSER (Associação Beneficente das Senhoras de Entre Rios) comercializa produtos artesanais como cerveja e vinho artesanal, geleias, mel e sabão caseiro, mantendo vivas as receitas dos pioneiros.',
   },
   {
     id: 'acc-3',
-    title: '🎵 Música e dança',
-    content: 'Os grupos de dança folclórica mantêm vivos os Ländler e as Polkas suábias. Instrumentos como o acordeão e o tuba integram bandas comunitárias que se apresentam nos festivais culturais anuais.',
+    title: '🎵 Música, dança e festivais',
+    content: 'Grupos de dança folclórica mantêm vivos os Ländler e as Polkas suábias desde os três anos de idade. Bandas comunitárias com acordeão e tuba se apresentam nos festivais anuais. As comemorações do aniversário de Entre Rios reúnem artistas da Alemanha e atraem visitantes de todo o Paraná.',
   },
   {
     id: 'acc-4',
-    title: '📚 Idioma e memória',
-    content: 'O "Donauschwäbisch" (dialeto suábio do Danúbio) ainda é falado pelas gerações mais antigas. Projetos de salvaguarda documentam esse patrimônio linguístico imaterial, com publicações bilíngues e acervos de história oral.',
+    title: '📚 Idioma, memória e museu',
+    content: 'O "Donauschwäbisch" (dialeto suábio do Danúbio) ainda é falado pelas gerações mais antigas. A Fundação Cultural Suábio-Brasileira (FCSB), criada em 2001 na Colônia Vitória, coordena a preservação do patrimônio imaterial. O Museu Histórico de Entre Rios, na Av. Michael Moor, 1951, guarda fotos, objetos e instalações que narram toda a trajetória da colonização.',
   },
 ];
 
