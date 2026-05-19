@@ -181,14 +181,15 @@ body.high-contrast .btn-secondary { border-color: #000; color: #000; }
   margin: 0 auto;
   height: 100%;
   padding: 0 var(--space-lg);
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-xl);
 }
 
 /* Logo */
 .navbar__logo {
+  grid-column: 1;
   display: flex;
   align-items: center;
   gap: var(--space-sm);
@@ -212,9 +213,9 @@ body.high-contrast .btn-secondary { border-color: #000; color: #000; }
 
 /* Nav links (desktop) */
 .navbar__nav {
-  flex: 1;
+  grid-column: 2;
   display: flex;
-  justify-content: center;   /* centraliza links horizontalmente */
+  justify-content: center;
 }
 
 .nav__list {
@@ -257,6 +258,8 @@ body.high-contrast .btn-secondary { border-color: #000; color: #000; }
 
 /* Hamburger (mobile) */
 .navbar__toggle {
+  grid-column: 3;
+  justify-self: end;
   display: none;
   flex-direction: column;
   gap: 5px;
@@ -1210,9 +1213,20 @@ body.high-contrast .btn-secondary { border-color: #000; color: #000; }
    23. MOBILE MENU
    ============================================================ */
 @media (max-width: 959px) {
-  .navbar__toggle { display: flex; }
+  .navbar__inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .navbar__toggle {
+    display: flex;
+    grid-column: unset;
+    justify-self: unset;
+  }
 
   .navbar__nav {
+    grid-column: unset;
     position: absolute;
     top: var(--navbar-h);
     left: 0; right: 0;
