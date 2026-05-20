@@ -600,9 +600,6 @@ const revealObserver = (() => {
     container.appendChild(el);
   });
 
-  // Garante que o container do acordeão seja visível imediatamente
-  container.classList.add('visible');
-  revealObserver.observe(container);
   $$('.accordion__trigger', container).forEach(btn => {
     btn.addEventListener('click', () => {
       const expanded = btn.getAttribute('aria-expanded') === 'true';
