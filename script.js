@@ -161,23 +161,23 @@ const TIMELINE_DATA = [
 const ACCORDION_DATA = [
   {
     id: 'acc-1',
-    title: '🏠 Arquitetura enxaimel',
-    content: 'As casas de enxaimel (Fachwerkhaus) trazidas da Europa central são marca registrada das colônias de Entre Rios. Com estruturas de madeira expostas preenchidas por tijolos, o estilo sobreviveu e se adaptou ao clima do Paraná, sendo hoje patrimônio arquitetônico da região. A Colônia Vitória concentra os exemplares mais bem preservados.',
+    title: '🌍 Por que Entre Rios é um exemplo nacional',
+    content: 'Entre Rios é reconhecida como uma das comunidades agrícolas mais sustentáveis do Brasil. Desde a chegada dos colonos suábios em 1951, a região desenvolveu um modelo único que combina alta produtividade com preservação ambiental e coesão social. A Cooperativa AGRÁRIA integra toda a cadeia produtiva — da semente à mesa — garantindo renda aos agricultores, preservação do solo e segurança alimentar para o país. Esse modelo está alinhado diretamente à ODS 2 da ONU: Fome Zero e Agricultura Sustentável, que propõe acabar com a fome, alcançar segurança alimentar, melhorar a nutrição e promover a agricultura sustentável até 2030.',
   },
   {
     id: 'acc-2',
-    title: '🥘 Gastronomia suábia',
-    content: 'Pratos como Schnitzel, Maultaschen (ravióli suábio), Sauerkraut artesanal e Strudel são parte do cotidiano das famílias. A ABSER (Associação Beneficente das Senhoras de Entre Rios) comercializa produtos artesanais como cerveja e vinho artesanal, geleias, mel e sabão caseiro, mantendo vivas as receitas dos pioneiros.',
+    title: '🌱 Plantio direto e conservação do solo',
+    content: 'A AGRÁRIA foi pioneira no Brasil na adoção do sistema de plantio direto, desenvolvido nas suas próprias áreas experimentais na década de 1970. A técnica consiste em semear sem revolver o solo, mantendo a palha da cultura anterior na superfície. Isso reduz drasticamente a erosão, conserva a umidade, aumenta a matéria orgânica e sequestra carbono. Hoje, essa prática é obrigatória para todos os associados da cooperativa e está presente em dezenas de milhões de hectares em todo o Brasil, sendo considerada uma das maiores contribuições brasileiras à agricultura sustentável mundial.',
   },
   {
     id: 'acc-3',
-    title: '🎵 Música, dança e festivais',
-    content: 'Grupos de dança folclórica mantêm vivos os Ländler e as Polkas suábias desde os três anos de idade. Bandas comunitárias com acordeão e tuba se apresentam nos festivais anuais. As comemorações do aniversário de Entre Rios reúnem artistas da Alemanha e atraem visitantes de todo o Paraná.',
+    title: '📋 Regras e práticas internas da AGRÁRIA',
+    content: 'A Cooperativa AGRÁRIA estabelece normas técnicas e ambientais rigorosas para todos os seus associados:<br/><br/><strong>• Rotação de culturas obrigatória:</strong> os agricultores alternam soja, milho, trigo e cevada nas mesmas áreas, evitando o esgotamento do solo e reduzindo o uso de defensivos.<br/><strong>• Análise de solo periódica:</strong> cada talhão é analisado regularmente para que a adubação seja feita de forma precisa, sem desperdício de insumos.<br/><strong>• Preservação de matas ciliares:</strong> faixas de vegetação nativa ao longo de rios e nascentes são obrigatórias, protegendo os recursos hídricos.<br/><strong>• Assistência técnica contínua:</strong> engenheiros agrônomos acompanham as propriedades ao longo do ano, orientando boas práticas e prevenindo problemas.<br/><strong>• Uso responsável de defensivos:</strong> a AGRÁRIA orienta e fiscaliza a aplicação de agroquímicos, priorizando produtos de menor impacto ambiental e respeitando os períodos de carência.',
   },
   {
     id: 'acc-4',
-    title: '📚 Idioma, memória e museu',
-    content: 'O "Donauschwäbisch" (dialeto suábio do Danúbio) ainda é falado pelas gerações mais antigas. A Fundação Cultural Suábio-Brasileira (FCSB), criada em 2001 na Colônia Vitória, coordena a preservação do patrimônio imaterial. O Museu Histórico de Entre Rios, na Av. Michael Moor, 1951, guarda fotos, objetos e instalações que narram toda a trajetória da colonização.',
+    title: '🔬 Pesquisa, inovação e cevada',
+    content: 'A FAPA (Fundação Agrária de Pesquisa Agropecuária), criada pela cooperativa, desenvolve variedades de trigo, cevada, soja e milho adaptadas ao clima subtropical de Guarapuava. Esse trabalho contínuo de melhoramento genético permite aumentar a produtividade sem ampliar a área plantada — conceito central da agricultura sustentável. A cevada cultivada em Entre Rios abastece a Agrária Malte, em Grandes Rios (PR), a maior maltaria da América Latina, que fornece malte para as principais cervejarias do Brasil. Toda a cadeia — da pesquisa ao processamento — acontece de forma integrada e sustentável dentro do modelo cooperativista.',
   },
 ];
 
