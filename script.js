@@ -58,37 +58,37 @@ const CARDS_DATA = [
 
 const CAROUSEL_DATA = [
   {
-    img: 'img_trigo.png',
+    img: 'img/img_trigo.png',
     title: 'Colheita do Trigo',
     caption: 'Colheitadeira percorre os campos dourados da Colônia Vitória – Entre Rios, Guarapuava.',
   },
   {
-    img: 'img_soja.png',
+    img: 'img/img_soja.png',
     title: 'Colheita de Soja',
     caption: 'Soja e trigo são as principais culturas da Cooperativa AGRÁRIA em Guarapuava.',
   },
   {
-    img: 'img_gado.png',
+    img: 'img/img_gado.png',
     title: 'Pecuária nas Colônias',
     caption: 'Gado leiteiro pasta nas colinas verdes, com a paisagem serrana de Entre Rios ao fundo.',
   },
   {
-    img: 'img_arquitetura.png',
+    img: 'img/img_arquitetura.png',
     title: 'Arquitetura Suábia',
     caption: 'Casas com estrutura enxaimel preservam a identidade arquitetônica dos imigrantes nas colônias.',
   },
   {
-    img: 'img_dancas.png',
+    img: 'img/img_dancas.png',
     title: 'Festival Cultural',
     caption: 'Danças folclóricas suábias reúnem centenas de pessoas no Centro de Eventos AGRÁRIA.',
   },
   {
-    img: 'img_moagem.png',
+    img: 'img/img_moagem.png',
     title: 'Moagem AGRÁRIA',
     caption: 'A Agrária Farinhas processa trigo produzido nas colônias, abastecendo o mercado nacional.',
   },
   {
-    img: 'img_mata.png',
+    img: 'img/img_mata.png',
     title: 'Floresta de Eucaliptos',
     caption: 'O horto florestal da Cooperativa AGRÁRIA preserva e distribui espécies nativas desde 1992.',
   },
