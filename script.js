@@ -58,34 +58,39 @@ const CARDS_DATA = [
 
 const CAROUSEL_DATA = [
   {
-    icon: '🌅',
-    bg: 'linear-gradient(135deg,#c8973a,#8a6835)',
+    img: 'img_trigo.png',
     title: 'Colheita do Trigo',
-    caption: 'Julho – Colônia Vitória · As colheitadeiras atravessam hectares de ouro.',
+    caption: 'Colheitadeira percorre os campos dourados da Colônia Vitória – Entre Rios, Guarapuava.',
   },
   {
-    icon: '🏘️',
-    bg: 'linear-gradient(135deg,#3a5c3e,#6b9c6f)',
+    img: 'img_soja.png',
+    title: 'Colheita de Soja',
+    caption: 'Soja e trigo são as principais culturas da Cooperativa AGRÁRIA em Guarapuava.',
+  },
+  {
+    img: 'img_gado.png',
+    title: 'Pecuária nas Colônias',
+    caption: 'Gado leiteiro pasta nas colinas verdes, com a paisagem serrana de Entre Rios ao fundo.',
+  },
+  {
+    img: 'img_arquitetura.png',
     title: 'Arquitetura Suábia',
-    caption: 'Casas enxaimel preservam a identidade arquitetônica dos imigrantes.',
+    caption: 'Casas com estrutura enxaimel preservam a identidade arquitetônica dos imigrantes nas colônias.',
   },
   {
-    icon: '🎶',
-    bg: 'linear-gradient(135deg,#4a3520,#7a5c44)',
+    img: 'img_dancas.png',
     title: 'Festival Cultural',
-    caption: 'Outubro Fest – danças, gastronomia e música trazem a Suábia ao Paraná.',
+    caption: 'Danças folclóricas suábias reúnem centenas de pessoas no Centro de Eventos AGRÁRIA.',
   },
   {
-    icon: '🏭',
-    bg: 'linear-gradient(135deg,#2e4a3e,#3a5c3e)',
+    img: 'img_moagem.png',
     title: 'Moagem AGRÁRIA',
-    caption: 'Farinha de trigo produzida na região abastece o Sul do Brasil.',
+    caption: 'A Agrária Farinhas processa trigo produzido nas colônias, abastecendo o mercado nacional.',
   },
   {
-    icon: '🌲',
-    bg: 'linear-gradient(135deg,#1a3a1e,#3a5c3e)',
-    title: 'Reserva de Mata Ciliar',
-    caption: 'Corredores ecológicos conectam fragmentos de Floresta com Araucária.',
+    img: 'img_mata.png',
+    title: 'Floresta de Eucaliptos',
+    caption: 'O horto florestal da Cooperativa AGRÁRIA preserva e distribui espécies nativas desde 1992.',
   },
 ];
 
@@ -471,10 +476,12 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
     });
     el.innerHTML = `
       <div class="carousel__img-wrap">
-        <div class="carousel__img-placeholder" style="background:${slide.bg}" role="img" aria-label="${slide.title}">
-          <span style="font-size:4rem" aria-hidden="true">${slide.icon}</span>
-          <span style="font-family:var(--font-display);color:#fff;font-size:1.2rem;font-weight:600;">${slide.title}</span>
-        </div>
+        <img
+          src="${slide.img}"
+          alt="${slide.title}"
+          style="width:100%;height:100%;object-fit:cover;display:block;"
+          loading="lazy"
+        />
       </div>
       <p class="carousel__caption">${slide.caption}</p>
     `;
