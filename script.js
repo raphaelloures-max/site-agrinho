@@ -300,20 +300,21 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 /* ============================================================
    5. SCROLL REVEAL – Intersection Observer
    ============================================================ */
-(function initScrollReveal() {
-  const reveals = $$('.reveal');
-  if (!reveals.length) return;
-
+const revealObserver = (() => {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        observer.unobserve(entry.target); // só anima uma vez
+        observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
 
-  reveals.forEach(el => observer.observe(el));
+  // Observa todos os .reveal existentes no DOM agora
+  $$('.reveal').forEach(el => observer.observe(el));
+
+  // Retorna função para observar novos elementos adicionados dinamicamente
+  return { observe: (el) => observer.observe(el) };
 })();
 
 /* ============================================================
@@ -574,7 +575,7 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
   ACCORDION_DATA.forEach((item, i) => {
     const isFirst = i === 0;
-    const el = createElement('div', { class: 'accordion__item reveal', role: 'listitem' });
+    const el = createElement('div', { class: 'accordion__item', role: 'listitem' });
     el.innerHTML = `
       <button
         class="accordion__trigger"
@@ -599,7 +600,9 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
     container.appendChild(el);
   });
 
-  // Interatividade
+  // Garante que o container do acordeão seja visível imediatamente
+  container.classList.add('visible');
+  revealObserver.observe(container);
   $$('.accordion__trigger', container).forEach(btn => {
     btn.addEventListener('click', () => {
       const expanded = btn.getAttribute('aria-expanded') === 'true';
