@@ -26,7 +26,8 @@
     #start-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,12,4,.72);border-radius:11px}
     #start-card{text-align:center;padding:2rem 2.5rem}
     #btn-start{background:#c8973a;color:#fff;border:none;border-radius:9px;padding:.6rem 2rem;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s}
-    #btn-start:hover{background:#e0a940}
+    #btn-start:hover:not(:disabled){background:#e0a940}
+    #btn-start:disabled{background:#7a6040;cursor:not-allowed;opacity:.7}
     .game-tip{font-size:.82rem;color:var(--color-bark,#5a3e28);opacity:.7;text-align:center}
   </style>
 </head>
@@ -267,6 +268,26 @@ function lerp(a,b,t){return a+(b-a)*t;}
 /* ── Carrega sprites externos (src definido no clique do botão) ── */
 const IMG_TRACTOR = new Image();
 const IMG_TREE    = new Image();
+
+/* Pré-carrega assim que a página abre — botão fica desabilitado até ficarem prontos */
+(function preload(){
+  const btn = document.getElementById('btn-start');
+  btn.disabled = true;
+  btn.textContent = 'Carregando…';
+
+  let ready = 0;
+  function check(){
+    ready++;
+    if(ready >= 2){
+      btn.disabled = false;
+      btn.innerHTML = '▶&nbsp; Iniciar';
+    }
+  }
+  IMG_TRACTOR.onload = IMG_TRACTOR.onerror = check;
+  IMG_TREE.onload    = IMG_TREE.onerror    = check;
+  IMG_TRACTOR.src = 'trator.png';
+  IMG_TREE.src    = 'arvore.png';
+})();
 
 /* ── Fundo rolante ── */
 function drawBG(){
@@ -517,43 +538,15 @@ CV.addEventListener('touchend',e=>{
   swipeY=null;
 },{passive:true});
 
-/* ── Arranca apenas quando o botão for clicado ── */
+/* ── Arranca apenas quando o botão for clicado (imagens já carregadas) ── */
 state = 'idle';
 
 document.getElementById('btn-start').addEventListener('click', function(){
-  const overlay = document.getElementById('start-overlay');
-
-  /* Carrega imagens e só inicia o loop após ambas estarem prontas */
-  let loaded = 0;
-  function onReady(){
-    loaded++;
-    if(loaded === 2){
-      overlay.style.display = 'none';
-      reset();
-      requestAnimationFrame(loop);
-    }
-  }
-  function onError(e){
-    console.warn('Sprite não carregado:', e.target.src, '— continuando sem ele');
-    onReady(); /* inicia mesmo assim */
-  }
-
-  if(IMG_TRACTOR.complete && IMG_TRACTOR.naturalWidth > 0 &&
-     IMG_TREE.complete    && IMG_TREE.naturalWidth    > 0){
-    /* já carregadas (cache) */
-    overlay.style.display = 'none';
-    reset();
-    requestAnimationFrame(loop);
-  } else {
-    IMG_TRACTOR.onload  = onReady;  IMG_TRACTOR.onerror = onError;
-    IMG_TREE.onload     = onReady;  IMG_TREE.onerror    = onError;
-    IMG_TRACTOR.src = 'trator.png';
-    IMG_TREE.src    = 'arvore.png';
-  }
+  document.getElementById('start-overlay').style.display = 'none';
+  reset();
+  requestAnimationFrame(loop);
 });
 })();
 </script>
-</body>
-</html>
 </body>
 </html>
