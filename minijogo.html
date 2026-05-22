@@ -1,14 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="MiniJogo – Entre Rios. Em breve." />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>MiniJogo – Entre Rios</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── página ── */
+    .game-section{background:var(--color-cream,#f5f0e8);padding:2rem 0 4rem}
+    .game-wrapper{max-width:800px;margin:0 auto;padding:0 1rem;display:flex;flex-direction:column;align-items:center;gap:1rem}
+    .game-header{text-align:center}
+    .game-header .section-tag{display:block;margin-bottom:.4rem}
+    .game-header h1{font-family:var(--font-display,'Playfair Display',serif);font-size:clamp(1.6rem,4vw,2.4rem);color:var(--color-earth,#3a2510);margin:0 0 .2rem}
+    .game-header p{font-size:.9rem;color:var(--color-bark,#5a3e28)}
+    /* ── HUD externo ── */
+    .game-hud{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+    .hud-box{background:var(--color-earth,#3a2510);color:#f5f0e8;border-radius:8px;padding:.35rem 1.2rem;font-family:var(--font-display,'Playfair Display',serif);font-size:.9rem;min-width:110px;text-align:center}
+    .hud-box span{display:block;font-size:1.4rem;font-weight:700;color:#c8973a;line-height:1.2}
+    /* ── canvas wrapper ── */
+    #game-container{position:relative;width:100%;max-width:760px;border-radius:14px;overflow:hidden;box-shadow:0 12px 48px rgba(58,37,16,.35);border:3px solid #c8973a}
+    #gameCanvas{display:block;width:100%;height:auto;cursor:default;filter:none!important;opacity:1!important}
+    .game-tip{font-size:.82rem;color:var(--color-bark,#5a3e28);opacity:.7;text-align:center}
+  </style>
 </head>
 <body>
 
@@ -24,24 +40,40 @@
         <span class="logo-mark" aria-hidden="true">❧</span>
         <span class="logo-text">Entre Rios</span>
       </a>
-      <button class="navbar__toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menu de navegação">
-        <span class="burger-line"></span>
-        <span class="burger-line"></span>
-        <span class="burger-line"></span>
+      <button class="navbar__toggle" id="nav-toggle" aria-expanded="false"
+              aria-controls="nav-menu" aria-label="Abrir menu de navegação">
+        <span class="burger-line"></span><span class="burger-line"></span><span class="burger-line"></span>
       </button>
       <nav id="nav-menu" class="navbar__nav" role="navigation" aria-label="Navegação principal">
         <ul class="nav__list" role="list">
           <li><a href="index.html"    class="nav__link">Início</a></li>
           <li><a href="historia.html" class="nav__link">História</a></li>
           <li><a href="minijogo.html" class="nav__link active" aria-current="page">MiniJogo</a></li>
-          <li><a href="projeto.html"    class="nav__link">Sobre o Projeto</a></li>
+          <li><a href="projeto.html"  class="nav__link">Sobre o Projeto</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <!-- Página intencionalmente em branco conforme especificação -->
-  <main id="main-content" style="min-height:60vh;"></main>
+  <main id="main-content">
+    <section class="game-section">
+      <div class="game-wrapper">
+        <div class="game-header">
+          <span class="section-tag">MiniJogo</span>
+          <h1>Trator Entre Rios 🚜</h1>
+          <p>Desvie das árvores e sobreviva o maior tempo possível!</p>
+        </div>
+        <div class="game-hud">
+          <div class="hud-box">Tempo<span id="hud-time">0s</span></div>
+          <div class="hud-box">Recorde<span id="hud-best">0s</span></div>
+        </div>
+        <div id="game-container">
+          <canvas id="gameCanvas" width="760" height="300"></canvas>
+        </div>
+        <p class="game-tip">⬆️ ⬇️ &nbsp;ou&nbsp; <strong>W / S</strong> para mudar de faixa &nbsp;·&nbsp; toque nos lados no mobile</p>
+      </div>
+    </section>
+  </main>
 
   <footer class="footer" role="contentinfo">
     <div class="container footer__inner">
@@ -63,5 +95,423 @@
   </footer>
 
   <script src="script.js"></script>
+<script>
+/* ============================================================
+   TRATOR ENTRE RIOS — Runner horizontal limpo
+   3 faixas · trator na esquerda · obstáculos da direita
+============================================================ */
+(function(){
+'use strict';
+
+const CV = document.getElementById('gameCanvas');
+const cx = CV.getContext('2d');
+const W  = CV.width;    // 760
+const H  = CV.height;   // 300
+
+const hudTime = document.getElementById('hud-time');
+const hudBest = document.getElementById('hud-best');
+
+/* ── Layout ── */
+const BORDER   = 32;          // altura da borda decorativa topo/base
+const TRACK_H  = H - BORDER*2;// 236px para as faixas
+const LANES    = 3;
+const LANE_H   = TRACK_H / LANES; // ~78px
+const TRACTOR_X = 90;
+const TRACTOR_S = 44;
+const TREE_S    = 40;
+
+function laneY(l){ return BORDER + l * LANE_H + LANE_H/2; }
+
+/* ── Cores das faixas — campo de trigo ── */
+const LANE_COLORS = ['#d9a825','#c99618','#d9a825'];
+const BORDER_COLOR = '#4d8a1a';    /* grama verde nas bordas */
+const DIVIDER_COLOR = '#8a6010';   /* terra/sulco entre faixas */
+
+/* ── Constantes ── */
+const SPEED_INIT  = 4.0;
+const SPEED_INC   = 0.018;
+const MAX_TREES   = 2;
+const SPAWN_MIN   = 90;
+const MOVE_CD_SEC = 0.13;
+
+/* ── Estado ── */
+let state='idle', lane=1, targetLane=1;
+let tractorY=laneY(1), speed=SPEED_INIT;
+let elapsed=0, best=0, lastTs=null;
+let moveCd=0, spawnCd=SPAWN_MIN;
+let trees=[], dusts=[];
+let bgOff=0;
+const keys={};
+let _btn=null;
+
+/* ── Fundo: pré-renderiza em offscreen canvas ── */
+/* Dois segmentos lado a lado para scroll infinito */
+const BGCV = document.createElement('canvas');
+BGCV.width = W*2; BGCV.height = H;
+(function(){
+  const g = BGCV.getContext('2d');
+  const TW = BGCV.width;
+
+  /* Faixas de corrida — cor sólida, SEM nada por cima */
+  for(let l=0; l<LANES; l++){
+    g.fillStyle = LANE_COLORS[l];
+    g.fillRect(0, BORDER + l*LANE_H, TW, LANE_H);
+  }
+
+  /* Fileiras horizontais de trigo dentro de cada faixa */
+  g.lineWidth = 1;
+  const ROW_SPACING = 10;
+  for(let l=0; l<LANES; l++){
+    const yBase = BORDER + l*LANE_H;
+    /* alternância leve de cor entre fileiras */
+    for(let ry=yBase+ROW_SPACING/2; ry<yBase+LANE_H-2; ry+=ROW_SPACING){
+      const even = Math.round((ry-yBase)/ROW_SPACING)%2===0;
+      g.strokeStyle = even
+        ? 'rgba(180,120,10,0.18)'
+        : 'rgba(255,220,80,0.12)';
+      g.beginPath(); g.moveTo(0,ry); g.lineTo(TW,ry); g.stroke();
+    }
+  }
+
+  /* Espigões de trigo desenhados nas fileiras (stroke curto) */
+  g.lineWidth = 1.2;
+  for(let l=0; l<LANES; l++){
+    const yBase = BORDER + l*LANE_H;
+    for(let ry=yBase+ROW_SPACING/2; ry<yBase+LANE_H-2; ry+=ROW_SPACING){
+      for(let xw=8; xw<TW; xw+=18){
+        const jitter = ((xw*31+ry*17)%7)-3;
+        g.strokeStyle='rgba(160,100,5,0.22)';
+        g.beginPath();
+        g.moveTo(xw+jitter, ry+2);
+        g.lineTo(xw+jitter, ry-5);
+        g.stroke();
+        /* cabeça do espigão */
+        g.strokeStyle='rgba(210,160,20,0.28)';
+        g.beginPath();
+        g.moveTo(xw+jitter-2, ry-5);
+        g.lineTo(xw+jitter+2, ry-5);
+        g.stroke();
+      }
+    }
+  }
+
+  /* Bordas decorativas — grama verde sólida */
+  g.fillStyle = BORDER_COLOR;
+  g.fillRect(0, 0,        TW, BORDER);
+  g.fillRect(0, H-BORDER, TW, BORDER);
+
+  /* Faixa de terra/sombra nas bordas do campo */
+  g.fillStyle = 'rgba(0,0,0,0.08)';
+  g.fillRect(0, BORDER-2, TW, 4);
+  g.fillRect(0, H-BORDER-2, TW, 4);
+
+  /* Divisórias redesenhadas POR ÚLTIMO — totalmente opacas, sobre a textura */
+  g.strokeStyle = DIVIDER_COLOR;
+  g.lineWidth = 4;
+  g.setLineDash([]);
+  for(let l=1; l<LANES; l++){
+    const y = BORDER + l*LANE_H;
+    g.beginPath(); g.moveTo(0,y); g.lineTo(TW,y); g.stroke();
+  }
+  g.lineWidth = 4;
+  g.beginPath(); g.moveTo(0,BORDER);   g.lineTo(TW,BORDER);   g.stroke();
+  g.beginPath(); g.moveTo(0,H-BORDER); g.lineTo(TW,H-BORDER); g.stroke();
+})();
+
+/* ── (wheat border animation removed) ── */
+
+/* ── Reset ── */
+function reset(){
+  lane=1; targetLane=1; tractorY=laneY(1);
+  speed=SPEED_INIT; elapsed=0; lastTs=null;
+  moveCd=0; spawnCd=SPAWN_MIN;
+  trees=[]; dusts=[]; bgOff=0;
+  state='playing';
+}
+
+/* ── Spawn ── */
+function spawnTree(){
+  if(trees.length>=MAX_TREES) return;
+  const used=new Set(trees.map(t=>t.lane));
+  const avail=[0,1,2].filter(l=>!used.has(l));
+  if(!avail.length) return;
+  const l=avail[Math.floor(Math.random()*avail.length)];
+  trees.push({lane:l, x:W+TREE_S+10, y:laneY(l)});
+  spawnCd = SPAWN_MIN + Math.floor(Math.random()*50);
+}
+
+/* ── Poeira ── */
+function addDust(x,y){
+  for(let i=0;i<5;i++)
+    dusts.push({
+      x:x+(Math.random()-.5)*16, y:y+(Math.random()-.5)*16,
+      vx:-(Math.random()*1.2+.4), vy:(Math.random()-.5)*.8,
+      life:1, r:Math.random()*4+2
+    });
+}
+
+function lerp(a,b,t){return a+(b-a)*t;}
+
+/* ── Carrega sprites externos ── */
+const IMG_TRACTOR = new Image();
+IMG_TRACTOR.src = 'trator.png';
+const IMG_TREE = new Image();
+IMG_TREE.src = 'arvore.png';
+
+/* ── Fundo rolante ── */
+function drawBG(){
+  const TW = BGCV.width;
+  const off = bgOff % TW;
+  cx.globalAlpha = 1;
+  cx.drawImage(BGCV, -off, 0, TW, H);
+  cx.drawImage(BGCV, TW-off, 0, TW, H);
+}
+
+/* ── Trator ── */
+function drawTractor(x, y){
+  cx.globalAlpha = 1;
+  const sw = TRACTOR_S * 2.4;   // largura do sprite no canvas
+  const sh = TRACTOR_S * 1.8;   // altura do sprite no canvas
+  /* sombra */
+  cx.fillStyle = 'rgba(0,0,0,0.28)';
+  cx.beginPath();
+  cx.ellipse(x + 2, y + sh * 0.38, sw * 0.42, sh * 0.10, 0, 0, Math.PI * 2);
+  cx.fill();
+  /* imagem — centralizada em (x, y), espelhada para olhar para a direita */
+  cx.save();
+  cx.translate(x, y);
+  cx.scale(-1, 1);                         // espelha horizontalmente
+  cx.drawImage(IMG_TRACTOR, -sw/2, -sh/2, sw, sh);
+  cx.restore();
+}
+
+/* ── Árvores ── */
+function drawTrees(){
+  cx.globalAlpha = 1;
+  trees.forEach(t => {
+    cx.globalAlpha = 1;
+    const sw = TREE_S * 1.9;
+    const sh = TREE_S * 1.9;
+    /* sombra */
+    cx.fillStyle = 'rgba(0,0,0,0.28)';
+    cx.beginPath();
+    cx.ellipse(t.x + 2, t.y + sh * 0.38, sw * 0.36, sh * 0.09, 0, 0, Math.PI * 2);
+    cx.fill();
+    /* imagem centralizada */
+    cx.drawImage(IMG_TREE, t.x - sw/2, t.y - sh/2, sw, sh);
+  });
+}
+
+/* ── Poeira ── */
+function tickDust(){
+  cx.globalAlpha = 1;
+  dusts.forEach(d=>{
+    d.x+=d.vx; d.y+=d.vy; d.life-=.06;
+    cx.beginPath(); cx.arc(d.x,d.y,d.r,0,Math.PI*2);
+    cx.fillStyle=`rgba(180,140,50,${d.life*.45})`;
+    cx.fill();
+  });
+  dusts=dusts.filter(d=>d.life>0);
+}
+
+/* ── HUD ── */
+function drawHUD(){
+  cx.globalAlpha = 1;
+  /* botão pause — apenas ele, sem overlays escuros no canvas */
+  cx.fillStyle='rgba(60,40,10,0.55)';
+  cx.beginPath(); cx.roundRect(W/2-30,5,60,22,6); cx.fill();
+  cx.strokeStyle='rgba(200,151,58,0.7)';
+  cx.lineWidth=1;
+  cx.beginPath(); cx.roundRect(W/2-30,5,60,22,6); cx.stroke();
+  cx.fillStyle='#f5f0e8';
+  cx.font='bold 11px "Playfair Display",serif';
+  cx.textAlign='center'; cx.textBaseline='middle';
+  cx.fillText(state==='paused'?'▶ P':'⏸ P', W/2, 16);
+}
+
+/* ── Card helper ── */
+function drawCard(ox,oy,cw,ch){
+  cx.globalAlpha=1;
+  cx.fillStyle='#1e1005';
+  cx.beginPath(); cx.roundRect(ox,oy,cw,ch,14); cx.fill();
+  cx.strokeStyle='#c8973a'; cx.lineWidth=2;
+  cx.beginPath(); cx.roundRect(ox,oy,cw,ch,14); cx.stroke();
+  cx.textAlign='center'; cx.textBaseline='middle';
+}
+function drawBtn(bx,by,label){
+  cx.fillStyle='#c8973a';
+  cx.beginPath(); cx.roundRect(bx-75,by-18,150,36,9); cx.fill();
+  cx.fillStyle='#fff';
+  cx.font='bold 14px "Playfair Display",serif';
+  cx.textAlign='center'; cx.textBaseline='middle';
+  cx.fillText(label,bx,by);
+  _btn={x:bx-75,y:by-18,w:150,h:36};
+}
+
+/* ── Tela Início ── */
+function drawIdle(){
+  cx.globalAlpha=1;
+  cx.fillStyle='rgba(0,0,0,0.65)'; cx.fillRect(0,0,W,H);
+  const cw=320,ch=180,ox=(W-cw)/2,oy=(H-ch)/2;
+  drawCard(ox,oy,cw,ch);
+  cx.font='28px serif'; cx.fillStyle='#f5f0e8';
+  cx.fillText('🚜',W/2,oy+38);
+  cx.font='bold 20px "Playfair Display",serif'; cx.fillStyle='#f5f0e8';
+  cx.fillText('Trator Entre Rios',W/2,oy+74);
+  cx.font='12px "Source Serif 4",serif'; cx.fillStyle='rgba(245,240,232,.65)';
+  cx.fillText('W / S  ou  ⬆️ ⬇️  para mudar de faixa',W/2,oy+102);
+  drawBtn(W/2,oy+148,'▶  Iniciar');
+}
+
+/* ── Game Over ── */
+function drawDead(){
+  cx.globalAlpha=1;
+  cx.fillStyle='rgba(0,0,0,0.68)'; cx.fillRect(0,0,W,H);
+  const cw=320,ch=210,ox=(W-cw)/2,oy=(H-ch)/2;
+  drawCard(ox,oy,cw,ch);
+  cx.font='28px serif'; cx.fillText('💥',W/2,oy+38);
+  cx.font='bold 22px "Playfair Display",serif'; cx.fillStyle='#f5f0e8';
+  cx.fillText('Fim de Jogo!',W/2,oy+76);
+  cx.font='18px "Playfair Display",serif'; cx.fillStyle='#c8973a';
+  cx.fillText(`Tempo: ${Math.floor(elapsed)}s`,W/2,oy+110);
+  if(Math.floor(elapsed)>=best&&elapsed>0){
+    cx.font='12px "Source Serif 4",serif'; cx.fillStyle='#ffe066';
+    cx.fillText('🏆 Novo recorde!',W/2,oy+136);
+  }
+  drawBtn(W/2,oy+178,'↺  Reiniciar');
+}
+
+/* ── Pausa ── */
+function drawPaused(){
+  cx.globalAlpha=1;
+  cx.fillStyle='rgba(0,0,0,0.58)'; cx.fillRect(0,0,W,H);
+  const cw=280,ch=120,ox=(W-cw)/2,oy=(H-ch)/2;
+  drawCard(ox,oy,cw,ch);
+  cx.font='bold 20px "Playfair Display",serif'; cx.fillStyle='#f5f0e8';
+  cx.fillText('⏸  Pausado',W/2,oy+42);
+  cx.font='12px "Source Serif 4",serif'; cx.fillStyle='rgba(245,240,232,.6)';
+  cx.fillText('Pressione P ou clique em Continuar',W/2,oy+70);
+  drawBtn(W/2,oy+104,'▶  Continuar');
+}
+
+function togglePause(){
+  if(state==='playing'){ state='paused'; }
+  else if(state==='paused'){ state='playing'; lastTs=null; }
+}
+
+/* ── Colisão ── */
+function hitTest(){
+  const hr=TRACTOR_S*.26;
+  for(const t of trees){
+    const dx=TRACTOR_X-t.x, dy=tractorY-t.y;
+    if(Math.sqrt(dx*dx+dy*dy)<hr+TREE_S*.26) return true;
+  }
+  return false;
+}
+
+/* ── Loop ── */
+function loop(ts){
+  requestAnimationFrame(loop);
+  if(!lastTs) lastTs=ts;
+  const dt=Math.min((ts-lastTs)/1000,.05);
+  lastTs=ts;
+
+  if(state==='playing'){
+    elapsed+=dt;
+    speed=SPEED_INIT+elapsed*SPEED_INC;
+    bgOff+=speed*1.1;
+    moveCd=Math.max(0,moveCd-dt);
+    spawnCd--;
+
+    if(moveCd===0){
+      if((keys['ArrowUp']||keys['w']||keys['W'])&&targetLane>0){
+        targetLane--; moveCd=MOVE_CD_SEC; addDust(TRACTOR_X,tractorY);
+      }
+      if((keys['ArrowDown']||keys['s']||keys['S'])&&targetLane<LANES-1){
+        targetLane++; moveCd=MOVE_CD_SEC; addDust(TRACTOR_X,tractorY);
+      }
+    }
+    tractorY=lerp(tractorY,laneY(targetLane),.16);
+
+    trees.forEach(t=>{t.x-=speed;});
+    trees=trees.filter(t=>t.x>-TREE_S-10);
+    if(spawnCd<=0&&trees.length<MAX_TREES) spawnTree();
+
+    if(hitTest()){
+      state='dead';
+      best=Math.max(best,Math.floor(elapsed));
+      hudBest.textContent=`${best}s`;
+    }
+    hudTime.textContent=`${Math.floor(elapsed)}s`;
+  }
+
+  /* ── Render ── (globalAlpha sempre 1 entre etapas) ── */
+  cx.globalAlpha=1;
+  drawBG();
+  cx.globalAlpha=1;
+  tickDust();
+  cx.globalAlpha=1;
+  drawTrees();
+  cx.globalAlpha=1;
+  drawTractor(TRACTOR_X,tractorY);
+  cx.globalAlpha=1;
+  drawHUD();
+  cx.globalAlpha=1;
+  if(state==='idle')   drawIdle();
+  if(state==='dead')   drawDead();
+  if(state==='paused') drawPaused();
+  cx.globalAlpha=1;
+}
+
+/* ── Input ── */
+window.addEventListener('keydown',e=>{
+  keys[e.key]=true;
+  if(['ArrowUp','ArrowDown','w','W','s','S'].includes(e.key)) e.preventDefault();
+  if(e.key==='p'||e.key==='P'){
+    if(state==='playing'||state==='paused') togglePause();
+  }
+});
+window.addEventListener('keyup',e=>{keys[e.key]=false;});
+
+function handleClick(px,py){
+  if(_btn&&px>=_btn.x&&px<=_btn.x+_btn.w&&py>=_btn.y&&py<=_btn.y+_btn.h){
+    if(state==='idle'||state==='dead') reset();
+    else if(state==='paused') togglePause();
+    return;
+  }
+  if(state==='playing'){
+    const mid=H/2;
+    if(py<mid&&targetLane>0){targetLane--;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}
+    if(py>=mid&&targetLane<LANES-1){targetLane++;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}
+  }
+}
+CV.addEventListener('click',e=>{
+  const r=CV.getBoundingClientRect();
+  handleClick((e.clientX-r.left)*(W/r.width),(e.clientY-r.top)*(H/r.height));
+});
+
+let swipeY=null;
+CV.addEventListener('touchstart',e=>{
+  e.preventDefault();
+  swipeY=e.touches[0].clientY;
+  const r=CV.getBoundingClientRect();
+  handleClick((e.touches[0].clientX-r.left)*(W/r.width),(e.touches[0].clientY-r.top)*(H/r.height));
+},{passive:false});
+CV.addEventListener('touchend',e=>{
+  if(swipeY===null||state!=='playing') return;
+  const dy=e.changedTouches[0].clientY-swipeY;
+  if(Math.abs(dy)>22){
+    if(dy<0&&targetLane>0){targetLane--;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}
+    if(dy>0&&targetLane<LANES-1){targetLane++;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}
+  }
+  swipeY=null;
+},{passive:true});
+
+/* ── Arranca ── */
+state='idle';
+requestAnimationFrame(loop);
+})();
+</script>
 </body>
+</html>
 </html>
