@@ -23,6 +23,10 @@
     /* ── canvas wrapper ── */
     #game-container{position:relative;width:100%;max-width:760px;border-radius:14px;overflow:hidden;box-shadow:0 12px 48px rgba(58,37,16,.35);border:3px solid #c8973a}
     #gameCanvas{display:block;width:100%;height:auto;cursor:default;filter:none!important;opacity:1!important}
+    #start-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,12,4,.72);border-radius:11px}
+    #start-card{text-align:center;padding:2rem 2.5rem}
+    #btn-start{background:#c8973a;color:#fff;border:none;border-radius:9px;padding:.6rem 2rem;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s}
+    #btn-start:hover{background:#e0a940}
     .game-tip{font-size:.82rem;color:var(--color-bark,#5a3e28);opacity:.7;text-align:center}
   </style>
 </head>
@@ -69,6 +73,14 @@
         </div>
         <div id="game-container">
           <canvas id="gameCanvas" width="760" height="300"></canvas>
+          <div id="start-overlay">
+            <div id="start-card">
+              <div style="font-size:2.5rem">🚜</div>
+              <h2 style="font-family:'Playfair Display',serif;color:#f5f0e8;margin:.5rem 0">Trator Entre Rios</h2>
+              <p style="color:rgba(245,240,232,.7);font-size:.85rem;margin-bottom:1.2rem">Desvie das árvores e sobreviva o maior tempo possível!</p>
+              <button id="btn-start">▶&nbsp; Iniciar</button>
+            </div>
+          </div>
         </div>
         <p class="game-tip">⬆️ ⬇️ &nbsp;ou&nbsp; <strong>W / S</strong> para mudar de faixa &nbsp;·&nbsp; toque nos lados no mobile</p>
       </div>
@@ -252,11 +264,9 @@ function addDust(x,y){
 
 function lerp(a,b,t){return a+(b-a)*t;}
 
-/* ── Carrega sprites externos ── */
+/* ── Carrega sprites externos (src definido no clique do botão) ── */
 const IMG_TRACTOR = new Image();
-IMG_TRACTOR.src = 'trator.png';
-const IMG_TREE = new Image();
-IMG_TREE.src = 'arvore.png';
+const IMG_TREE    = new Image();
 
 /* ── Fundo rolante ── */
 function drawBG(){
@@ -270,19 +280,19 @@ function drawBG(){
 /* ── Trator ── */
 function drawTractor(x, y){
   cx.globalAlpha = 1;
-  const sw = TRACTOR_S * 2.4;   // largura do sprite no canvas
-  const sh = TRACTOR_S * 1.8;   // altura do sprite no canvas
-  /* sombra */
+  const sw = TRACTOR_S * 2.4;
+  const sh = TRACTOR_S * 1.8;
   cx.fillStyle = 'rgba(0,0,0,0.28)';
   cx.beginPath();
   cx.ellipse(x + 2, y + sh * 0.38, sw * 0.42, sh * 0.10, 0, 0, Math.PI * 2);
   cx.fill();
-  /* imagem — centralizada em (x, y), espelhada para olhar para a direita */
-  cx.save();
-  cx.translate(x, y);
-  cx.scale(-1, 1);                         // espelha horizontalmente
-  cx.drawImage(IMG_TRACTOR, -sw/2, -sh/2, sw, sh);
-  cx.restore();
+  if(IMG_TRACTOR.complete && IMG_TRACTOR.naturalWidth > 0){
+    cx.save();
+    cx.translate(x, y);
+    cx.scale(-1, 1);
+    cx.drawImage(IMG_TRACTOR, -sw/2, -sh/2, sw, sh);
+    cx.restore();
+  }
 }
 
 /* ── Árvores ── */
@@ -292,13 +302,13 @@ function drawTrees(){
     cx.globalAlpha = 1;
     const sw = TREE_S * 1.9;
     const sh = TREE_S * 1.9;
-    /* sombra */
     cx.fillStyle = 'rgba(0,0,0,0.28)';
     cx.beginPath();
     cx.ellipse(t.x + 2, t.y + sh * 0.38, sw * 0.36, sh * 0.09, 0, 0, Math.PI * 2);
     cx.fill();
-    /* imagem centralizada */
-    cx.drawImage(IMG_TREE, t.x - sw/2, t.y - sh/2, sw, sh);
+    if(IMG_TREE.complete && IMG_TREE.naturalWidth > 0){
+      cx.drawImage(IMG_TREE, t.x - sw/2, t.y - sh/2, sw, sh);
+    }
   });
 }
 
@@ -507,11 +517,44 @@ CV.addEventListener('touchend',e=>{
   swipeY=null;
 },{passive:true});
 
-/* ── Arranca ── */
-state='idle';
-requestAnimationFrame(loop);
+/* ── Arranca apenas quando o botão for clicado ── */
+state = 'idle';
+
+document.getElementById('btn-start').addEventListener('click', function(){
+  const overlay = document.getElementById('start-overlay');
+
+  /* Carrega imagens e só inicia o loop após ambas estarem prontas */
+  let loaded = 0;
+  function onReady(){
+    loaded++;
+    if(loaded === 2){
+      overlay.style.display = 'none';
+      reset();
+      requestAnimationFrame(loop);
+    }
+  }
+  function onError(e){
+    console.warn('Sprite não carregado:', e.target.src, '— continuando sem ele');
+    onReady(); /* inicia mesmo assim */
+  }
+
+  if(IMG_TRACTOR.complete && IMG_TRACTOR.naturalWidth > 0 &&
+     IMG_TREE.complete    && IMG_TREE.naturalWidth    > 0){
+    /* já carregadas (cache) */
+    overlay.style.display = 'none';
+    reset();
+    requestAnimationFrame(loop);
+  } else {
+    IMG_TRACTOR.onload  = onReady;  IMG_TRACTOR.onerror = onError;
+    IMG_TREE.onload     = onReady;  IMG_TREE.onerror    = onError;
+    IMG_TRACTOR.src = 'trator.png';
+    IMG_TREE.src    = 'arvore.png';
+  }
+});
 })();
 </script>
+</body>
+</html>
 </body>
 </html>
 </html>
