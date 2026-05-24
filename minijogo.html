@@ -9,9 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet"/>
   <style>
-    /* ══════════════════════════════════════════
-       SEÇÃO GERAL
-    ══════════════════════════════════════════ */
+
     .minijogo-section {
       background: var(--color-cream, #f5f0e8);
       padding: 2rem 0 5rem;
@@ -35,9 +33,6 @@
     }
     .minijogo-header p { color: var(--color-bark, #5a3e28); font-size: .95rem; }
 
-    /* ══════════════════════════════════════════
-       SELETOR DE ABAS
-    ══════════════════════════════════════════ */
     .game-tabs {
       display: flex;
       gap: .5rem;
@@ -67,15 +62,9 @@
     }
     .game-tab:hover:not(.active) { background: rgba(255,255,255,.5); }
 
-    /* ══════════════════════════════════════════
-       PAINÉIS
-    ══════════════════════════════════════════ */
     .game-panel { display: none; width: 100%; }
     .game-panel.active { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
 
-    /* ══════════════════════════════════════════
-       JOGO DO TRATOR
-    ══════════════════════════════════════════ */
     .game-subheader { text-align: center; }
     .game-subheader h2 {
       font-family: 'Playfair Display', serif;
@@ -121,9 +110,6 @@
     #btn-start:disabled { background: #7a6040; cursor: not-allowed; opacity: .7; }
     .game-tip { font-size: .82rem; color: var(--color-bark, #5a3e28); opacity: .7; text-align: center; }
 
-    /* ══════════════════════════════════════════
-       QUIZ
-    ══════════════════════════════════════════ */
     .quiz-progress { width: 100%; display: flex; flex-direction: column; gap: .4rem; }
     .quiz-progress__bar-bg {
       width: 100%; height: 8px; background: #d9cfc0;
@@ -258,18 +244,15 @@
           <p>Escolha entre o quiz de conhecimentos ou o jogo do trator</p>
         </div>
 
-        
         <div class="game-tabs" role="tablist">
           <button class="game-tab active" id="tab-quiz" role="tab" aria-selected="true"  aria-controls="panel-quiz">🌾 Quiz</button>
           <button class="game-tab"        id="tab-trator" role="tab" aria-selected="false" aria-controls="panel-trator">🚜 Jogo do Trator</button>
         </div>
 
-        
         <div class="game-panel active" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz">
           <div id="quiz-app" style="width:100%"></div>
         </div>
 
-        
         <div class="game-panel" id="panel-trator" role="tabpanel" aria-labelledby="tab-trator">
           <div class="game-subheader">
             <h2>Trator Entre Rios 🚜</h2>
@@ -317,7 +300,6 @@
 
   <script src="script.js"></script>
 
-  
   <script>
   (function(){
     const tabQuiz   = document.getElementById('tab-quiz');
@@ -340,7 +322,6 @@
   })();
   </script>
 
-  
   <script>
   (function(){
     const QUESTIONS = [
@@ -530,7 +511,6 @@
   })();
   </script>
 
-  
   <script>
   (function(){
   'use strict';
@@ -567,7 +547,6 @@
   const keys={};
   let _btn=null;
 
-  /* Fundo offscreen */
   const BGCV = document.createElement('canvas');
   BGCV.width = W*2; BGCV.height = H;
   (function(){
@@ -616,7 +595,6 @@
   function addDust(x,y){ for(let i=0;i<5;i++) dusts.push({x:x+(Math.random()-.5)*16,y:y+(Math.random()-.5)*16,vx:-(Math.random()*1.2+.4),vy:(Math.random()-.5)*.8,life:1,r:Math.random()*4+2}); }
   function lerp(a,b,t){return a+(b-a)*t;}
 
-  /* Sprites */
   const IMG_TRACTOR = new Image();
   const IMG_TREE    = new Image();
   function preloadSprites(){
@@ -714,7 +692,6 @@
   CV.addEventListener('touchstart',e=>{e.preventDefault();swipeY=e.touches[0].clientY;const r=CV.getBoundingClientRect();handleClick((e.touches[0].clientX-r.left)*(W/r.width),(e.touches[0].clientY-r.top)*(H/r.height));},{passive:false});
   CV.addEventListener('touchend',e=>{if(swipeY===null||state!=='playing')return;const dy=e.changedTouches[0].clientY-swipeY;if(Math.abs(dy)>22){if(dy<0&&targetLane>0){targetLane--;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}if(dy>0&&targetLane<LANES-1){targetLane++;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}}swipeY=null;},{passive:true});
 
-  /* Inicia o loop ao clicar no botão */
   document.getElementById('btn-start').addEventListener('click', function(){
     document.getElementById('start-overlay').style.display='none';
     reset();
