@@ -2,33 +2,295 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>MiniJogo – Entre Rios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz – Entre Rios</title>
   <link rel="stylesheet" href="style.css"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet"/>
   <style>
-    /* ── página ── */
-    .game-section{background:var(--color-cream,#f5f0e8);padding:2rem 0 4rem}
-    .game-wrapper{max-width:800px;margin:0 auto;padding:0 1rem;display:flex;flex-direction:column;align-items:center;gap:1rem}
-    .game-header{text-align:center}
-    .game-header .section-tag{display:block;margin-bottom:.4rem}
-    .game-header h1{font-family:var(--font-display,'Playfair Display',serif);font-size:clamp(1.6rem,4vw,2.4rem);color:var(--color-earth,#3a2510);margin:0 0 .2rem}
-    .game-header p{font-size:.9rem;color:var(--color-bark,#5a3e28)}
-    /* ── HUD externo ── */
-    .game-hud{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
-    .hud-box{background:var(--color-earth,#3a2510);color:#f5f0e8;border-radius:8px;padding:.35rem 1.2rem;font-family:var(--font-display,'Playfair Display',serif);font-size:.9rem;min-width:110px;text-align:center}
-    .hud-box span{display:block;font-size:1.4rem;font-weight:700;color:#c8973a;line-height:1.2}
-    /* ── canvas wrapper ── */
-    #game-container{position:relative;width:100%;max-width:760px;border-radius:14px;overflow:hidden;box-shadow:0 12px 48px rgba(58,37,16,.35);border:3px solid #c8973a}
-    #gameCanvas{display:block;width:100%;height:auto;cursor:default;filter:none!important;opacity:1!important}
-    #start-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,12,4,.72);border-radius:11px}
-    #start-card{text-align:center;padding:2rem 2.5rem}
-    #btn-start{background:#c8973a;color:#fff;border:none;border-radius:9px;padding:.6rem 2rem;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s}
-    #btn-start:hover:not(:disabled){background:#e0a940}
-    #btn-start:disabled{background:#7a6040;cursor:not-allowed;opacity:.7}
-    .game-tip{font-size:.82rem;color:var(--color-bark,#5a3e28);opacity:.7;text-align:center}
+    .quiz-section {
+      background: var(--color-cream, #f5f0e8);
+      padding: 2rem 0 5rem;
+      min-height: 80vh;
+    }
+    .quiz-wrapper {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .quiz-header { text-align: center; }
+    .quiz-header h1 {
+      font-family: var(--font-display, 'Playfair Display', serif);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--color-earth, #3a2510);
+      margin: .3rem 0 .4rem;
+    }
+    .quiz-header p { color: var(--color-bark, #5a3e28); font-size: .95rem; }
+
+    /* ── Barra de progresso ── */
+    .quiz-progress {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+    .quiz-progress__bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #d9cfc0;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .quiz-progress__bar-fill {
+      height: 100%;
+      background: #c8973a;
+      border-radius: 99px;
+      transition: width .4s ease;
+    }
+    .quiz-progress__label {
+      font-size: .8rem;
+      color: var(--color-bark, #5a3e28);
+      opacity: .75;
+      text-align: right;
+    }
+
+    /* ── Card da pergunta ── */
+    .quiz-card {
+      width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(58,37,16,.13);
+      border: 2px solid #e8dcc8;
+      padding: 2rem 2rem 1.6rem;
+      animation: fadeUp .35s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .quiz-card__num {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #c8973a;
+      margin-bottom: .7rem;
+    }
+    .quiz-card__question {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+      color: #3a2510;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Opções ── */
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: .7rem;
+    }
+    .quiz-opt {
+      width: 100%;
+      text-align: left;
+      background: #faf7f2;
+      border: 2px solid #e0d5c4;
+      border-radius: 10px;
+      padding: .75rem 1.1rem;
+      font-family: 'Source Serif 4', serif;
+      font-size: .95rem;
+      color: #3a2510;
+      cursor: pointer;
+      transition: border-color .18s, background .18s, transform .12s;
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+    }
+    .quiz-opt:hover:not(:disabled) {
+      border-color: #c8973a;
+      background: #fdf6e8;
+      transform: translateX(3px);
+    }
+    .quiz-opt .opt-letter {
+      min-width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #e8dcc8;
+      color: #5a3e28;
+      font-weight: 700;
+      font-size: .82rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background .18s, color .18s;
+    }
+    .quiz-opt.correct {
+      border-color: #3a8a2f;
+      background: #edfae9;
+    }
+    .quiz-opt.correct .opt-letter {
+      background: #3a8a2f;
+      color: #fff;
+    }
+    .quiz-opt.wrong {
+      border-color: #c0392b;
+      background: #fdecea;
+    }
+    .quiz-opt.wrong .opt-letter {
+      background: #c0392b;
+      color: #fff;
+    }
+    .quiz-opt:disabled { cursor: default; transform: none; }
+
+    /* ── Feedback ── */
+    .quiz-feedback {
+      margin-top: 1.1rem;
+      padding: .85rem 1.1rem;
+      border-radius: 10px;
+      font-size: .9rem;
+      line-height: 1.5;
+      display: none;
+    }
+    .quiz-feedback.show { display: block; animation: fadeUp .25s ease; }
+    .quiz-feedback.correct-fb {
+      background: #edfae9;
+      border-left: 4px solid #3a8a2f;
+      color: #1e5219;
+    }
+    .quiz-feedback.wrong-fb {
+      background: #fdecea;
+      border-left: 4px solid #c0392b;
+      color: #7a1e1e;
+    }
+
+    /* ── Botão próximo ── */
+    .quiz-next {
+      display: none;
+      margin-top: 1.2rem;
+      width: 100%;
+      background: #c8973a;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: .75rem 1.5rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .quiz-next.show { display: block; animation: fadeUp .25s ease; }
+    .quiz-next:hover { background: #e0a940; }
+
+    /* ── Tela inicial ── */
+    .quiz-start {
+      width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(58,37,16,.13);
+      border: 2px solid #e8dcc8;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .quiz-start__icon { font-size: 3rem; margin-bottom: .8rem; }
+    .quiz-start h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #3a2510;
+      margin-bottom: .6rem;
+    }
+    .quiz-start p { color: #5a3e28; font-size: .95rem; margin-bottom: 1.5rem; line-height: 1.6; }
+    .quiz-start__meta {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1.8rem;
+      flex-wrap: wrap;
+    }
+    .quiz-start__meta span {
+      background: #faf7f2;
+      border: 1px solid #e0d5c4;
+      border-radius: 8px;
+      padding: .4rem .9rem;
+      font-size: .85rem;
+      color: #5a3e28;
+    }
+    .btn-quiz-start {
+      background: #c8973a;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: .75rem 2.5rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-quiz-start:hover { background: #e0a940; }
+
+    /* ── Tela de resultado ── */
+    .quiz-result {
+      width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(58,37,16,.13);
+      border: 2px solid #e8dcc8;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      animation: fadeUp .35s ease;
+    }
+    .quiz-result__emoji { font-size: 3.5rem; margin-bottom: .6rem; }
+    .quiz-result h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: #3a2510;
+      margin-bottom: .5rem;
+    }
+    .quiz-result__score {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #c8973a;
+      font-family: 'Playfair Display', serif;
+      line-height: 1.1;
+    }
+    .quiz-result__score span { font-size: 1.2rem; color: #5a3e28; }
+    .quiz-result__msg { color: #5a3e28; font-size: .95rem; margin: .8rem 0 1.5rem; line-height: 1.6; }
+    .quiz-result__breakdown {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1.8rem;
+      flex-wrap: wrap;
+    }
+    .quiz-result__breakdown div {
+      background: #faf7f2;
+      border: 1px solid #e0d5c4;
+      border-radius: 10px;
+      padding: .6rem 1.2rem;
+      font-size: .88rem;
+      color: #5a3e28;
+    }
+    .quiz-result__breakdown strong { display: block; font-size: 1.4rem; color: #3a2510; }
+    .btn-quiz-restart {
+      background: #c8973a;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: .75rem 2.2rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-quiz-restart:hover { background: #e0a940; }
   </style>
 </head>
 <body>
@@ -60,29 +322,17 @@
   </header>
 
   <main id="main-content">
-    <section class="game-section">
-      <div class="game-wrapper">
-        <div class="game-header">
+    <section class="quiz-section">
+      <div class="quiz-wrapper">
+
+        <div class="quiz-header">
           <span class="section-tag">MiniJogo</span>
-          <h1>Trator Entre Rios 🚜</h1>
-          <p>Desvie das árvores e sobreviva o maior tempo possível!</p>
+          <h1>Quiz Entre Rios</h1>
+          <p>Teste seus conhecimentos sobre a história e a agricultura de Entre Rios</p>
         </div>
-        <div class="game-hud">
-          <div class="hud-box">Tempo<span id="hud-time">0s</span></div>
-          <div class="hud-box">Recorde<span id="hud-best">0s</span></div>
-        </div>
-        <div id="game-container">
-          <canvas id="gameCanvas" width="760" height="300"></canvas>
-          <div id="start-overlay">
-            <div id="start-card">
-              <div style="font-size:2.5rem">🚜</div>
-              <h2 style="font-family:'Playfair Display',serif;color:#f5f0e8;margin:.5rem 0">Trator Entre Rios</h2>
-              <p style="color:rgba(245,240,232,.7);font-size:.85rem;margin-bottom:1.2rem">Desvie das árvores e sobreviva o maior tempo possível!</p>
-              <button id="btn-start">▶&nbsp; Iniciar</button>
-            </div>
-          </div>
-        </div>
-        <p class="game-tip">⬆️ ⬇️ &nbsp;ou&nbsp; <strong>W / S</strong> para mudar de faixa &nbsp;·&nbsp; toque nos lados no mobile</p>
+
+        <div id="quiz-app" style="width:100%"></div>
+
       </div>
     </section>
   </main>
@@ -106,449 +356,226 @@
   </footer>
 
   <script src="script.js"></script>
-<script>
-/* ============================================================
-   TRATOR ENTRE RIOS — Runner horizontal limpo
-   3 faixas · trator na esquerda · obstáculos da direita
-============================================================ */
-(function(){
-'use strict';
+  <script>
+  (function(){
+    const QUESTIONS = [
+      {
+        q: 'Em que ano as primeiras famílias suábias chegaram à região de Guarapuava para fundar Entre Rios?',
+        opts: ['1945', '1951', '1962', '1970'],
+        answer: 1,
+        feedback: 'Em maio de 1951, as primeiras 500 famílias suábias chegaram à região delimitada pelos rios Jordão e Pinhão, fundando as cinco colônias de Entre Rios.'
+      },
+      {
+        q: 'Quantas colônias formam o distrito de Entre Rios?',
+        opts: ['Três', 'Quatro', 'Cinco', 'Seis'],
+        answer: 2,
+        feedback: 'Entre Rios é formado por cinco colônias: Vitória, Jordãozinho, Cachoeira, Socorro e Samambaia.'
+      },
+      {
+        q: 'Qual engenheiro agrônomo liderou a vinda dos suábios ao Brasil e presidiu a Cooperativa Agrária?',
+        opts: ['Hans Mueller', 'Michael Moor', 'Johann Weber', 'Karl Bauer'],
+        answer: 1,
+        feedback: 'Michael Moor foi o engenheiro agrônomo responsável por selecionar as famílias e as terras em Guarapuava, tornando-se o primeiro presidente da Cooperativa Agrária.'
+      },
+      {
+        q: 'De qual região da Europa vieram os Suábios do Danúbio antes de chegarem ao Brasil?',
+        opts: ['França e Alemanha', 'Polônia e Ucrânia', 'Hungria, Croácia e Romênia', 'Áustria e Suíça'],
+        answer: 2,
+        feedback: 'Os Suábios do Danúbio eram descendentes de colonizadores alemães que se estabeleceram no sudeste europeu — especialmente na Hungria, Croácia e Romênia — no século XVIII.'
+      },
+      {
+        q: 'Em que década a AGRÁRIA foi pioneira na adoção do sistema de plantio direto no Brasil?',
+        opts: ['1960s', '1970s', '1980s', '1990s'],
+        answer: 1,
+        feedback: 'Na década de 1970, técnicos da AGRÁRIA e agricultores locais desenvolveram e adotaram o plantio direto, técnica que hoje cobre dezenas de milhões de hectares no Brasil.'
+      },
+      {
+        q: 'Qual é a principal contribuição da Agrária Malte para o Brasil?',
+        opts: [
+          'É a maior fábrica de farinha do país',
+          'É a maior maltaria da América Latina, abastecendo as principais cervejarias',
+          'É responsável por 60% da exportação de soja',
+          'Produz etanol para o mercado nacional'
+        ],
+        answer: 1,
+        feedback: 'A Agrária Malte, localizada em Grandes Rios (PR), é a maior maltaria da América Latina, responsável por cerca de 30% da demanda nacional de malte.'
+      },
+      {
+        q: 'Que percentual da área do distrito de Entre Rios é coberto por vegetação nativa?',
+        opts: ['Mais de 10%', 'Mais de 20%', 'Mais de 30%', 'Mais de 50%'],
+        answer: 2,
+        feedback: 'Mais de 30% da área do distrito é coberta por vegetação nativa, superando as exigências do Código Florestal Brasileiro.'
+      },
+      {
+        q: 'Qual é o objetivo da FAPA (Fundação Agrária de Pesquisa Agropecuária)?',
+        opts: [
+          'Organizar festivais culturais suábios',
+          'Desenvolver variedades adaptadas ao clima subtropical de Guarapuava',
+          'Administrar o sistema de saúde das colônias',
+          'Exportar trigo para a Europa'
+        ],
+        answer: 1,
+        feedback: 'A FAPA desenvolve variedades de trigo, cevada, soja e milho adaptadas ao clima subtropical de Guarapuava, elevando a produtividade sem ampliar a área plantada.'
+      },
+      {
+        q: 'Em que ano o distrito de Entre Rios foi oficialmente criado por lei estadual?',
+        opts: ['1951', '1955', '1962', '1970'],
+        answer: 2,
+        feedback: 'Pela lei estadual nº 4.583, de 27 de junho de 1962, o distrito de Entre Rios foi oficialmente criado e anexado ao município de Guarapuava.'
+      },
+      {
+        q: 'Qual ODS (Objetivo de Desenvolvimento Sustentável) da ONU está diretamente relacionado ao modelo de Entre Rios?',
+        opts: ['ODS 1 – Erradicação da Pobreza', 'ODS 2 – Fome Zero e Agricultura Sustentável', 'ODS 7 – Energia Limpa', 'ODS 13 – Ação Climática'],
+        answer: 1,
+        feedback: 'O projeto de Entre Rios tem como base a ODS 2 – Fome Zero e Agricultura Sustentável, que busca acabar com a fome, alcançar segurança alimentar e promover a agricultura sustentável.'
+      },
+      {
+        q: 'Quais são as principais culturas agrícolas de Entre Rios?',
+        opts: [
+          'Café, cana-de-açúcar e algodão',
+          'Arroz, feijão e mandioca',
+          'Soja, milho, trigo e cevada',
+          'Uva, maçã e pêssego'
+        ],
+        answer: 2,
+        feedback: 'As culturas principais de Entre Rios são soja, milho, trigo e cevada, com rotação obrigatória entre elas para preservar a saúde do solo.'
+      },
+      {
+        q: 'Qual organização coordena a preservação do patrimônio cultural suábio em Entre Rios desde 2001?',
+        opts: [
+          'Cooperativa AGRÁRIA',
+          'Prefeitura de Guarapuava',
+          'Fundação Cultural Suábio-Brasileira (FCSB)',
+          'Instituto do Patrimônio Histórico do Paraná'
+        ],
+        answer: 2,
+        feedback: 'A Fundação Cultural Suábio-Brasileira (FCSB), criada em 2001 na Colônia Vitória, coordena a preservação do patrimônio cultural suábio, incluindo festivais, gastronomia e arquitetura enxaimel.'
+      },
+    ];
 
-const CV = document.getElementById('gameCanvas');
-const cx = CV.getContext('2d');
-const W  = CV.width;    // 760
-const H  = CV.height;   // 300
+    const LETTERS = ['A', 'B', 'C', 'D'];
 
-const hudTime = document.getElementById('hud-time');
-const hudBest = document.getElementById('hud-best');
+    let current = 0;
+    let score = 0;
+    let answered = false;
+    let wrongCount = 0;
 
-/* ── Layout ── */
-const BORDER   = 32;          // altura da borda decorativa topo/base
-const TRACK_H  = H - BORDER*2;// 236px para as faixas
-const LANES    = 3;
-const LANE_H   = TRACK_H / LANES; // ~78px
-const TRACTOR_X = 90;
-const TRACTOR_S = 44;
-const TREE_S    = 40;
+    const app = document.getElementById('quiz-app');
 
-function laneY(l){ return BORDER + l * LANE_H + LANE_H/2; }
-
-/* ── Cores das faixas — campo de trigo ── */
-const LANE_COLORS = ['#d9a825','#c99618','#d9a825'];
-const BORDER_COLOR = '#4d8a1a';    /* grama verde nas bordas */
-const DIVIDER_COLOR = '#8a6010';   /* terra/sulco entre faixas */
-
-/* ── Constantes ── */
-const SPEED_INIT  = 4.0;
-const SPEED_INC   = 0.018;
-const MAX_TREES   = 2;
-const SPAWN_MIN   = 90;
-const MOVE_CD_SEC = 0.13;
-
-/* ── Estado ── */
-let state='idle', lane=1, targetLane=1;
-let tractorY=laneY(1), speed=SPEED_INIT;
-let elapsed=0, best=0, lastTs=null;
-let moveCd=0, spawnCd=SPAWN_MIN;
-let trees=[], dusts=[];
-let bgOff=0;
-const keys={};
-let _btn=null;
-
-/* ── Fundo: pré-renderiza em offscreen canvas ── */
-/* Dois segmentos lado a lado para scroll infinito */
-const BGCV = document.createElement('canvas');
-BGCV.width = W*2; BGCV.height = H;
-(function(){
-  const g = BGCV.getContext('2d');
-  const TW = BGCV.width;
-
-  /* Faixas de corrida — cor sólida, SEM nada por cima */
-  for(let l=0; l<LANES; l++){
-    g.fillStyle = LANE_COLORS[l];
-    g.fillRect(0, BORDER + l*LANE_H, TW, LANE_H);
-  }
-
-  /* Fileiras horizontais de trigo dentro de cada faixa */
-  g.lineWidth = 1;
-  const ROW_SPACING = 10;
-  for(let l=0; l<LANES; l++){
-    const yBase = BORDER + l*LANE_H;
-    /* alternância leve de cor entre fileiras */
-    for(let ry=yBase+ROW_SPACING/2; ry<yBase+LANE_H-2; ry+=ROW_SPACING){
-      const even = Math.round((ry-yBase)/ROW_SPACING)%2===0;
-      g.strokeStyle = even
-        ? 'rgba(180,120,10,0.18)'
-        : 'rgba(255,220,80,0.12)';
-      g.beginPath(); g.moveTo(0,ry); g.lineTo(TW,ry); g.stroke();
+    function getResultData(s, total) {
+      const pct = s / total;
+      if (pct === 1)   return { emoji: '🏆', title: 'Perfeito!', msg: 'Você domina a história de Entre Rios! Conhecimento completo sobre os suábios, a AGRÁRIA e a agricultura sustentável.' };
+      if (pct >= 0.75) return { emoji: '🌾', title: 'Muito bem!', msg: 'Ótimo conhecimento sobre Entre Rios! Revise a história e agricultura para alcançar a pontuação máxima.' };
+      if (pct >= 0.5)  return { emoji: '📚', title: 'Bom começo!', msg: 'Você sabe bastante, mas há detalhes sobre a história e práticas agrícolas para explorar. Que tal ler a aba História?' };
+      return { emoji: '🌱', title: 'Continue aprendendo!', msg: 'Entre Rios tem uma história rica. Explore as páginas do site para conhecer mais sobre os suábios e a AGRÁRIA!' };
     }
-  }
 
-  /* Espigões de trigo desenhados nas fileiras (stroke curto) */
-  g.lineWidth = 1.2;
-  for(let l=0; l<LANES; l++){
-    const yBase = BORDER + l*LANE_H;
-    for(let ry=yBase+ROW_SPACING/2; ry<yBase+LANE_H-2; ry+=ROW_SPACING){
-      for(let xw=8; xw<TW; xw+=18){
-        const jitter = ((xw*31+ry*17)%7)-3;
-        g.strokeStyle='rgba(160,100,5,0.22)';
-        g.beginPath();
-        g.moveTo(xw+jitter, ry+2);
-        g.lineTo(xw+jitter, ry-5);
-        g.stroke();
-        /* cabeça do espigão */
-        g.strokeStyle='rgba(210,160,20,0.28)';
-        g.beginPath();
-        g.moveTo(xw+jitter-2, ry-5);
-        g.lineTo(xw+jitter+2, ry-5);
-        g.stroke();
+    function renderStart() {
+      app.innerHTML = `
+        <div class="quiz-start">
+          <div class="quiz-start__icon">🌾</div>
+          <h2>Quanto você sabe sobre Entre Rios?</h2>
+          <p>Responda ${QUESTIONS.length} perguntas sobre a história, agricultura e cultura dos Suábios do Danúbio no Paraná.</p>
+          <div class="quiz-start__meta">
+            <span>📋 ${QUESTIONS.length} perguntas</span>
+            <span>🏆 1 ponto por acerto</span>
+            <span>💡 Explicação em cada resposta</span>
+          </div>
+          <button class="btn-quiz-start" id="btn-begin">▶ &nbsp;Começar Quiz</button>
+        </div>`;
+      document.getElementById('btn-begin').addEventListener('click', () => {
+        current = 0; score = 0; answered = false; wrongCount = 0;
+        renderQuestion();
+      });
+    }
+
+    function renderQuestion() {
+      const q = QUESTIONS[current];
+      const total = QUESTIONS.length;
+      const pct = ((current) / total) * 100;
+
+      app.innerHTML = `
+        <div class="quiz-progress">
+          <div class="quiz-progress__bar-bg">
+            <div class="quiz-progress__bar-fill" style="width:${pct}%"></div>
+          </div>
+          <div class="quiz-progress__label">Pergunta ${current + 1} de ${total}</div>
+        </div>
+        <div class="quiz-card">
+          <div class="quiz-card__num">Pergunta ${current + 1} / ${total}</div>
+          <div class="quiz-card__question">${q.q}</div>
+          <div class="quiz-options" id="opts">
+            ${q.opts.map((opt, i) => `
+              <button class="quiz-opt" data-i="${i}">
+                <span class="opt-letter">${LETTERS[i]}</span>
+                ${opt}
+              </button>`).join('')}
+          </div>
+          <div class="quiz-feedback" id="feedback"></div>
+          <button class="quiz-next" id="btn-next">
+            ${current + 1 < total ? 'Próxima pergunta →' : 'Ver resultado →'}
+          </button>
+        </div>`;
+
+      document.querySelectorAll('.quiz-opt').forEach(btn => {
+        btn.addEventListener('click', () => handleAnswer(parseInt(btn.dataset.i)));
+      });
+      document.getElementById('btn-next').addEventListener('click', () => {
+        current++;
+        if (current < QUESTIONS.length) renderQuestion();
+        else renderResult();
+      });
+    }
+
+    function handleAnswer(chosen) {
+      if (answered) return;
+      answered = true;
+      const q = QUESTIONS[current];
+      const correct = q.answer;
+      const feedback = document.getElementById('feedback');
+      const nextBtn = document.getElementById('btn-next');
+
+      document.querySelectorAll('.quiz-opt').forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === correct) btn.classList.add('correct');
+        if (i === chosen && chosen !== correct) btn.classList.add('wrong');
+      });
+
+      if (chosen === correct) {
+        score++;
+        feedback.className = 'quiz-feedback correct-fb show';
+        feedback.innerHTML = `<strong>✅ Correto!</strong> ${q.feedback}`;
+      } else {
+        wrongCount++;
+        feedback.className = 'quiz-feedback wrong-fb show';
+        feedback.innerHTML = `<strong>❌ Incorreto.</strong> A resposta certa é <strong>${LETTERS[correct]} – ${q.opts[correct]}</strong>. ${q.feedback}`;
       }
+
+      nextBtn.classList.add('show');
+      answered = true;
     }
-  }
 
-  /* Bordas decorativas — grama verde sólida */
-  g.fillStyle = BORDER_COLOR;
-  g.fillRect(0, 0,        TW, BORDER);
-  g.fillRect(0, H-BORDER, TW, BORDER);
-
-  /* Faixa de terra/sombra nas bordas do campo */
-  g.fillStyle = 'rgba(0,0,0,0.08)';
-  g.fillRect(0, BORDER-2, TW, 4);
-  g.fillRect(0, H-BORDER-2, TW, 4);
-
-  /* Divisórias redesenhadas POR ÚLTIMO — totalmente opacas, sobre a textura */
-  g.strokeStyle = DIVIDER_COLOR;
-  g.lineWidth = 4;
-  g.setLineDash([]);
-  for(let l=1; l<LANES; l++){
-    const y = BORDER + l*LANE_H;
-    g.beginPath(); g.moveTo(0,y); g.lineTo(TW,y); g.stroke();
-  }
-  g.lineWidth = 4;
-  g.beginPath(); g.moveTo(0,BORDER);   g.lineTo(TW,BORDER);   g.stroke();
-  g.beginPath(); g.moveTo(0,H-BORDER); g.lineTo(TW,H-BORDER); g.stroke();
-})();
-
-/* ── (wheat border animation removed) ── */
-
-/* ── Reset ── */
-function reset(){
-  lane=1; targetLane=1; tractorY=laneY(1);
-  speed=SPEED_INIT; elapsed=0; lastTs=null;
-  moveCd=0; spawnCd=SPAWN_MIN;
-  trees=[]; dusts=[]; bgOff=0;
-  state='playing';
-}
-
-/* ── Spawn ── */
-function spawnTree(){
-  if(trees.length>=MAX_TREES) return;
-  const used=new Set(trees.map(t=>t.lane));
-  const avail=[0,1,2].filter(l=>!used.has(l));
-  if(!avail.length) return;
-  const l=avail[Math.floor(Math.random()*avail.length)];
-  trees.push({lane:l, x:W+TREE_S+10, y:laneY(l)});
-  spawnCd = SPAWN_MIN + Math.floor(Math.random()*50);
-}
-
-/* ── Poeira ── */
-function addDust(x,y){
-  for(let i=0;i<5;i++)
-    dusts.push({
-      x:x+(Math.random()-.5)*16, y:y+(Math.random()-.5)*16,
-      vx:-(Math.random()*1.2+.4), vy:(Math.random()-.5)*.8,
-      life:1, r:Math.random()*4+2
-    });
-}
-
-function lerp(a,b,t){return a+(b-a)*t;}
-
-/* ── Sprites ── */
-const IMG_TRACTOR = new Image();
-const IMG_TREE    = new Image();
-let spritesReady = 0;
-
-function preloadSprites(){
-  const btn = document.getElementById('btn-start');
-  if(btn){ btn.disabled = true; btn.textContent = 'Carregando…'; }
-
-  function check(){
-    spritesReady++;
-    if(spritesReady >= 2){
-      const b = document.getElementById('btn-start');
-      if(b){ b.disabled = false; b.innerHTML = '▶&nbsp; Iniciar'; }
+    function renderResult() {
+      const total = QUESTIONS.length;
+      const res = getResultData(score, total);
+      app.innerHTML = `
+        <div class="quiz-result">
+          <div class="quiz-result__emoji">${res.emoji}</div>
+          <h2>${res.title}</h2>
+          <div class="quiz-result__score">${score}<span> / ${total}</span></div>
+          <p class="quiz-result__msg">${res.msg}</p>
+          <div class="quiz-result__breakdown">
+            <div><strong style="color:#3a8a2f">${score}</strong> acertos</div>
+            <div><strong style="color:#c0392b">${wrongCount}</strong> erros</div>
+            <div><strong style="color:#c8973a">${Math.round((score/total)*100)}%</strong> aproveitamento</div>
+          </div>
+          <button class="btn-quiz-restart" id="btn-restart">↺ &nbsp;Tentar novamente</button>
+        </div>`;
+      document.getElementById('btn-restart').addEventListener('click', renderStart);
     }
-  }
-  IMG_TRACTOR.crossOrigin = 'anonymous';
-  IMG_TREE.crossOrigin    = 'anonymous';
-  IMG_TRACTOR.onload = check;
-  IMG_TRACTOR.onerror = check;
-  IMG_TREE.onload = check;
-  IMG_TREE.onerror = check;
-  IMG_TRACTOR.src = 'img/trator.png?' + Date.now();
-  IMG_TREE.src    = 'img/arvore.png?' + Date.now();
-}
 
-if(document.readyState === 'loading'){
-  document.addEventListener('DOMContentLoaded', preloadSprites);
-} else {
-  preloadSprites();
-}
-
-/* ── Fundo rolante ── */
-function drawBG(){
-  const TW = BGCV.width;
-  const off = bgOff % TW;
-  cx.globalAlpha = 1;
-  cx.drawImage(BGCV, -off, 0, TW, H);
-  cx.drawImage(BGCV, TW-off, 0, TW, H);
-}
-
-/* ── Trator ── */
-function drawTractor(x, y){
-  cx.globalAlpha = 1;
-  const sw = TRACTOR_S * 2.4;
-  const sh = TRACTOR_S * 1.8;
-  cx.fillStyle = 'rgba(0,0,0,0.28)';
-  cx.beginPath();
-  cx.ellipse(x + 2, y + sh * 0.38, sw * 0.42, sh * 0.10, 0, 0, Math.PI * 2);
-  cx.fill();
-  cx.save();
-  cx.translate(x, y);
-  cx.scale(-1, 1);
-  cx.drawImage(IMG_TRACTOR, -sw/2, -sh/2, sw, sh);
-  cx.restore();
-}
-
-/* ── Árvores ── */
-function drawTrees(){
-  cx.globalAlpha = 1;
-  trees.forEach(t => {
-    cx.globalAlpha = 1;
-    const sw = TREE_S * 1.9;
-    const sh = TREE_S * 1.9;
-    cx.fillStyle = 'rgba(0,0,0,0.28)';
-    cx.beginPath();
-    cx.ellipse(t.x + 2, t.y + sh * 0.38, sw * 0.36, sh * 0.09, 0, 0, Math.PI * 2);
-    cx.fill();
-    cx.drawImage(IMG_TREE, t.x - sw/2, t.y - sh/2, sw, sh);
-  });
-}
-
-/* ── Poeira ── */
-function tickDust(){
-  cx.globalAlpha = 1;
-  dusts.forEach(d=>{
-    d.x+=d.vx; d.y+=d.vy; d.life-=.06;
-    cx.beginPath(); cx.arc(d.x,d.y,d.r,0,Math.PI*2);
-    cx.fillStyle=`rgba(180,140,50,${d.life*.45})`;
-    cx.fill();
-  });
-  dusts=dusts.filter(d=>d.life>0);
-}
-
-/* ── HUD ── */
-function drawHUD(){
-  cx.globalAlpha = 1;
-  /* botão pause — apenas ele, sem overlays escuros no canvas */
-  cx.fillStyle='rgba(60,40,10,0.55)';
-  cx.beginPath(); cx.roundRect(W/2-30,5,60,22,6); cx.fill();
-  cx.strokeStyle='rgba(200,151,58,0.7)';
-  cx.lineWidth=1;
-  cx.beginPath(); cx.roundRect(W/2-30,5,60,22,6); cx.stroke();
-  cx.fillStyle='#f5f0e8';
-  cx.font='bold 11px "Playfair Display",serif';
-  cx.textAlign='center'; cx.textBaseline='middle';
-  cx.fillText(state==='paused'?'▶ P':'⏸ P', W/2, 16);
-}
-
-/* ── Card helper ── */
-function drawCard(ox,oy,cw,ch){
-  cx.globalAlpha=1;
-  cx.fillStyle='#1e1005';
-  cx.beginPath(); cx.roundRect(ox,oy,cw,ch,14); cx.fill();
-  cx.strokeStyle='#c8973a'; cx.lineWidth=2;
-  cx.beginPath(); cx.roundRect(ox,oy,cw,ch,14); cx.stroke();
-  cx.textAlign='center'; cx.textBaseline='middle';
-}
-function drawBtn(bx,by,label){
-  cx.fillStyle='#c8973a';
-  cx.beginPath(); cx.roundRect(bx-75,by-18,150,36,9); cx.fill();
-  cx.fillStyle='#fff';
-  cx.font='bold 14px "Playfair Display",serif';
-  cx.textAlign='center'; cx.textBaseline='middle';
-  cx.fillText(label,bx,by);
-  _btn={x:bx-75,y:by-18,w:150,h:36};
-}
-
-/* ── Tela Início ── */
-function drawIdle(){
-  cx.globalAlpha=1;
-  cx.fillStyle='rgba(0,0,0,0.65)'; cx.fillRect(0,0,W,H);
-  const cw=320,ch=180,ox=(W-cw)/2,oy=(H-ch)/2;
-  drawCard(ox,oy,cw,ch);
-  cx.font='28px serif'; cx.fillStyle='#f5f0e8';
-  cx.fillText('🚜',W/2,oy+38);
-  cx.font='bold 20px "Playfair Display",serif'; cx.fillStyle='#f5f0e8';
-  cx.fillText('Trator Entre Rios',W/2,oy+74);
-  cx.font='12px "Source Serif 4",serif'; cx.fillStyle='rgba(245,240,232,.65)';
-  cx.fillText('W / S  ou  ⬆️ ⬇️  para mudar de faixa',W/2,oy+102);
-  drawBtn(W/2,oy+148,'▶  Iniciar');
-}
-
-/* ── Game Over ── */
-function drawDead(){
-  cx.globalAlpha=1;
-  cx.fillStyle='rgba(0,0,0,0.68)'; cx.fillRect(0,0,W,H);
-  const cw=320,ch=210,ox=(W-cw)/2,oy=(H-ch)/2;
-  drawCard(ox,oy,cw,ch);
-  cx.font='28px serif'; cx.fillText('💥',W/2,oy+38);
-  cx.font='bold 22px "Playfair Display",serif'; cx.fillStyle='#f5f0e8';
-  cx.fillText('Fim de Jogo!',W/2,oy+76);
-  cx.font='18px "Playfair Display",serif'; cx.fillStyle='#c8973a';
-  cx.fillText(`Tempo: ${Math.floor(elapsed)}s`,W/2,oy+110);
-  if(Math.floor(elapsed)>=best&&elapsed>0){
-    cx.font='12px "Source Serif 4",serif'; cx.fillStyle='#ffe066';
-    cx.fillText('🏆 Novo recorde!',W/2,oy+136);
-  }
-  drawBtn(W/2,oy+178,'↺  Reiniciar');
-}
-
-/* ── Pausa ── */
-function drawPaused(){
-  cx.globalAlpha=1;
-  cx.fillStyle='rgba(0,0,0,0.58)'; cx.fillRect(0,0,W,H);
-  const cw=280,ch=120,ox=(W-cw)/2,oy=(H-ch)/2;
-  drawCard(ox,oy,cw,ch);
-  cx.font='bold 20px "Playfair Display",serif'; cx.fillStyle='#f5f0e8';
-  cx.fillText('⏸  Pausado',W/2,oy+42);
-  cx.font='12px "Source Serif 4",serif'; cx.fillStyle='rgba(245,240,232,.6)';
-  cx.fillText('Pressione P ou clique em Continuar',W/2,oy+70);
-  drawBtn(W/2,oy+104,'▶  Continuar');
-}
-
-function togglePause(){
-  if(state==='playing'){ state='paused'; }
-  else if(state==='paused'){ state='playing'; lastTs=null; }
-}
-
-/* ── Colisão ── */
-function hitTest(){
-  const hr=TRACTOR_S*.26;
-  for(const t of trees){
-    const dx=TRACTOR_X-t.x, dy=tractorY-t.y;
-    if(Math.sqrt(dx*dx+dy*dy)<hr+TREE_S*.26) return true;
-  }
-  return false;
-}
-
-/* ── Loop ── */
-function loop(ts){
-  requestAnimationFrame(loop);
-  if(!lastTs) lastTs=ts;
-  const dt=Math.min((ts-lastTs)/1000,.05);
-  lastTs=ts;
-
-  if(state==='playing'){
-    elapsed+=dt;
-    speed=SPEED_INIT+elapsed*SPEED_INC;
-    bgOff+=speed*1.1;
-    moveCd=Math.max(0,moveCd-dt);
-    spawnCd--;
-
-    if(moveCd===0){
-      if((keys['ArrowUp']||keys['w']||keys['W'])&&targetLane>0){
-        targetLane--; moveCd=MOVE_CD_SEC; addDust(TRACTOR_X,tractorY);
-      }
-      if((keys['ArrowDown']||keys['s']||keys['S'])&&targetLane<LANES-1){
-        targetLane++; moveCd=MOVE_CD_SEC; addDust(TRACTOR_X,tractorY);
-      }
-    }
-    tractorY=lerp(tractorY,laneY(targetLane),.16);
-
-    trees.forEach(t=>{t.x-=speed;});
-    trees=trees.filter(t=>t.x>-TREE_S-10);
-    if(spawnCd<=0&&trees.length<MAX_TREES) spawnTree();
-
-    if(hitTest()){
-      state='dead';
-      best=Math.max(best,Math.floor(elapsed));
-      hudBest.textContent=`${best}s`;
-    }
-    hudTime.textContent=`${Math.floor(elapsed)}s`;
-  }
-
-  /* ── Render ── (globalAlpha sempre 1 entre etapas) ── */
-  cx.globalAlpha=1;
-  drawBG();
-  cx.globalAlpha=1;
-  tickDust();
-  cx.globalAlpha=1;
-  drawTrees();
-  cx.globalAlpha=1;
-  drawTractor(TRACTOR_X,tractorY);
-  cx.globalAlpha=1;
-  drawHUD();
-  cx.globalAlpha=1;
-  if(state==='idle')   drawIdle();
-  if(state==='dead')   drawDead();
-  if(state==='paused') drawPaused();
-  cx.globalAlpha=1;
-}
-
-/* ── Input ── */
-window.addEventListener('keydown',e=>{
-  keys[e.key]=true;
-  if(['ArrowUp','ArrowDown','w','W','s','S'].includes(e.key)) e.preventDefault();
-  if(e.key==='p'||e.key==='P'){
-    if(state==='playing'||state==='paused') togglePause();
-  }
-});
-window.addEventListener('keyup',e=>{keys[e.key]=false;});
-
-function handleClick(px,py){
-  if(_btn&&px>=_btn.x&&px<=_btn.x+_btn.w&&py>=_btn.y&&py<=_btn.y+_btn.h){
-    if(state==='idle'||state==='dead') reset();
-    else if(state==='paused') togglePause();
-    return;
-  }
-  if(state==='playing'){
-    const mid=H/2;
-    if(py<mid&&targetLane>0){targetLane--;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}
-    if(py>=mid&&targetLane<LANES-1){targetLane++;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}
-  }
-}
-CV.addEventListener('click',e=>{
-  const r=CV.getBoundingClientRect();
-  handleClick((e.clientX-r.left)*(W/r.width),(e.clientY-r.top)*(H/r.height));
-});
-
-let swipeY=null;
-CV.addEventListener('touchstart',e=>{
-  e.preventDefault();
-  swipeY=e.touches[0].clientY;
-  const r=CV.getBoundingClientRect();
-  handleClick((e.touches[0].clientX-r.left)*(W/r.width),(e.touches[0].clientY-r.top)*(H/r.height));
-},{passive:false});
-CV.addEventListener('touchend',e=>{
-  if(swipeY===null||state!=='playing') return;
-  const dy=e.changedTouches[0].clientY-swipeY;
-  if(Math.abs(dy)>22){
-    if(dy<0&&targetLane>0){targetLane--;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}
-    if(dy>0&&targetLane<LANES-1){targetLane++;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}
-  }
-  swipeY=null;
-},{passive:true});
-
-/* ── Arranca apenas quando o botão for clicado (imagens já carregadas) ── */
-state = 'idle';
-
-document.getElementById('btn-start').addEventListener('click', function(){
-  document.getElementById('start-overlay').style.display = 'none';
-  reset();
-  requestAnimationFrame(loop);
-});
-})();
-</script>
+    renderStart();
+  })();
+  </script>
 </body>
 </html>
