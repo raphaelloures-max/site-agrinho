@@ -3,19 +3,22 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Quiz – Entre Rios</title>
+  <title>MiniJogo – Entre Rios</title>
   <link rel="stylesheet" href="style.css"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet"/>
   <style>
-    .quiz-section {
+    /* ══════════════════════════════════════════
+       SEÇÃO GERAL
+    ══════════════════════════════════════════ */
+    .minijogo-section {
       background: var(--color-cream, #f5f0e8);
       padding: 2rem 0 5rem;
       min-height: 80vh;
     }
-    .quiz-wrapper {
-      max-width: 720px;
+    .minijogo-wrapper {
+      max-width: 800px;
       margin: 0 auto;
       padding: 0 1.2rem;
       display: flex;
@@ -23,272 +26,196 @@
       align-items: center;
       gap: 1.5rem;
     }
-    .quiz-header { text-align: center; }
-    .quiz-header h1 {
+    .minijogo-header { text-align: center; }
+    .minijogo-header h1 {
       font-family: var(--font-display, 'Playfair Display', serif);
       font-size: clamp(1.8rem, 4vw, 2.6rem);
       color: var(--color-earth, #3a2510);
       margin: .3rem 0 .4rem;
     }
-    .quiz-header p { color: var(--color-bark, #5a3e28); font-size: .95rem; }
+    .minijogo-header p { color: var(--color-bark, #5a3e28); font-size: .95rem; }
 
-    /* ── Barra de progresso ── */
-    .quiz-progress {
-      width: 100%;
+    /* ══════════════════════════════════════════
+       SELETOR DE ABAS
+    ══════════════════════════════════════════ */
+    .game-tabs {
       display: flex;
-      flex-direction: column;
-      gap: .4rem;
-    }
-    .quiz-progress__bar-bg {
+      gap: .5rem;
+      background: #e8dcc8;
+      padding: .35rem;
+      border-radius: 12px;
       width: 100%;
-      height: 8px;
-      background: #d9cfc0;
-      border-radius: 99px;
+      max-width: 420px;
+    }
+    .game-tab {
+      flex: 1;
+      padding: .6rem 1rem;
+      border: none;
+      border-radius: 9px;
+      background: transparent;
+      font-family: 'Playfair Display', serif;
+      font-size: .95rem;
+      color: #5a3e28;
+      cursor: pointer;
+      transition: background .2s, color .2s, box-shadow .2s;
+      font-weight: 600;
+    }
+    .game-tab.active {
+      background: #fff;
+      color: #3a2510;
+      box-shadow: 0 2px 10px rgba(58,37,16,.12);
+    }
+    .game-tab:hover:not(.active) { background: rgba(255,255,255,.5); }
+
+    /* ══════════════════════════════════════════
+       PAINÉIS
+    ══════════════════════════════════════════ */
+    .game-panel { display: none; width: 100%; }
+    .game-panel.active { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+    /* ══════════════════════════════════════════
+       JOGO DO TRATOR
+    ══════════════════════════════════════════ */
+    .game-subheader { text-align: center; }
+    .game-subheader h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      color: #3a2510;
+      margin: 0 0 .2rem;
+    }
+    .game-subheader p { font-size: .88rem; color: #5a3e28; }
+    .game-hud { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+    .hud-box {
+      background: var(--color-earth, #3a2510);
+      color: #f5f0e8;
+      border-radius: 8px;
+      padding: .35rem 1.2rem;
+      font-family: var(--font-display, 'Playfair Display', serif);
+      font-size: .9rem;
+      min-width: 110px;
+      text-align: center;
+    }
+    .hud-box span { display: block; font-size: 1.4rem; font-weight: 700; color: #c8973a; line-height: 1.2; }
+    #game-container {
+      position: relative;
+      width: 100%;
+      max-width: 760px;
+      border-radius: 14px;
       overflow: hidden;
+      box-shadow: 0 12px 48px rgba(58,37,16,.35);
+      border: 3px solid #c8973a;
+    }
+    #gameCanvas { display: block; width: 100%; height: auto; cursor: default; }
+    #start-overlay {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(20,12,4,.72); border-radius: 11px;
+    }
+    #start-card { text-align: center; padding: 2rem 2.5rem; }
+    #btn-start {
+      background: #c8973a; color: #fff; border: none; border-radius: 9px;
+      padding: .6rem 2rem; font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s;
+    }
+    #btn-start:hover:not(:disabled) { background: #e0a940; }
+    #btn-start:disabled { background: #7a6040; cursor: not-allowed; opacity: .7; }
+    .game-tip { font-size: .82rem; color: var(--color-bark, #5a3e28); opacity: .7; text-align: center; }
+
+    /* ══════════════════════════════════════════
+       QUIZ
+    ══════════════════════════════════════════ */
+    .quiz-progress { width: 100%; display: flex; flex-direction: column; gap: .4rem; }
+    .quiz-progress__bar-bg {
+      width: 100%; height: 8px; background: #d9cfc0;
+      border-radius: 99px; overflow: hidden;
     }
     .quiz-progress__bar-fill {
-      height: 100%;
-      background: #c8973a;
-      border-radius: 99px;
-      transition: width .4s ease;
+      height: 100%; background: #c8973a;
+      border-radius: 99px; transition: width .4s ease;
     }
-    .quiz-progress__label {
-      font-size: .8rem;
-      color: var(--color-bark, #5a3e28);
-      opacity: .75;
-      text-align: right;
-    }
-
-    /* ── Card da pergunta ── */
+    .quiz-progress__label { font-size: .8rem; color: #5a3e28; opacity: .75; text-align: right; }
     .quiz-card {
-      width: 100%;
-      background: #fff;
-      border-radius: 16px;
+      width: 100%; background: #fff; border-radius: 16px;
       box-shadow: 0 8px 40px rgba(58,37,16,.13);
-      border: 2px solid #e8dcc8;
-      padding: 2rem 2rem 1.6rem;
+      border: 2px solid #e8dcc8; padding: 2rem 2rem 1.6rem;
       animation: fadeUp .35s ease;
     }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .quiz-card__num {
-      font-size: .78rem;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: #c8973a;
-      margin-bottom: .7rem;
-    }
-    .quiz-card__question {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.05rem, 2.5vw, 1.3rem);
-      color: #3a2510;
-      line-height: 1.5;
-      margin-bottom: 1.5rem;
-    }
-
-    /* ── Opções ── */
-    .quiz-options {
-      display: flex;
-      flex-direction: column;
-      gap: .7rem;
-    }
+    .quiz-card__num { font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #c8973a; margin-bottom: .7rem; }
+    .quiz-card__question { font-family: 'Playfair Display', serif; font-size: clamp(1.05rem, 2.5vw, 1.3rem); color: #3a2510; line-height: 1.5; margin-bottom: 1.5rem; }
+    .quiz-options { display: flex; flex-direction: column; gap: .7rem; }
     .quiz-opt {
-      width: 100%;
-      text-align: left;
-      background: #faf7f2;
-      border: 2px solid #e0d5c4;
-      border-radius: 10px;
-      padding: .75rem 1.1rem;
-      font-family: 'Source Serif 4', serif;
-      font-size: .95rem;
-      color: #3a2510;
-      cursor: pointer;
+      width: 100%; text-align: left; background: #faf7f2;
+      border: 2px solid #e0d5c4; border-radius: 10px;
+      padding: .75rem 1.1rem; font-family: 'Source Serif 4', serif;
+      font-size: .95rem; color: #3a2510; cursor: pointer;
       transition: border-color .18s, background .18s, transform .12s;
-      display: flex;
-      align-items: center;
-      gap: .7rem;
+      display: flex; align-items: center; gap: .7rem;
     }
-    .quiz-opt:hover:not(:disabled) {
-      border-color: #c8973a;
-      background: #fdf6e8;
-      transform: translateX(3px);
-    }
+    .quiz-opt:hover:not(:disabled) { border-color: #c8973a; background: #fdf6e8; transform: translateX(3px); }
     .quiz-opt .opt-letter {
-      min-width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: #e8dcc8;
-      color: #5a3e28;
-      font-weight: 700;
-      font-size: .82rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: background .18s, color .18s;
+      min-width: 28px; height: 28px; border-radius: 50%;
+      background: #e8dcc8; color: #5a3e28; font-weight: 700;
+      font-size: .82rem; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; transition: background .18s, color .18s;
     }
-    .quiz-opt.correct {
-      border-color: #3a8a2f;
-      background: #edfae9;
-    }
-    .quiz-opt.correct .opt-letter {
-      background: #3a8a2f;
-      color: #fff;
-    }
-    .quiz-opt.wrong {
-      border-color: #c0392b;
-      background: #fdecea;
-    }
-    .quiz-opt.wrong .opt-letter {
-      background: #c0392b;
-      color: #fff;
-    }
+    .quiz-opt.correct { border-color: #3a8a2f; background: #edfae9; }
+    .quiz-opt.correct .opt-letter { background: #3a8a2f; color: #fff; }
+    .quiz-opt.wrong { border-color: #c0392b; background: #fdecea; }
+    .quiz-opt.wrong .opt-letter { background: #c0392b; color: #fff; }
     .quiz-opt:disabled { cursor: default; transform: none; }
-
-    /* ── Feedback ── */
     .quiz-feedback {
-      margin-top: 1.1rem;
-      padding: .85rem 1.1rem;
-      border-radius: 10px;
-      font-size: .9rem;
-      line-height: 1.5;
-      display: none;
+      margin-top: 1.1rem; padding: .85rem 1.1rem; border-radius: 10px;
+      font-size: .9rem; line-height: 1.5; display: none;
     }
     .quiz-feedback.show { display: block; animation: fadeUp .25s ease; }
-    .quiz-feedback.correct-fb {
-      background: #edfae9;
-      border-left: 4px solid #3a8a2f;
-      color: #1e5219;
-    }
-    .quiz-feedback.wrong-fb {
-      background: #fdecea;
-      border-left: 4px solid #c0392b;
-      color: #7a1e1e;
-    }
-
-    /* ── Botão próximo ── */
+    .quiz-feedback.correct-fb { background: #edfae9; border-left: 4px solid #3a8a2f; color: #1e5219; }
+    .quiz-feedback.wrong-fb   { background: #fdecea; border-left: 4px solid #c0392b; color: #7a1e1e; }
     .quiz-next {
-      display: none;
-      margin-top: 1.2rem;
-      width: 100%;
-      background: #c8973a;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: .75rem 1.5rem;
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background .2s;
+      display: none; margin-top: 1.2rem; width: 100%;
+      background: #c8973a; color: #fff; border: none; border-radius: 10px;
+      padding: .75rem 1.5rem; font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s;
     }
     .quiz-next.show { display: block; animation: fadeUp .25s ease; }
     .quiz-next:hover { background: #e0a940; }
-
-    /* ── Tela inicial ── */
     .quiz-start {
-      width: 100%;
-      background: #fff;
-      border-radius: 16px;
+      width: 100%; background: #fff; border-radius: 16px;
       box-shadow: 0 8px 40px rgba(58,37,16,.13);
-      border: 2px solid #e8dcc8;
-      padding: 2.5rem 2rem;
-      text-align: center;
+      border: 2px solid #e8dcc8; padding: 2.5rem 2rem; text-align: center;
     }
     .quiz-start__icon { font-size: 3rem; margin-bottom: .8rem; }
-    .quiz-start h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      color: #3a2510;
-      margin-bottom: .6rem;
-    }
+    .quiz-start h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: #3a2510; margin-bottom: .6rem; }
     .quiz-start p { color: #5a3e28; font-size: .95rem; margin-bottom: 1.5rem; line-height: 1.6; }
-    .quiz-start__meta {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-bottom: 1.8rem;
-      flex-wrap: wrap;
-    }
-    .quiz-start__meta span {
-      background: #faf7f2;
-      border: 1px solid #e0d5c4;
-      border-radius: 8px;
-      padding: .4rem .9rem;
-      font-size: .85rem;
-      color: #5a3e28;
-    }
+    .quiz-start__meta { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
+    .quiz-start__meta span { background: #faf7f2; border: 1px solid #e0d5c4; border-radius: 8px; padding: .4rem .9rem; font-size: .85rem; color: #5a3e28; }
     .btn-quiz-start {
-      background: #c8973a;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: .75rem 2.5rem;
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background .2s;
+      background: #c8973a; color: #fff; border: none; border-radius: 10px;
+      padding: .75rem 2.5rem; font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: background .2s;
     }
     .btn-quiz-start:hover { background: #e0a940; }
-
-    /* ── Tela de resultado ── */
     .quiz-result {
-      width: 100%;
-      background: #fff;
-      border-radius: 16px;
+      width: 100%; background: #fff; border-radius: 16px;
       box-shadow: 0 8px 40px rgba(58,37,16,.13);
-      border: 2px solid #e8dcc8;
-      padding: 2.5rem 2rem;
-      text-align: center;
+      border: 2px solid #e8dcc8; padding: 2.5rem 2rem; text-align: center;
       animation: fadeUp .35s ease;
     }
     .quiz-result__emoji { font-size: 3.5rem; margin-bottom: .6rem; }
-    .quiz-result h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      color: #3a2510;
-      margin-bottom: .5rem;
-    }
-    .quiz-result__score {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #c8973a;
-      font-family: 'Playfair Display', serif;
-      line-height: 1.1;
-    }
+    .quiz-result h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #3a2510; margin-bottom: .5rem; }
+    .quiz-result__score { font-size: 3rem; font-weight: 700; color: #c8973a; font-family: 'Playfair Display', serif; line-height: 1.1; }
     .quiz-result__score span { font-size: 1.2rem; color: #5a3e28; }
     .quiz-result__msg { color: #5a3e28; font-size: .95rem; margin: .8rem 0 1.5rem; line-height: 1.6; }
-    .quiz-result__breakdown {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-bottom: 1.8rem;
-      flex-wrap: wrap;
-    }
-    .quiz-result__breakdown div {
-      background: #faf7f2;
-      border: 1px solid #e0d5c4;
-      border-radius: 10px;
-      padding: .6rem 1.2rem;
-      font-size: .88rem;
-      color: #5a3e28;
-    }
+    .quiz-result__breakdown { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
+    .quiz-result__breakdown div { background: #faf7f2; border: 1px solid #e0d5c4; border-radius: 10px; padding: .6rem 1.2rem; font-size: .88rem; color: #5a3e28; }
     .quiz-result__breakdown strong { display: block; font-size: 1.4rem; color: #3a2510; }
     .btn-quiz-restart {
-      background: #c8973a;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: .75rem 2.2rem;
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background .2s;
+      background: #c8973a; color: #fff; border: none; border-radius: 10px;
+      padding: .75rem 2.2rem; font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s;
     }
     .btn-quiz-restart:hover { background: #e0a940; }
   </style>
@@ -322,16 +249,49 @@
   </header>
 
   <main id="main-content">
-    <section class="quiz-section">
-      <div class="quiz-wrapper">
+    <section class="minijogo-section">
+      <div class="minijogo-wrapper">
 
-        <div class="quiz-header">
+        <div class="minijogo-header">
           <span class="section-tag">MiniJogo</span>
-          <h1>Quiz Entre Rios</h1>
-          <p>Teste seus conhecimentos sobre a história e a agricultura de Entre Rios</p>
+          <h1>Jogos de Entre Rios</h1>
+          <p>Escolha entre o quiz de conhecimentos ou o jogo do trator</p>
         </div>
 
-        <div id="quiz-app" style="width:100%"></div>
+        <!-- ABAS -->
+        <div class="game-tabs" role="tablist">
+          <button class="game-tab active" id="tab-quiz" role="tab" aria-selected="true"  aria-controls="panel-quiz">🌾 Quiz</button>
+          <button class="game-tab"        id="tab-trator" role="tab" aria-selected="false" aria-controls="panel-trator">🚜 Jogo do Trator</button>
+        </div>
+
+        <!-- PAINEL: QUIZ -->
+        <div class="game-panel active" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz">
+          <div id="quiz-app" style="width:100%"></div>
+        </div>
+
+        <!-- PAINEL: JOGO DO TRATOR -->
+        <div class="game-panel" id="panel-trator" role="tabpanel" aria-labelledby="tab-trator">
+          <div class="game-subheader">
+            <h2>Trator Entre Rios 🚜</h2>
+            <p>Desvie das árvores e sobreviva o maior tempo possível!</p>
+          </div>
+          <div class="game-hud">
+            <div class="hud-box">Tempo<span id="hud-time">0s</span></div>
+            <div class="hud-box">Recorde<span id="hud-best">0s</span></div>
+          </div>
+          <div id="game-container">
+            <canvas id="gameCanvas" width="760" height="300"></canvas>
+            <div id="start-overlay">
+              <div id="start-card">
+                <div style="font-size:2.5rem">🚜</div>
+                <h2 style="font-family:'Playfair Display',serif;color:#f5f0e8;margin:.5rem 0">Trator Entre Rios</h2>
+                <p style="color:rgba(245,240,232,.7);font-size:.85rem;margin-bottom:1.2rem">Desvie das árvores e sobreviva o maior tempo possível!</p>
+                <button id="btn-start">▶&nbsp; Iniciar</button>
+              </div>
+            </div>
+          </div>
+          <p class="game-tip">⬆️ ⬇️ &nbsp;ou&nbsp; <strong>W / S</strong> para mudar de faixa &nbsp;·&nbsp; toque nos lados no mobile</p>
+        </div>
 
       </div>
     </section>
@@ -356,6 +316,35 @@
   </footer>
 
   <script src="script.js"></script>
+
+  <!-- ══════════════════════════════════════════
+       LÓGICA DAS ABAS
+  ══════════════════════════════════════════ -->
+  <script>
+  (function(){
+    const tabQuiz   = document.getElementById('tab-quiz');
+    const tabTrator = document.getElementById('tab-trator');
+    const panelQuiz   = document.getElementById('panel-quiz');
+    const panelTrator = document.getElementById('panel-trator');
+
+    function switchTab(tab) {
+      const isQuiz = tab === 'quiz';
+      tabQuiz.classList.toggle('active', isQuiz);
+      tabTrator.classList.toggle('active', !isQuiz);
+      tabQuiz.setAttribute('aria-selected', isQuiz);
+      tabTrator.setAttribute('aria-selected', !isQuiz);
+      panelQuiz.classList.toggle('active', isQuiz);
+      panelTrator.classList.toggle('active', !isQuiz);
+    }
+
+    tabQuiz.addEventListener('click',   () => switchTab('quiz'));
+    tabTrator.addEventListener('click', () => switchTab('trator'));
+  })();
+  </script>
+
+  <!-- ══════════════════════════════════════════
+       QUIZ
+  ══════════════════════════════════════════ -->
   <script>
   (function(){
     const QUESTIONS = [
@@ -391,12 +380,7 @@
       },
       {
         q: 'Qual é a principal contribuição da Agrária Malte para o Brasil?',
-        opts: [
-          'É a maior fábrica de farinha do país',
-          'É a maior maltaria da América Latina, abastecendo as principais cervejarias',
-          'É responsável por 60% da exportação de soja',
-          'Produz etanol para o mercado nacional'
-        ],
+        opts: ['É a maior fábrica de farinha do país', 'É a maior maltaria da América Latina, abastecendo as principais cervejarias', 'É responsável por 60% da exportação de soja', 'Produz etanol para o mercado nacional'],
         answer: 1,
         feedback: 'A Agrária Malte, localizada em Grandes Rios (PR), é a maior maltaria da América Latina, responsável por cerca de 30% da demanda nacional de malte.'
       },
@@ -408,12 +392,7 @@
       },
       {
         q: 'Qual é o objetivo da FAPA (Fundação Agrária de Pesquisa Agropecuária)?',
-        opts: [
-          'Organizar festivais culturais suábios',
-          'Desenvolver variedades adaptadas ao clima subtropical de Guarapuava',
-          'Administrar o sistema de saúde das colônias',
-          'Exportar trigo para a Europa'
-        ],
+        opts: ['Organizar festivais culturais suábios', 'Desenvolver variedades adaptadas ao clima subtropical de Guarapuava', 'Administrar o sistema de saúde das colônias', 'Exportar trigo para a Europa'],
         answer: 1,
         feedback: 'A FAPA desenvolve variedades de trigo, cevada, soja e milho adaptadas ao clima subtropical de Guarapuava, elevando a produtividade sem ampliar a área plantada.'
       },
@@ -424,50 +403,35 @@
         feedback: 'Pela lei estadual nº 4.583, de 27 de junho de 1962, o distrito de Entre Rios foi oficialmente criado e anexado ao município de Guarapuava.'
       },
       {
-        q: 'Qual ODS (Objetivo de Desenvolvimento Sustentável) da ONU está diretamente relacionado ao modelo de Entre Rios?',
+        q: 'Qual ODS da ONU está diretamente relacionado ao modelo de Entre Rios?',
         opts: ['ODS 1 – Erradicação da Pobreza', 'ODS 2 – Fome Zero e Agricultura Sustentável', 'ODS 7 – Energia Limpa', 'ODS 13 – Ação Climática'],
         answer: 1,
-        feedback: 'O projeto de Entre Rios tem como base a ODS 2 – Fome Zero e Agricultura Sustentável, que busca acabar com a fome, alcançar segurança alimentar e promover a agricultura sustentável.'
+        feedback: 'O projeto de Entre Rios tem como base a ODS 2 – Fome Zero e Agricultura Sustentável, que busca acabar com a fome e promover a agricultura sustentável.'
       },
       {
         q: 'Quais são as principais culturas agrícolas de Entre Rios?',
-        opts: [
-          'Café, cana-de-açúcar e algodão',
-          'Arroz, feijão e mandioca',
-          'Soja, milho, trigo e cevada',
-          'Uva, maçã e pêssego'
-        ],
+        opts: ['Café, cana-de-açúcar e algodão', 'Arroz, feijão e mandioca', 'Soja, milho, trigo e cevada', 'Uva, maçã e pêssego'],
         answer: 2,
         feedback: 'As culturas principais de Entre Rios são soja, milho, trigo e cevada, com rotação obrigatória entre elas para preservar a saúde do solo.'
       },
       {
         q: 'Qual organização coordena a preservação do patrimônio cultural suábio em Entre Rios desde 2001?',
-        opts: [
-          'Cooperativa AGRÁRIA',
-          'Prefeitura de Guarapuava',
-          'Fundação Cultural Suábio-Brasileira (FCSB)',
-          'Instituto do Patrimônio Histórico do Paraná'
-        ],
+        opts: ['Cooperativa AGRÁRIA', 'Prefeitura de Guarapuava', 'Fundação Cultural Suábio-Brasileira (FCSB)', 'Instituto do Patrimônio Histórico do Paraná'],
         answer: 2,
-        feedback: 'A Fundação Cultural Suábio-Brasileira (FCSB), criada em 2001 na Colônia Vitória, coordena a preservação do patrimônio cultural suábio, incluindo festivais, gastronomia e arquitetura enxaimel.'
+        feedback: 'A Fundação Cultural Suábio-Brasileira (FCSB), criada em 2001, coordena a preservação do patrimônio cultural suábio, incluindo festivais, gastronomia e arquitetura enxaimel.'
       },
     ];
 
-    const LETTERS = ['A', 'B', 'C', 'D'];
-
-    let current = 0;
-    let score = 0;
-    let answered = false;
-    let wrongCount = 0;
-
+    const LETTERS = ['A','B','C','D'];
+    let current = 0, score = 0, wrongCount = 0, answered = false;
     const app = document.getElementById('quiz-app');
 
     function getResultData(s, total) {
       const pct = s / total;
-      if (pct === 1)   return { emoji: '🏆', title: 'Perfeito!', msg: 'Você domina a história de Entre Rios! Conhecimento completo sobre os suábios, a AGRÁRIA e a agricultura sustentável.' };
-      if (pct >= 0.75) return { emoji: '🌾', title: 'Muito bem!', msg: 'Ótimo conhecimento sobre Entre Rios! Revise a história e agricultura para alcançar a pontuação máxima.' };
-      if (pct >= 0.5)  return { emoji: '📚', title: 'Bom começo!', msg: 'Você sabe bastante, mas há detalhes sobre a história e práticas agrícolas para explorar. Que tal ler a aba História?' };
-      return { emoji: '🌱', title: 'Continue aprendendo!', msg: 'Entre Rios tem uma história rica. Explore as páginas do site para conhecer mais sobre os suábios e a AGRÁRIA!' };
+      if (pct === 1)   return { emoji:'🏆', title:'Perfeito!',           msg:'Você domina a história de Entre Rios! Conhecimento completo sobre os suábios, a AGRÁRIA e a agricultura sustentável.' };
+      if (pct >= 0.75) return { emoji:'🌾', title:'Muito bem!',          msg:'Ótimo conhecimento sobre Entre Rios! Revise alguns detalhes para alcançar a pontuação máxima.' };
+      if (pct >= 0.5)  return { emoji:'📚', title:'Bom começo!',         msg:'Você sabe bastante! Explore a aba História para aprender mais sobre os suábios e a AGRÁRIA.' };
+      return               { emoji:'🌱', title:'Continue aprendendo!', msg:'Entre Rios tem uma história rica. Explore o site para conhecer mais sobre os suábios e a AGRÁRIA!' };
     }
 
     function renderStart() {
@@ -492,31 +456,28 @@
     function renderQuestion() {
       const q = QUESTIONS[current];
       const total = QUESTIONS.length;
-      const pct = ((current) / total) * 100;
-
+      answered = false;
       app.innerHTML = `
         <div class="quiz-progress">
           <div class="quiz-progress__bar-bg">
-            <div class="quiz-progress__bar-fill" style="width:${pct}%"></div>
+            <div class="quiz-progress__bar-fill" style="width:${(current/total)*100}%"></div>
           </div>
-          <div class="quiz-progress__label">Pergunta ${current + 1} de ${total}</div>
+          <div class="quiz-progress__label">Pergunta ${current+1} de ${total}</div>
         </div>
         <div class="quiz-card">
-          <div class="quiz-card__num">Pergunta ${current + 1} / ${total}</div>
+          <div class="quiz-card__num">Pergunta ${current+1} / ${total}</div>
           <div class="quiz-card__question">${q.q}</div>
           <div class="quiz-options" id="opts">
-            ${q.opts.map((opt, i) => `
+            ${q.opts.map((opt,i) => `
               <button class="quiz-opt" data-i="${i}">
-                <span class="opt-letter">${LETTERS[i]}</span>
-                ${opt}
+                <span class="opt-letter">${LETTERS[i]}</span>${opt}
               </button>`).join('')}
           </div>
           <div class="quiz-feedback" id="feedback"></div>
           <button class="quiz-next" id="btn-next">
-            ${current + 1 < total ? 'Próxima pergunta →' : 'Ver resultado →'}
+            ${current+1 < total ? 'Próxima pergunta →' : 'Ver resultado →'}
           </button>
         </div>`;
-
       document.querySelectorAll('.quiz-opt').forEach(btn => {
         btn.addEventListener('click', () => handleAnswer(parseInt(btn.dataset.i)));
       });
@@ -531,28 +492,23 @@
       if (answered) return;
       answered = true;
       const q = QUESTIONS[current];
-      const correct = q.answer;
       const feedback = document.getElementById('feedback');
-      const nextBtn = document.getElementById('btn-next');
-
+      const nextBtn  = document.getElementById('btn-next');
       document.querySelectorAll('.quiz-opt').forEach((btn, i) => {
         btn.disabled = true;
-        if (i === correct) btn.classList.add('correct');
-        if (i === chosen && chosen !== correct) btn.classList.add('wrong');
+        if (i === q.answer) btn.classList.add('correct');
+        if (i === chosen && chosen !== q.answer) btn.classList.add('wrong');
       });
-
-      if (chosen === correct) {
+      if (chosen === q.answer) {
         score++;
         feedback.className = 'quiz-feedback correct-fb show';
         feedback.innerHTML = `<strong>✅ Correto!</strong> ${q.feedback}`;
       } else {
         wrongCount++;
         feedback.className = 'quiz-feedback wrong-fb show';
-        feedback.innerHTML = `<strong>❌ Incorreto.</strong> A resposta certa é <strong>${LETTERS[correct]} – ${q.opts[correct]}</strong>. ${q.feedback}`;
+        feedback.innerHTML = `<strong>❌ Incorreto.</strong> A resposta certa é <strong>${LETTERS[q.answer]} – ${q.opts[q.answer]}</strong>. ${q.feedback}`;
       }
-
       nextBtn.classList.add('show');
-      answered = true;
     }
 
     function renderResult() {
@@ -575,6 +531,201 @@
     }
 
     renderStart();
+  })();
+  </script>
+
+  <!-- ══════════════════════════════════════════
+       JOGO DO TRATOR
+  ══════════════════════════════════════════ -->
+  <script>
+  (function(){
+  'use strict';
+  const CV = document.getElementById('gameCanvas');
+  const cx = CV.getContext('2d');
+  const W  = CV.width;
+  const H  = CV.height;
+  const hudTime = document.getElementById('hud-time');
+  const hudBest = document.getElementById('hud-best');
+
+  const BORDER   = 32;
+  const TRACK_H  = H - BORDER*2;
+  const LANES    = 3;
+  const LANE_H   = TRACK_H / LANES;
+  const TRACTOR_X = 90;
+  const TRACTOR_S = 44;
+  const TREE_S    = 40;
+  function laneY(l){ return BORDER + l * LANE_H + LANE_H/2; }
+
+  const LANE_COLORS  = ['#d9a825','#c99618','#d9a825'];
+  const BORDER_COLOR = '#4d8a1a';
+  const DIVIDER_COLOR= '#8a6010';
+  const SPEED_INIT   = 4.0;
+  const SPEED_INC    = 0.018;
+  const MAX_TREES    = 2;
+  const SPAWN_MIN    = 90;
+  const MOVE_CD_SEC  = 0.13;
+
+  let state='idle', lane=1, targetLane=1;
+  let tractorY=laneY(1), speed=SPEED_INIT;
+  let elapsed=0, best=0, lastTs=null;
+  let moveCd=0, spawnCd=SPAWN_MIN;
+  let trees=[], dusts=[], bgOff=0;
+  const keys={};
+  let _btn=null;
+
+  /* Fundo offscreen */
+  const BGCV = document.createElement('canvas');
+  BGCV.width = W*2; BGCV.height = H;
+  (function(){
+    const g = BGCV.getContext('2d');
+    const TW = BGCV.width;
+    for(let l=0;l<LANES;l++){ g.fillStyle=LANE_COLORS[l]; g.fillRect(0,BORDER+l*LANE_H,TW,LANE_H); }
+    g.lineWidth=1;
+    const RS=10;
+    for(let l=0;l<LANES;l++){
+      const yB=BORDER+l*LANE_H;
+      for(let ry=yB+RS/2;ry<yB+LANE_H-2;ry+=RS){
+        const even=Math.round((ry-yB)/RS)%2===0;
+        g.strokeStyle=even?'rgba(180,120,10,0.18)':'rgba(255,220,80,0.12)';
+        g.beginPath();g.moveTo(0,ry);g.lineTo(TW,ry);g.stroke();
+      }
+    }
+    g.lineWidth=1.2;
+    for(let l=0;l<LANES;l++){
+      const yB=BORDER+l*LANE_H;
+      for(let ry=yB+RS/2;ry<yB+LANE_H-2;ry+=RS){
+        for(let xw=8;xw<TW;xw+=18){
+          const j=((xw*31+ry*17)%7)-3;
+          g.strokeStyle='rgba(160,100,5,0.22)';g.beginPath();g.moveTo(xw+j,ry+2);g.lineTo(xw+j,ry-5);g.stroke();
+          g.strokeStyle='rgba(210,160,20,0.28)';g.beginPath();g.moveTo(xw+j-2,ry-5);g.lineTo(xw+j+2,ry-5);g.stroke();
+        }
+      }
+    }
+    g.fillStyle=BORDER_COLOR;g.fillRect(0,0,TW,BORDER);g.fillRect(0,H-BORDER,TW,BORDER);
+    g.fillStyle='rgba(0,0,0,0.08)';g.fillRect(0,BORDER-2,TW,4);g.fillRect(0,H-BORDER-2,TW,4);
+    g.strokeStyle=DIVIDER_COLOR;g.lineWidth=4;g.setLineDash([]);
+    for(let l=1;l<LANES;l++){const y=BORDER+l*LANE_H;g.beginPath();g.moveTo(0,y);g.lineTo(TW,y);g.stroke();}
+    g.beginPath();g.moveTo(0,BORDER);g.lineTo(TW,BORDER);g.stroke();
+    g.beginPath();g.moveTo(0,H-BORDER);g.lineTo(TW,H-BORDER);g.stroke();
+  })();
+
+  function reset(){ lane=1;targetLane=1;tractorY=laneY(1);speed=SPEED_INIT;elapsed=0;lastTs=null;moveCd=0;spawnCd=SPAWN_MIN;trees=[];dusts=[];bgOff=0;state='playing'; }
+  function spawnTree(){
+    if(trees.length>=MAX_TREES)return;
+    const used=new Set(trees.map(t=>t.lane));
+    const avail=[0,1,2].filter(l=>!used.has(l));
+    if(!avail.length)return;
+    const l=avail[Math.floor(Math.random()*avail.length)];
+    trees.push({lane:l,x:W+TREE_S+10,y:laneY(l)});
+    spawnCd=SPAWN_MIN+Math.floor(Math.random()*50);
+  }
+  function addDust(x,y){ for(let i=0;i<5;i++) dusts.push({x:x+(Math.random()-.5)*16,y:y+(Math.random()-.5)*16,vx:-(Math.random()*1.2+.4),vy:(Math.random()-.5)*.8,life:1,r:Math.random()*4+2}); }
+  function lerp(a,b,t){return a+(b-a)*t;}
+
+  /* Sprites */
+  const IMG_TRACTOR = new Image();
+  const IMG_TREE    = new Image();
+  function preloadSprites(){
+    const btn = document.getElementById('btn-start');
+    if(btn){ btn.disabled=true; btn.textContent='Carregando…'; }
+    let ready=0;
+    function check(){ ready++; if(ready>=2){ const b=document.getElementById('btn-start'); if(b){b.disabled=false;b.innerHTML='▶&nbsp; Iniciar';} } }
+    IMG_TRACTOR.crossOrigin='anonymous'; IMG_TREE.crossOrigin='anonymous';
+    IMG_TRACTOR.onload=check; IMG_TRACTOR.onerror=check;
+    IMG_TREE.onload=check;    IMG_TREE.onerror=check;
+    IMG_TRACTOR.src='img/trator.png?'+Date.now();
+    IMG_TREE.src   ='img/arvore.png?'+Date.now();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',preloadSprites);
+  else preloadSprites();
+
+  function drawBG(){ const TW=BGCV.width,off=bgOff%TW;cx.globalAlpha=1;cx.drawImage(BGCV,-off,0,TW,H);cx.drawImage(BGCV,TW-off,0,TW,H); }
+  function drawTractor(x,y){
+    cx.globalAlpha=1;
+    const sw=TRACTOR_S*2.4,sh=TRACTOR_S*1.8;
+    cx.fillStyle='rgba(0,0,0,0.28)';cx.beginPath();cx.ellipse(x+2,y+sh*.38,sw*.42,sh*.10,0,0,Math.PI*2);cx.fill();
+    if(IMG_TRACTOR.complete&&IMG_TRACTOR.naturalWidth>0){cx.save();cx.translate(x,y);cx.scale(-1,1);cx.drawImage(IMG_TRACTOR,-sw/2,-sh/2,sw,sh);cx.restore();}
+  }
+  function drawTrees(){
+    cx.globalAlpha=1;
+    trees.forEach(t=>{
+      const sw=TREE_S*1.9,sh=TREE_S*1.9;
+      cx.fillStyle='rgba(0,0,0,0.28)';cx.beginPath();cx.ellipse(t.x+2,t.y+sh*.38,sw*.36,sh*.09,0,0,Math.PI*2);cx.fill();
+      if(IMG_TREE.complete&&IMG_TREE.naturalWidth>0) cx.drawImage(IMG_TREE,t.x-sw/2,t.y-sh/2,sw,sh);
+    });
+  }
+  function tickDust(){ cx.globalAlpha=1;dusts.forEach(d=>{d.x+=d.vx;d.y+=d.vy;d.life-=.06;cx.beginPath();cx.arc(d.x,d.y,d.r,0,Math.PI*2);cx.fillStyle=`rgba(180,140,50,${d.life*.45})`;cx.fill();});dusts=dusts.filter(d=>d.life>0); }
+  function drawHUD(){
+    cx.globalAlpha=1;cx.fillStyle='rgba(60,40,10,0.55)';cx.beginPath();cx.roundRect(W/2-30,5,60,22,6);cx.fill();
+    cx.strokeStyle='rgba(200,151,58,0.7)';cx.lineWidth=1;cx.beginPath();cx.roundRect(W/2-30,5,60,22,6);cx.stroke();
+    cx.fillStyle='#f5f0e8';cx.font='bold 11px "Playfair Display",serif';cx.textAlign='center';cx.textBaseline='middle';
+    cx.fillText(state==='paused'?'▶ P':'⏸ P',W/2,16);
+  }
+  function drawCard(ox,oy,cw,ch){ cx.globalAlpha=1;cx.fillStyle='#1e1005';cx.beginPath();cx.roundRect(ox,oy,cw,ch,14);cx.fill();cx.strokeStyle='#c8973a';cx.lineWidth=2;cx.beginPath();cx.roundRect(ox,oy,cw,ch,14);cx.stroke();cx.textAlign='center';cx.textBaseline='middle'; }
+  function drawBtn(bx,by,label){ cx.fillStyle='#c8973a';cx.beginPath();cx.roundRect(bx-75,by-18,150,36,9);cx.fill();cx.fillStyle='#fff';cx.font='bold 14px "Playfair Display",serif';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(label,bx,by);_btn={x:bx-75,y:by-18,w:150,h:36}; }
+  function drawDead(){
+    cx.globalAlpha=1;cx.fillStyle='rgba(0,0,0,0.68)';cx.fillRect(0,0,W,H);
+    const cw=320,ch=210,ox=(W-cw)/2,oy=(H-ch)/2;drawCard(ox,oy,cw,ch);
+    cx.font='28px serif';cx.fillText('💥',W/2,oy+38);
+    cx.font='bold 22px "Playfair Display",serif';cx.fillStyle='#f5f0e8';cx.fillText('Fim de Jogo!',W/2,oy+76);
+    cx.font='18px "Playfair Display",serif';cx.fillStyle='#c8973a';cx.fillText(`Tempo: ${Math.floor(elapsed)}s`,W/2,oy+110);
+    if(Math.floor(elapsed)>=best&&elapsed>0){cx.font='12px "Source Serif 4",serif';cx.fillStyle='#ffe066';cx.fillText('🏆 Novo recorde!',W/2,oy+136);}
+    drawBtn(W/2,oy+178,'↺  Reiniciar');
+  }
+  function drawPaused(){
+    cx.globalAlpha=1;cx.fillStyle='rgba(0,0,0,0.58)';cx.fillRect(0,0,W,H);
+    const cw=280,ch=120,ox=(W-cw)/2,oy=(H-ch)/2;drawCard(ox,oy,cw,ch);
+    cx.font='bold 20px "Playfair Display",serif';cx.fillStyle='#f5f0e8';cx.fillText('⏸  Pausado',W/2,oy+42);
+    cx.font='12px "Source Serif 4",serif';cx.fillStyle='rgba(245,240,232,.6)';cx.fillText('Pressione P ou clique em Continuar',W/2,oy+70);
+    drawBtn(W/2,oy+104,'▶  Continuar');
+  }
+  function togglePause(){ if(state==='playing')state='paused'; else if(state==='paused'){state='playing';lastTs=null;} }
+  function hitTest(){ const hr=TRACTOR_S*.26;for(const t of trees){const dx=TRACTOR_X-t.x,dy=tractorY-t.y;if(Math.sqrt(dx*dx+dy*dy)<hr+TREE_S*.26)return true;}return false; }
+
+  let loopRunning = false;
+  function loop(ts){
+    requestAnimationFrame(loop);
+    if(!lastTs)lastTs=ts;
+    const dt=Math.min((ts-lastTs)/1000,.05);lastTs=ts;
+    if(state==='playing'){
+      elapsed+=dt;speed=SPEED_INIT+elapsed*SPEED_INC;bgOff+=speed*1.1;moveCd=Math.max(0,moveCd-dt);spawnCd--;
+      if(moveCd===0){
+        if((keys['ArrowUp']||keys['w']||keys['W'])&&targetLane>0){targetLane--;moveCd=MOVE_CD_SEC;addDust(TRACTOR_X,tractorY);}
+        if((keys['ArrowDown']||keys['s']||keys['S'])&&targetLane<LANES-1){targetLane++;moveCd=MOVE_CD_SEC;addDust(TRACTOR_X,tractorY);}
+      }
+      tractorY=lerp(tractorY,laneY(targetLane),.16);
+      trees.forEach(t=>{t.x-=speed;});trees=trees.filter(t=>t.x>-TREE_S-10);
+      if(spawnCd<=0&&trees.length<MAX_TREES)spawnTree();
+      if(hitTest()){state='dead';best=Math.max(best,Math.floor(elapsed));hudBest.textContent=`${best}s`;}
+      hudTime.textContent=`${Math.floor(elapsed)}s`;
+    }
+    cx.globalAlpha=1;drawBG();cx.globalAlpha=1;tickDust();cx.globalAlpha=1;drawTrees();cx.globalAlpha=1;drawTractor(TRACTOR_X,tractorY);cx.globalAlpha=1;drawHUD();cx.globalAlpha=1;
+    if(state==='dead')drawDead();if(state==='paused')drawPaused();cx.globalAlpha=1;
+  }
+
+  window.addEventListener('keydown',e=>{
+    keys[e.key]=true;
+    if(['ArrowUp','ArrowDown','w','W','s','S'].includes(e.key))e.preventDefault();
+    if((e.key==='p'||e.key==='P')&&(state==='playing'||state==='paused'))togglePause();
+  });
+  window.addEventListener('keyup',e=>{keys[e.key]=false;});
+  function handleClick(px,py){
+    if(_btn&&px>=_btn.x&&px<=_btn.x+_btn.w&&py>=_btn.y&&py<=_btn.y+_btn.h){
+      if(state==='dead')reset(); else if(state==='paused')togglePause(); return;
+    }
+    if(state==='playing'){const mid=H/2;if(py<mid&&targetLane>0){targetLane--;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}if(py>=mid&&targetLane<LANES-1){targetLane++;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}}
+  }
+  CV.addEventListener('click',e=>{const r=CV.getBoundingClientRect();handleClick((e.clientX-r.left)*(W/r.width),(e.clientY-r.top)*(H/r.height));});
+  let swipeY=null;
+  CV.addEventListener('touchstart',e=>{e.preventDefault();swipeY=e.touches[0].clientY;const r=CV.getBoundingClientRect();handleClick((e.touches[0].clientX-r.left)*(W/r.width),(e.touches[0].clientY-r.top)*(H/r.height));},{passive:false});
+  CV.addEventListener('touchend',e=>{if(swipeY===null||state!=='playing')return;const dy=e.changedTouches[0].clientY-swipeY;if(Math.abs(dy)>22){if(dy<0&&targetLane>0){targetLane--;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}if(dy>0&&targetLane<LANES-1){targetLane++;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}}swipeY=null;},{passive:true});
+
+  /* Inicia o loop ao clicar no botão */
+  document.getElementById('btn-start').addEventListener('click', function(){
+    document.getElementById('start-overlay').style.display='none';
+    reset();
+    if(!loopRunning){ loopRunning=true; requestAnimationFrame(loop); }
+  });
   })();
   </script>
 </body>
