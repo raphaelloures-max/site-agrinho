@@ -281,8 +281,10 @@ const IMG_TREE    = new Image();
       btn.innerHTML = '▶&nbsp; Iniciar';
     }
   }
-  IMG_TRACTOR.onload = IMG_TRACTOR.onerror = check;
-  IMG_TREE.onload    = IMG_TREE.onerror    = check;
+  IMG_TRACTOR.onload = check;
+  IMG_TRACTOR.onerror = function(){ IMG_TRACTOR.src = 'trator.png'; IMG_TRACTOR.onerror = check; };
+  IMG_TREE.onload = check;
+  IMG_TREE.onerror = function(){ IMG_TREE.src = 'arvore.png'; IMG_TREE.onerror = check; };
   IMG_TRACTOR.src = 'img/trator.png';
   IMG_TREE.src    = 'img/arvore.png';
 })();
@@ -305,13 +307,11 @@ function drawTractor(x, y){
   cx.beginPath();
   cx.ellipse(x + 2, y + sh * 0.38, sw * 0.42, sh * 0.10, 0, 0, Math.PI * 2);
   cx.fill();
-  if(IMG_TRACTOR.complete && IMG_TRACTOR.naturalWidth > 0){
-    cx.save();
-    cx.translate(x, y);
-    cx.scale(-1, 1);
-    cx.drawImage(IMG_TRACTOR, -sw/2, -sh/2, sw, sh);
-    cx.restore();
-  }
+  cx.save();
+  cx.translate(x, y);
+  cx.scale(-1, 1);
+  cx.drawImage(IMG_TRACTOR, -sw/2, -sh/2, sw, sh);
+  cx.restore();
 }
 
 /* ── Árvores ── */
@@ -325,9 +325,7 @@ function drawTrees(){
     cx.beginPath();
     cx.ellipse(t.x + 2, t.y + sh * 0.38, sw * 0.36, sh * 0.09, 0, 0, Math.PI * 2);
     cx.fill();
-    if(IMG_TREE.complete && IMG_TREE.naturalWidth > 0){
-      cx.drawImage(IMG_TREE, t.x - sw/2, t.y - sh/2, sw, sh);
-    }
+    cx.drawImage(IMG_TREE, t.x - sw/2, t.y - sh/2, sw, sh);
   });
 }
 
