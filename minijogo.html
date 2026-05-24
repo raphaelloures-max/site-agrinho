@@ -263,31 +263,37 @@ function addDust(x,y){
 
 function lerp(a,b,t){return a+(b-a)*t;}
 
-/* ── Carrega sprites externos (src definido no clique do botão) ── */
+/* ── Sprites ── */
 const IMG_TRACTOR = new Image();
 const IMG_TREE    = new Image();
+let spritesReady = 0;
 
-/* Pré-carrega assim que a página abre — botão fica desabilitado até ficarem prontos */
-(function preload(){
+function preloadSprites(){
   const btn = document.getElementById('btn-start');
-  btn.disabled = true;
-  btn.textContent = 'Carregando…';
+  if(btn){ btn.disabled = true; btn.textContent = 'Carregando…'; }
 
-  let ready = 0;
   function check(){
-    ready++;
-    if(ready >= 2){
-      btn.disabled = false;
-      btn.innerHTML = '▶&nbsp; Iniciar';
+    spritesReady++;
+    if(spritesReady >= 2){
+      const b = document.getElementById('btn-start');
+      if(b){ b.disabled = false; b.innerHTML = '▶&nbsp; Iniciar'; }
     }
   }
+  IMG_TRACTOR.crossOrigin = 'anonymous';
+  IMG_TREE.crossOrigin    = 'anonymous';
   IMG_TRACTOR.onload = check;
-  IMG_TRACTOR.onerror = function(){ IMG_TRACTOR.src = 'trator.png'; IMG_TRACTOR.onerror = check; };
+  IMG_TRACTOR.onerror = check;
   IMG_TREE.onload = check;
-  IMG_TREE.onerror = function(){ IMG_TREE.src = 'arvore.png'; IMG_TREE.onerror = check; };
-  IMG_TRACTOR.src = 'img/trator.png';
-  IMG_TREE.src    = 'img/arvore.png';
-})();
+  IMG_TREE.onerror = check;
+  IMG_TRACTOR.src = 'img/trator.png?' + Date.now();
+  IMG_TREE.src    = 'img/arvore.png?' + Date.now();
+}
+
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', preloadSprites);
+} else {
+  preloadSprites();
+}
 
 /* ── Fundo rolante ── */
 function drawBG(){
