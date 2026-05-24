@@ -1,14 +1,4 @@
-/* ============================================================
-   ENTRE RIOS – script.js
-   Módulos: Dados, Acessibilidade, Navbar, Scroll Reveal,
-            Carrossel, Tabs, Acordeão, Timeline, Partículas
-   ============================================================ */
-
 'use strict';
-
-/* ============================================================
-   1. DADOS – Arrays de objetos (edite aqui para mudar conteúdo)
-   ============================================================ */
 
 const STATS_DATA = [
   { number: '~9.000', label: 'habitantes' },
@@ -190,11 +180,6 @@ const TECH_CARDS_DATA = [
   { icon: '🚀', title: 'Zero dependências', text: 'Sem frameworks externos – HTML, CSS e JS puros para máxima performance.', tag: 'Performance' },
 ];
 
-/* ============================================================
-   2. UTILITÁRIOS
-   ============================================================ */
-
-/** Cria elemento com atributos e innerHTML opcionais */
 function createElement(tag, attrs = {}, innerHTML = '') {
   const el = document.createElement(tag);
   Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
@@ -202,23 +187,19 @@ function createElement(tag, attrs = {}, innerHTML = '') {
   return el;
 }
 
-/** Seleciona elemento, retorna null sem erro */
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
-/* ============================================================
-   3. ACESSIBILIDADE – Tamanho de fonte e alto contraste
-   ============================================================ */
 (function initA11y() {
-  // Estado salvo no localStorage para persistir entre páginas
+
   const FONT_KEY    = 'er_fontSize';
   const CONTRAST_KEY = 'er_contrast';
 
   let fontLevel = parseInt(localStorage.getItem(FONT_KEY) || '0', 10);
-  const FONT_STEP  = 2;    // px por clique
-  const FONT_MIN   = -4;   // -4px do padrão
-  const FONT_MAX   = 8;    // +8px do padrão
-  const BASE_SIZE  = 16;   // px base do :root
+  const FONT_STEP  = 2;
+  const FONT_MIN   = -4;
+  const FONT_MAX   = 8;
+  const BASE_SIZE  = 16;
 
   function applyFont() {
     document.documentElement.style.fontSize = (BASE_SIZE + fontLevel) + 'px';
@@ -233,7 +214,6 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
   applyFont();
   applyContrast();
 
-  // Botões
   const btnInc = $('#btn-font-inc');
   const btnDec = $('#btn-font-dec');
   const btnCon = $('#btn-contrast');
@@ -252,9 +232,6 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
   });
 })();
 
-/* ============================================================
-   4. NAVBAR – Toggle mobile + scroll shadow
-   ============================================================ */
 (function initNavbar() {
   const toggle = $('#nav-toggle');
   const nav    = $('#nav-menu');
@@ -267,7 +244,6 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
       nav.classList.toggle('open', !expanded);
     });
 
-    // Fecha menu ao clicar em link
     $$('.nav__link', nav).forEach(link => {
       link.addEventListener('click', () => {
         toggle.setAttribute('aria-expanded', 'false');
@@ -275,7 +251,6 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
       });
     });
 
-    // Fecha com ESC
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
         toggle.setAttribute('aria-expanded', 'false');
@@ -285,7 +260,6 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
     });
   }
 
-  // Sombra na navbar ao rolar
   if (navbar) {
     const observer = new IntersectionObserver(
       ([entry]) => navbar.classList.toggle('scrolled', !entry.isIntersecting),
@@ -297,9 +271,6 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
   }
 })();
 
-/* ============================================================
-   5. SCROLL REVEAL – Intersection Observer
-   ============================================================ */
 const revealObserver = (() => {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -310,16 +281,11 @@ const revealObserver = (() => {
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
 
-  // Observa todos os .reveal existentes no DOM agora
   $$('.reveal').forEach(el => observer.observe(el));
 
-  // Retorna função para observar novos elementos adicionados dinamicamente
   return { observe: (el) => observer.observe(el) };
 })();
 
-/* ============================================================
-   6. PARTÍCULAS DE TRIGO (hero)
-   ============================================================ */
 (function initParticles() {
   const container = $('#hero-particles');
   if (!container) return;
@@ -338,9 +304,6 @@ const revealObserver = (() => {
   }
 })();
 
-/* ============================================================
-   7. STATS – Renderização dinâmica
-   ============================================================ */
 (function renderStats() {
   const container = $('#stats-container');
   if (!container) return;
@@ -355,11 +318,8 @@ const revealObserver = (() => {
   });
 })();
 
-/* ============================================================
-   8. CARDS DE SUSTENTABILIDADE – Renderização dinâmica
-   ============================================================ */
 (function renderCards() {
-  // index.html – cards de sustentabilidade
+
   const sustContainer = $('#cards-container');
   if (sustContainer) {
     CARDS_DATA.forEach(card => {
@@ -367,7 +327,6 @@ const revealObserver = (() => {
     });
   }
 
-  // autor.html – cards de tecnologias
   const techContainer = $('#tech-cards');
   if (techContainer) {
     TECH_CARDS_DATA.forEach(card => {
@@ -387,17 +346,13 @@ const revealObserver = (() => {
   }
 })();
 
-/* ============================================================
-   9. TABS (Pilares) – index.html
-   ============================================================ */
 (function initTabs() {
   const btnContainer   = $('#tab-buttons');
   const panelContainer = $('#tab-panels');
   if (!btnContainer || !panelContainer) return;
 
-  // Renderiza botões e painéis a partir dos dados
   PILLARS_DATA.forEach((pilar, i) => {
-    // Botão
+
     const btn = createElement('button', {
       class:           `tab-btn${i === 0 ? ' active' : ''}`,
       role:            'tab',
@@ -407,7 +362,6 @@ const revealObserver = (() => {
     }, pilar.label);
     btnContainer.appendChild(btn);
 
-    // Painel
     const panel = createElement('div', {
       id:               pilar.id,
       class:            `tab-panel${i === 0 ? ' active' : ''}`,
@@ -427,13 +381,11 @@ const revealObserver = (() => {
     panelContainer.appendChild(panel);
   });
 
-  // Interatividade
   const buttons = $$('.tab-btn', btnContainer);
 
   buttons.forEach((btn, i) => {
     btn.addEventListener('click', () => activateTab(i));
 
-    // Navegação por teclado (setas)
     btn.addEventListener('keydown', e => {
       let target = -1;
       if (e.key === 'ArrowRight') target = (i + 1) % buttons.length;
@@ -453,9 +405,6 @@ const revealObserver = (() => {
   }
 })();
 
-/* ============================================================
-   10. CARROSSEL
-   ============================================================ */
 (function initCarousel() {
   const track      = $('#carousel-track');
   const dotsEl     = $('#carousel-dots');
@@ -465,9 +414,8 @@ const revealObserver = (() => {
 
   let current  = 0;
   let autoTimer = null;
-  const VISIBLE = getVisibleCount(); // slides visíveis por vez
+  const VISIBLE = getVisibleCount();
 
-  // Renderiza slides
   CAROUSEL_DATA.forEach((slide, i) => {
     const el = createElement('div', {
       class: 'carousel__slide',
@@ -493,7 +441,6 @@ const revealObserver = (() => {
     return window.innerWidth >= 960 ? 3 : 1;
   }
 
-  // Renderiza dots apenas para posições alcançáveis (não um por slide)
   function buildDots() {
     if (!dotsEl) return;
     dotsEl.innerHTML = '';
@@ -546,12 +493,10 @@ const revealObserver = (() => {
   prevBtn && prevBtn.addEventListener('click', () => { goTo(current - 1); stopAuto(); });
   nextBtn && nextBtn.addEventListener('click', () => { goTo(current + 1); stopAuto(); });
 
-  // Pausa no hover
   const carousel = $('.carousel');
   carousel && carousel.addEventListener('mouseenter', stopAuto);
   carousel && carousel.addEventListener('mouseleave', startAuto);
 
-  // Swipe (touch)
   let touchStartX = 0;
   track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
   track.addEventListener('touchend',   e => {
@@ -560,15 +505,11 @@ const revealObserver = (() => {
     stopAuto();
   });
 
-  // Responsividade – reconstrói dots pois a qtd visível muda
   window.addEventListener('resize', () => { buildDots(); goTo(current); });
 
   startAuto();
 })();
 
-/* ============================================================
-   11. ACORDEÃO – historia.html
-   ============================================================ */
 (function initAccordion() {
   const container = $('#accordion-container');
   if (!container) return;
@@ -606,14 +547,12 @@ const revealObserver = (() => {
       const panelId  = btn.getAttribute('aria-controls');
       const panel    = document.getElementById(panelId);
 
-      // Fecha todos
       $$('.accordion__trigger', container).forEach(b => {
         b.setAttribute('aria-expanded', 'false');
         const p = document.getElementById(b.getAttribute('aria-controls'));
         if (p) { p.style.display = 'none'; p.setAttribute('aria-hidden', 'true'); }
       });
 
-      // Abre o clicado (toggle)
       if (!expanded) {
         btn.setAttribute('aria-expanded', 'true');
         if (panel) { panel.style.display = 'block'; panel.setAttribute('aria-hidden', 'false'); }
@@ -622,9 +561,6 @@ const revealObserver = (() => {
   });
 })();
 
-/* ============================================================
-   12. TIMELINE – historia.html
-   ============================================================ */
 (function renderTimeline() {
   const list = $('#timeline-list');
   if (!list) return;
