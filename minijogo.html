@@ -258,18 +258,18 @@
           <p>Escolha entre o quiz de conhecimentos ou o jogo do trator</p>
         </div>
 
-        <!-- ABAS -->
+        
         <div class="game-tabs" role="tablist">
           <button class="game-tab active" id="tab-quiz" role="tab" aria-selected="true"  aria-controls="panel-quiz">🌾 Quiz</button>
           <button class="game-tab"        id="tab-trator" role="tab" aria-selected="false" aria-controls="panel-trator">🚜 Jogo do Trator</button>
         </div>
 
-        <!-- PAINEL: QUIZ -->
+        
         <div class="game-panel active" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz">
           <div id="quiz-app" style="width:100%"></div>
         </div>
 
-        <!-- PAINEL: JOGO DO TRATOR -->
+        
         <div class="game-panel" id="panel-trator" role="tabpanel" aria-labelledby="tab-trator">
           <div class="game-subheader">
             <h2>Trator Entre Rios 🚜</h2>
@@ -317,9 +317,7 @@
 
   <script src="script.js"></script>
 
-  <!-- ══════════════════════════════════════════
-       LÓGICA DAS ABAS
-  ══════════════════════════════════════════ -->
+  
   <script>
   (function(){
     const tabQuiz   = document.getElementById('tab-quiz');
@@ -342,9 +340,7 @@
   })();
   </script>
 
-  <!-- ══════════════════════════════════════════
-       QUIZ
-  ══════════════════════════════════════════ -->
+  
   <script>
   (function(){
     const QUESTIONS = [
@@ -534,9 +530,7 @@
   })();
   </script>
 
-  <!-- ══════════════════════════════════════════
-       JOGO DO TRATOR
-  ══════════════════════════════════════════ -->
+  
   <script>
   (function(){
   'use strict';
