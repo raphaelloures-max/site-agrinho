@@ -82,6 +82,16 @@ const CAROUSEL_DATA = [
     title: 'Floresta de Eucaliptos',
     caption: 'O horto florestal da Cooperativa AGRÁRIA preserva e distribui espécies nativas desde 1992.',
   },
+  {
+    img: 'img/Museu.png',
+    title: 'Museu da Imigração Suábio-Brasileira',
+    caption: 'O museu da Colônia Vitória preserva fotografias, documentos e objetos dos primeiros colonizadores suábios.',
+  },
+  {
+    img: 'img/Agraria75anos.png',
+    title: '75 Anos de Entre Rios',
+    caption: 'Em 2026, Entre Rios celebra 75 anos de história, tradição agrícola e preservação cultural no Paraná.',
+  },
 ];
 
 const PILLARS_DATA = [
