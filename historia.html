@@ -74,7 +74,7 @@
       </div>
     </section>
 
-    <section class="about section-pad reveal" aria-labelledby="hist-intro-title">
+    <section class="about section-pad" aria-labelledby="hist-intro-title">
       <div class="container grid-2col">
         <div class="about__text">
           <span class="section-tag" aria-hidden="true">A Origem</span>
@@ -92,7 +92,7 @@
       </div>
     </section>
 
-    <section class="about section-pad reveal" style="background:var(--color-cream-dk, #ece5d4);" aria-labelledby="distrito-title">
+    <section class="about section-pad" style="background:var(--color-cream-dk, #ece5d4);" aria-labelledby="distrito-title">
       <div class="container">
         <div style="max-width:780px;margin:0 auto;">
           <span class="section-tag" aria-hidden="true">O Distrito</span>
@@ -106,7 +106,7 @@
       </div>
     </section>
 
-    <section class="about section-pad reveal" aria-labelledby="cultura-title">
+    <section class="about section-pad" aria-labelledby="cultura-title">
       <div class="container grid-2col">
         <figure class="about__visual" aria-label="Dançarinos suábios em traje típico">
           <div class="about__img-frame">
@@ -134,7 +134,7 @@
       </div>
     </section>
 
-    <section class="about section-pad reveal" style="background:var(--color-cream-dk, #ece5d4);" aria-labelledby="cooperativa-title">
+    <section class="about section-pad" style="background:var(--color-cream-dk, #ece5d4);" aria-labelledby="cooperativa-title">
       <div class="container grid-2col">
         <div class="about__text">
           <span class="section-tag" aria-hidden="true">Cooperativismo</span>
@@ -152,7 +152,7 @@
       </div>
     </section>
 
-    <section class="about section-pad reveal" aria-labelledby="impacto-title">
+    <section class="about section-pad" aria-labelledby="impacto-title">
       <div class="container grid-2col">
         <figure class="about__visual" aria-label="Vista aérea dos campos de trigo de Entre Rios">
           <div class="about__img-frame">
@@ -209,5 +209,14 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof revealObserver !== 'undefined') {
+      document.querySelectorAll('.about, .timeline-section, .accordion-section').forEach(function(el) {
+        revealObserver.observe(el);
+      });
+    }
+  });
+  </script>
 </body>
 </html>
