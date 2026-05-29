@@ -616,7 +616,7 @@
     cx.globalAlpha=1;
     const sw=TRACTOR_S*2.4,sh=TRACTOR_S*1.8;
     cx.fillStyle='rgba(0,0,0,0.28)';cx.beginPath();cx.ellipse(x+2,y+sh*.38,sw*.42,sh*.10,0,0,Math.PI*2);cx.fill();
-    if(IMG_TRACTOR.complete&&IMG_TRACTOR.naturalWidth>0){cx.save();cx.translate(x,y);cx.scale(-1,1);cx.drawImage(IMG_TRACTOR,-sw/2,-sh/2,sw,sh);cx.restore();}
+    if(IMG_TRACTOR.complete&&IMG_TRACTOR.naturalWidth>0){cx.drawImage(IMG_TRACTOR,x-sw/2,y-sh/2,sw,sh);}
   }
   function drawTrees(){
     cx.globalAlpha=1;
