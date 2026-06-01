@@ -530,7 +530,7 @@
   const DIVIDER_COLOR= '#8a6010';
   const SPEED_INIT   = 4.0;
   const SPEED_INC    = 0.018;
-  const MAX_TREES    = 2;
+  const MAX_TREES    = 3;
   const SPAWN_MIN    = 90;
   const MOVE_CD_SEC  = 0.13;
 
@@ -579,13 +579,14 @@
 
   let doubleSpawnNext=false,lastDoubleTick=0;
   function reset(){ lane=1;targetLane=1;tractorY=laneY(1);speed=SPEED_INIT;elapsed=0;lastTs=null;moveCd=0;spawnCd=SPAWN_MIN;trees=[];dusts=[];bgOff=0;doubleSpawnNext=false;lastDoubleTick=0;state='playing'; }
-  function spawnTree(){
+  function spawnTree(extraX){
     if(trees.length>=MAX_TREES)return;
     const used=new Set(trees.map(t=>t.lane));
     const avail=[0,1,2].filter(l=>!used.has(l));
     if(!avail.length)return;
     const l=avail[Math.floor(Math.random()*avail.length)];
-    trees.push({lane:l,x:W+TREE_S+10,y:laneY(l)});
+    const xPos = W+TREE_S+10+(extraX||0);
+    trees.push({lane:l,x:xPos,y:laneY(l)});
     spawnCd=SPAWN_MIN+Math.floor(Math.random()*50);
   }
   function addDust(x,y){ for(let i=0;i<5;i++) dusts.push({x:x+(Math.random()-.5)*16,y:y+(Math.random()-.5)*16,vx:-(Math.random()*1.2+.4),vy:(Math.random()-.5)*.8,life:1,r:Math.random()*4+2}); }
@@ -663,11 +664,16 @@
       }
       tractorY=lerp(tractorY,laneY(targetLane),.16);
       trees.forEach(t=>{t.x-=speed;});trees=trees.filter(t=>t.x>-TREE_S-10);
-      if(spawnCd<=0&&trees.length<MAX_TREES){
+      if(spawnCd<=0){
         const tick=Math.floor(elapsed/10);
         if(tick>lastDoubleTick){ doubleSpawnNext=true; lastDoubleTick=tick; }
-        spawnTree();
-        if(doubleSpawnNext&&trees.length<MAX_TREES){ spawnTree(); doubleSpawnNext=false; }
+        if(doubleSpawnNext){
+          spawnTree(0);
+          spawnTree(60);
+          doubleSpawnNext=false;
+        } else {
+          spawnTree(0);
+        }
       }
       if(hitTest()){state='dead';best=Math.max(best,Math.floor(elapsed));hudBest.textContent=`${best}s`;}
       hudTime.textContent=`${Math.floor(elapsed)}s`;
