@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Meio Ambiente – Equilíbrio entre produção e natureza em Entre Rios, Guarapuava, Paraná." />
+  <title>Meio Ambiente – Entre Rios</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet" />
+  <style>
+    .quote-block {
+      border-left: 4px solid #4a8a2a;
+      background: #f2f7f0;
+      border-radius: 0 10px 10px 0;
+      padding: 1.1rem 1.4rem;
+      margin: 1.2rem 0;
+    }
+    .quote-block p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: #1e3a10;
+      margin: 0 0 .4rem;
+      line-height: 1.6;
+    }
+    .quote-block cite {
+      font-size: .82rem;
+      color: #4a6a38;
+      font-style: normal;
+      font-weight: 600;
+      letter-spacing: .04em;
+    }
+    .stat-row {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin: 1.4rem 0;
+    }
+    .stat-pill {
+      background: #fff;
+      border: 2px solid #c8e0b0;
+      border-radius: 10px;
+      padding: .6rem 1.2rem;
+      text-align: center;
+      flex: 1;
+      min-width: 130px;
+    }
+    .stat-pill strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #3a7a1a;
+      line-height: 1.2;
+    }
+    .stat-pill span {
+      font-size: .78rem;
+      color: #4a6a38;
+    }
+    .alert-box {
+      background: #fff8e8;
+      border: 2px solid #c8973a;
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      margin: 1.5rem 0;
+    }
+    .alert-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: #3a2510;
+      margin: 0 0 .6rem;
+    }
+    .alert-box p {
+      font-size: .93rem;
+      color: #5a3e28;
+      margin: 0;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="a11y-bar" role="toolbar" aria-label="Ferramentas de acessibilidade">
+    <button class="a11y-btn" id="btn-font-dec" aria-label="Diminuir tamanho da fonte">A−</button>
+    <button class="a11y-btn" id="btn-font-inc" aria-label="Aumentar tamanho da fonte">A+</button>
+    <button class="a11y-btn" id="btn-contrast" aria-label="Alternar alto contraste">◐</button>
+  </div>
+
+  <header class="navbar" role="banner">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo" aria-label="Início – Entre Rios">
+        <span class="logo-text">Entre Rios</span>
+      </a>
+      <button class="navbar__toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menu de navegação">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </button>
+      <nav id="nav-menu" class="navbar__nav" role="navigation" aria-label="Navegação principal">
+        <ul class="nav__list" role="list">
+          <li><a href="index.html"         class="nav__link">Início</a></li>
+          <li><a href="historia.html"      class="nav__link">História</a></li>
+          <li><a href="meio-ambiente.html" class="nav__link active" aria-current="page">Meio Ambiente</a></li>
+          <li><a href="minijogo.html"      class="nav__link">MiniJogo</a></li>
+          <li><a href="projeto.html"       class="nav__link">Sobre o Projeto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <section class="page-hero page-hero--ambiente" aria-labelledby="page-hero-title">
+      <div class="hero__grain" aria-hidden="true"></div>
+      <div class="page-hero__content reveal">
+        <p class="hero__eyebrow">Produção & Natureza</p>
+        <h1 id="page-hero-title" class="hero__title hero__title--sm">Onde a lavoura<br /><em>respeita a mata</em></h1>
+        <p class="hero__subtitle">Entre Rios é uma das regiões agrícolas mais produtivas do Paraná — e uma das que mais preservam o meio ambiente.</p>
+      </div>
+    </section>
+
+    <section class="about section-pad" aria-labelledby="equilibrio-title">
+      <div class="container grid-2col">
+        <div class="about__text">
+          <span class="section-tag" aria-hidden="true">Equilíbrio</span>
+          <h2 id="equilibrio-title" class="section-title">Produzir sem<br />destruir</h2>
+          <p>Desde os primeiros anos de fundação, os colonizadores suábios de Entre Rios compreenderam que a terra é um recurso que precisa ser cuidado, não apenas explorado. Essa visão — enraizada tanto na cultura europeia quanto na necessidade prática de garantir colheitas futuras — moldou um modelo agrícola que hoje serve de referência nacional.</p>
+          <p>Mais de <strong>30% da área do distrito</strong> é coberta por vegetação nativa, superando o mínimo exigido pelo Código Florestal Brasileiro. As matas ciliares ao longo dos rios Jordão e Pinhão são preservadas rigorosamente, protegendo os mananciais que abastecem tanto a agricultura quanto as comunidades locais.</p>
+          <div class="stat-row">
+            <div class="stat-pill"><strong>+30%</strong><span>área em vegetação nativa</span></div>
+            <div class="stat-pill"><strong>35 mi</strong><span>hectares com plantio direto no Brasil</span></div>
+            <div class="stat-pill"><strong>Zero</strong><span>queimadas registradas no distrito</span></div>
+          </div>
+          <p>A <strong>Cooperativa Agrária</strong> mantém um horto florestal próprio que produz e distribui mudas de espécies nativas gratuitamente para produtores da região, incentivando a recomposição de áreas degradadas e a criação de corredores ecológicos entre fragmentos de mata.</p>
+        </div>
+        <figure class="about__visual" aria-label="Mata nativa preservada em Entre Rios">
+          <div class="about__img-frame">
+            <img src="img/img_mata.png" alt="Floresta de araucárias e mata nativa preservada no distrito de Entre Rios" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
+          <figcaption class="about__caption">Vegetação nativa preservada · Entre Rios</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="about section-pad" style="background:var(--color-cream-dk, #ece5d4);" aria-labelledby="plantio-title">
+      <div class="container grid-2col">
+        <figure class="about__visual" aria-label="Colheita de grãos com maquinário moderno">
+          <div class="about__img-frame">
+            <img src="img/img_colheita.png" alt="Colheitadeiras modernas colhendo grãos nos campos de Entre Rios" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
+          <figcaption class="about__caption">Colheita sustentável · Cooperativa AGRÁRIA</figcaption>
+        </figure>
+        <div class="about__text">
+          <span class="section-tag" aria-hidden="true">Inovação</span>
+          <h2 id="plantio-title" class="section-title">O plantio direto<br />que mudou o Brasil</h2>
+          <p>Na década de 1970, técnicos da AGRÁRIA e agricultores de Entre Rios foram pioneiros na adoção e no aperfeiçoamento do <strong>sistema de plantio direto</strong> no Brasil. A técnica consiste em semear as culturas sem revolver o solo, mantendo a cobertura vegetal da safra anterior sobre a terra.</p>
+          <p>Os benefícios ambientais são profundos: o plantio direto reduz drasticamente a erosão do solo, diminui a perda de nutrientes por lixiviação, aumenta a infiltração da água no solo e sequestra carbono na matéria orgânica. Em uma região com chuvas intensas como Guarapuava, essa prática foi decisiva para manter a fertilidade dos campos ao longo das décadas.</p>
+          <div class="quote-block">
+            <p>"O plantio direto nasceu da observação dos agricultores de que a natureza nunca ara o solo. A mata não precisa de arado para ser fértil — a lavoura também não."</p>
+            <cite>— FAPA, Fundação Agrária de Pesquisa Agropecuária</cite>
+          </div>
+          <p>Hoje, o plantio direto está presente em mais de <strong>35 milhões de hectares</strong> em todo o Brasil, sendo a técnica agrícola de conservação mais adotada no país. Entre Rios e a AGRÁRIA são reconhecidos internacionalmente como berço dessa revolução silenciosa que transformou a agricultura brasileira sem fazer barulho.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about section-pad" aria-labelledby="parana-title">
+      <div class="container grid-2col">
+        <div class="about__text">
+          <span class="section-tag" aria-hidden="true">Importância Regional</span>
+          <h2 id="parana-title" class="section-title">O que Entre Rios<br />representa para o Paraná</h2>
+          <p>O Paraná é o segundo maior estado produtor de grãos do Brasil, e Entre Rios é parte fundamental dessa equação. A região de Guarapuava, impulsionada pela presença da Cooperativa Agrária, é responsável por uma parcela expressiva da produção paranaense de <strong>trigo e cevada</strong> — culturas de inverno essenciais para o abastecimento nacional de farinhas e malte.</p>
+          <p>Além da produção em si, Entre Rios exporta conhecimento. A <strong>FAPA</strong> desenvolve variedades adaptadas ao clima subtropical do sul do Paraná e as disponibiliza para produtores de toda a região. Seus resultados em pesquisa influenciam diretamente a produtividade de milhares de agricultores que nunca pisaram em Entre Rios, mas cultivam sementes desenvolvidas ali.</p>
+          <p>Do ponto de vista ambiental, o distrito funciona como um importante <strong>corredor ecológico</strong> entre fragmentos de Floresta com Araucária — um dos biomas mais ameaçados do Brasil, com menos de 3% de sua cobertura original preservada. A manutenção de mais de 30% de vegetação nativa em uma área de alta pressão agrícola é uma conquista rara e valiosa para o ecossistema paranaense.</p>
+          <div class="quote-block">
+            <p>"A Floresta com Araucária é o símbolo do Paraná. Preservar fragmentos dela dentro de uma das regiões mais produtivas do estado é um feito que merece muito mais atenção do que recebe."</p>
+            <cite>— Instituto Paranaense de Desenvolvimento Econômico e Social (IPARDES)</cite>
+          </div>
+        </div>
+        <figure class="about__visual" aria-label="Campos de soja de Entre Rios ao entardecer">
+          <div class="about__img-frame">
+            <img src="img/img_soja.png" alt="Lavoura de soja com mato nativo ao fundo em Entre Rios, Guarapuava" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
+          <figcaption class="about__caption">Lavoura e natureza em harmonia · Entre Rios</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="about section-pad" style="background:var(--color-cream-dk, #ece5d4);" aria-labelledby="reconhecimento-title">
+      <div class="container">
+        <div style="max-width:780px;margin:0 auto;">
+          <span class="section-tag" aria-hidden="true">Reconhecimento</span>
+          <h2 id="reconhecimento-title" class="section-title">Um distrito importante<br />que o Brasil pouco conhece</h2>
+          <p>Apesar de tudo que Entre Rios representa — para a agricultura brasileira, para a preservação ambiental, para a história da imigração e para o desenvolvimento do Paraná —, o distrito segue sendo amplamente desconhecido fora do estado. Até mesmo dentro de Guarapuava, muitos moradores da sede municipal têm pouca consciência da relevância do distrito localizado a poucos quilômetros de distância.</p>
+          <div class="alert-box">
+            <h3>🌿 Um modelo que o mundo precisa conhecer</h3>
+            <p>Entre Rios prova que alta produtividade agrícola e responsabilidade ambiental não são objetivos opostos. Em um momento em que o mundo debate como alimentar bilhões de pessoas sem destruir o planeta, o modelo de Entre Rios oferece respostas concretas — baseadas não em teoria, mas em mais de 70 anos de prática.</p>
+          </div>
+          <p>A invisibilidade de Entre Rios tem consequências práticas: menos recursos públicos para infraestrutura, menos investimento em turismo rural e histórico, menos valorização do patrimônio cultural suábio. Comunidades com histórias muito menos relevantes recebem muito mais atenção da mídia e das políticas públicas.</p>
+          <p>Iniciativas como este projeto têm papel fundamental nessa mudança. Divulgar a história, os números e o modelo de Entre Rios é o primeiro passo para que o distrito receba o reconhecimento que merece — não apenas como polo agrícola, mas como exemplo vivo de como o Brasil pode se desenvolver com responsabilidade, identidade e respeito à natureza.</p>
+          <div class="quote-block">
+            <p>"Entre Rios não é apenas um distrito de Guarapuava. É uma lição de como recomeçar, produzir e preservar ao mesmo tempo. O Brasil precisa aprender com ele."</p>
+            <cite>— Projeto Entre Rios · Guarapuava, 2026</cite>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band reveal" aria-labelledby="cta-title">
+      <div class="container cta-band__inner">
+        <div>
+          <h2 id="cta-title" class="cta-band__title">Conheça a história completa</h2>
+          <p class="cta-band__sub">Da chegada dos imigrantes às conquistas do século XXI.</p>
+        </div>
+        <a href="historia.html" class="btn-primary btn-primary--light" aria-label="Ir para página de história">Ver História →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <span class="logo-text">Entre Rios</span>
+        <p class="footer__tagline">Tradição agrícola e sustentabilidade.</p>
+      </div>
+      <nav class="footer__nav" aria-label="Links do rodapé">
+        <ul role="list">
+          <li><a href="index.html">Início</a></li>
+          <li><a href="historia.html">História</a></li>
+          <li><a href="meio-ambiente.html">Meio Ambiente</a></li>
+          <li><a href="minijogo.html">MiniJogo</a></li>
+          <li><a href="projeto.html">Sobre o Projeto</a></li>
+        </ul>
+      </nav>
+      <p class="footer__copy">© 2026 Raphael Loures</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
