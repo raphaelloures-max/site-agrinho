@@ -245,6 +245,19 @@
           <p>Escolha entre o quiz de conhecimentos ou o jogo do trator</p>
         </div>
 
+        <div style="display:flex;gap:1rem;width:100%;max-width:700px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:240px;background:#fff;border:2px solid #e8dcc8;border-radius:14px;padding:1.2rem 1.4rem;">
+            <div style="font-size:1.6rem;margin-bottom:.4rem;">🌾</div>
+            <strong style="font-family:'Playfair Display',serif;font-size:1rem;color:#3a2510;display:block;margin-bottom:.4rem;">Quiz — Teste seus conhecimentos</strong>
+            <p style="font-size:.85rem;color:#5a3e28;margin:0;line-height:1.6;">Responda 7 perguntas sobre a história, o meio ambiente e as curiosidades de Entre Rios. Cada resposta vem com uma explicação baseada no conteúdo do site. Ideal para aprender enquanto joga!</p>
+          </div>
+          <div style="flex:1;min-width:240px;background:#fff;border:2px solid #e8dcc8;border-radius:14px;padding:1.2rem 1.4rem;">
+            <div style="font-size:1.6rem;margin-bottom:.4rem;">🚜</div>
+            <strong style="font-family:'Playfair Display',serif;font-size:1rem;color:#3a2510;display:block;margin-bottom:.4rem;">Jogo do Trator — Desvie e sobreviva</strong>
+            <p style="font-size:.85rem;color:#5a3e28;margin:0;line-height:1.6;">Pilote o trator pelos campos de Entre Rios e desvie das árvores! Use ⬆️⬇️ ou W/S para mudar de faixa. A velocidade aumenta com o tempo — e a cada 10 segundos o perigo dobra!</p>
+          </div>
+        </div>
+
         <div class="game-tabs" role="tablist">
           <button class="game-tab active" id="tab-quiz" role="tab" aria-selected="true"  aria-controls="panel-quiz">🌾 Quiz</button>
           <button class="game-tab"        id="tab-trator" role="tab" aria-selected="false" aria-controls="panel-trator">🚜 Jogo do Trator</button>
@@ -331,73 +344,53 @@
         q: 'Em que ano as primeiras famílias suábias chegaram à região de Guarapuava para fundar Entre Rios?',
         opts: ['1945', '1951', '1962', '1970'],
         answer: 1,
-        feedback: 'Em maio de 1951, as primeiras 500 famílias suábias chegaram à região delimitada pelos rios Jordão e Pinhão, fundando as cinco colônias de Entre Rios.'
+        feedback: 'Em maio de 1951, cerca de 500 famílias suábias chegaram à região delimitada pelos rios Jordão e Pinhão, fundando as cinco colônias que formam o distrito.'
       },
       {
-        q: 'Quantas colônias formam o distrito de Entre Rios?',
-        opts: ['Três', 'Quatro', 'Cinco', 'Seis'],
-        answer: 2,
-        feedback: 'Entre Rios é formado por cinco colônias: Vitória, Jordãozinho, Cachoeira, Socorro e Samambaia.'
-      },
-      {
-        q: 'Qual engenheiro agrônomo liderou a vinda dos suábios ao Brasil e presidiu a Cooperativa Agrária?',
-        opts: ['Hans Mueller', 'Michael Moor', 'Johann Weber', 'Karl Bauer'],
-        answer: 1,
-        feedback: 'Michael Moor foi o engenheiro agrônomo responsável por selecionar as famílias e as terras em Guarapuava, tornando-se o primeiro presidente da Cooperativa Agrária.'
-      },
-      {
-        q: 'De qual região da Europa vieram os Suábios do Danúbio antes de chegarem ao Brasil?',
-        opts: ['França e Alemanha', 'Polônia e Ucrânia', 'Hungria, Croácia e Romênia', 'Áustria e Suíça'],
-        answer: 2,
-        feedback: 'Os Suábios do Danúbio eram descendentes de colonizadores alemães que se estabeleceram no sudeste europeu — especialmente na Hungria, Croácia e Romênia — no século XVIII.'
-      },
-      {
-        q: 'Em que década a AGRÁRIA foi pioneira na adoção do sistema de plantio direto no Brasil?',
-        opts: ['1960s', '1970s', '1980s', '1990s'],
-        answer: 1,
-        feedback: 'Na década de 1970, técnicos da AGRÁRIA e agricultores locais desenvolveram e adotaram o plantio direto, técnica que hoje cobre dezenas de milhões de hectares no Brasil.'
-      },
-      {
-        q: 'Qual é a principal contribuição da Agrária Malte para o Brasil?',
-        opts: ['É a maior fábrica de farinha do país', 'É a maior maltaria da América Latina, abastecendo as principais cervejarias', 'É responsável por 60% da exportação de soja', 'Produz etanol para o mercado nacional'],
-        answer: 1,
-        feedback: 'A Agrária Malte, localizada em Grandes Rios (PR), é a maior maltaria da América Latina, responsável por cerca de 30% da demanda nacional de malte.'
-      },
-      {
-        q: 'Que percentual da área do distrito de Entre Rios é coberto por vegetação nativa?',
-        opts: ['Mais de 10%', 'Mais de 20%', 'Mais de 30%', 'Mais de 50%'],
-        answer: 2,
-        feedback: 'Mais de 30% da área do distrito é coberta por vegetação nativa, superando as exigências do Código Florestal Brasileiro.'
-      },
-      {
-        q: 'Qual é o objetivo da FAPA (Fundação Agrária de Pesquisa Agropecuária)?',
-        opts: ['Organizar festivais culturais suábios', 'Desenvolver variedades adaptadas ao clima subtropical de Guarapuava', 'Administrar o sistema de saúde das colônias', 'Exportar trigo para a Europa'],
-        answer: 1,
-        feedback: 'A FAPA desenvolve variedades de trigo, cevada, soja e milho adaptadas ao clima subtropical de Guarapuava, elevando a produtividade sem ampliar a área plantada.'
+        q: 'Quais são as cinco colônias que formam o distrito de Entre Rios?',
+        opts: [
+          'Vitória, Cachoeira, Jordãozinho, Samambaia e Socorro',
+          'Vitória, Pinhão, Jordão, Samambaia e Cachoeira',
+          'Socorro, Guarapuava, Vitória, Jordãozinho e Pinheiro',
+          'Cachoeira, Palmas, Vitória, Jordão e Samambaia'
+        ],
+        answer: 0,
+        feedback: 'As cinco colônias são: Vitória, Cachoeira, Jordãozinho, Samambaia e Socorro. Cada uma preserva traços da cultura suábia trazida da Europa.'
       },
       {
         q: 'Em que ano o distrito de Entre Rios foi oficialmente criado por lei estadual?',
-        opts: ['1951', '1955', '1962', '1970'],
+        opts: ['1951', '1957', '1962', '1975'],
         answer: 2,
-        feedback: 'Pela lei estadual nº 4.583, de 27 de junho de 1962, o distrito de Entre Rios foi oficialmente criado e anexado ao município de Guarapuava.'
+        feedback: 'O distrito foi criado oficialmente em 27 de junho de 1962, pela lei estadual nº 4.583, sendo anexado ao município de Guarapuava.'
       },
       {
-        q: 'Qual ODS da ONU está diretamente relacionado ao modelo de Entre Rios?',
-        opts: ['ODS 1 – Erradicação da Pobreza', 'ODS 2 – Fome Zero e Agricultura Sustentável', 'ODS 7 – Energia Limpa', 'ODS 13 – Ação Climática'],
+        q: 'Em que década técnicos da AGRÁRIA e agricultores de Entre Rios foram pioneiros no plantio direto no Brasil?',
+        opts: ['1950s', '1960s', '1970s', '1980s'],
+        answer: 2,
+        feedback: 'Na década de 1970, a AGRÁRIA e agricultores locais desenvolveram o plantio direto — técnica que evita revolver o solo, reduz erosão e sequestra carbono. Hoje cobre mais de 33 milhões de hectares no Brasil (IBGE, 2017).'
+      },
+      {
+        q: 'Que percentual da área de Entre Rios é coberto por vegetação nativa, superando o mínimo do Código Florestal?',
+        opts: ['Mais de 10%', 'Mais de 20%', 'Mais de 30%', 'Mais de 50%'],
+        answer: 2,
+        feedback: 'Mais de 30% da área do distrito é coberta por vegetação nativa. O Código Florestal Brasileiro exige apenas 20% — Entre Rios vai além, funcionando como corredor ecológico para a Floresta com Araucária.'
+      },
+      {
+        q: 'Qual é a curiosidade sobre a Agrária Malte, unidade industrial da Cooperativa AGRÁRIA?',
+        opts: [
+          'É o maior moinho de trigo da América do Sul',
+          'É a maior maltaria da América Latina, responsável por ~30% do malte nacional',
+          'É a única fábrica de cerveja artesanal do Paraná',
+          'Exporta 100% da sua produção para a Europa'
+        ],
         answer: 1,
-        feedback: 'O projeto de Entre Rios tem como base a ODS 2 – Fome Zero e Agricultura Sustentável, que busca acabar com a fome e promover a agricultura sustentável.'
+        feedback: 'A Agrária Malte, localizada em Grandes Rios (PR), é a maior maltaria da América Latina e abastece as principais cervejarias do Brasil, sendo responsável por cerca de 30% da demanda nacional de malte.'
       },
       {
-        q: 'Quais são as principais culturas agrícolas de Entre Rios?',
-        opts: ['Café, cana-de-açúcar e algodão', 'Arroz, feijão e mandioca', 'Soja, milho, trigo e cevada', 'Uva, maçã e pêssego'],
-        answer: 2,
-        feedback: 'As culturas principais de Entre Rios são soja, milho, trigo e cevada, com rotação obrigatória entre elas para preservar a saúde do solo.'
-      },
-      {
-        q: 'Qual organização coordena a preservação do patrimônio cultural suábio em Entre Rios desde 2001?',
-        opts: ['Cooperativa AGRÁRIA', 'Prefeitura de Guarapuava', 'Fundação Cultural Suábio-Brasileira (FCSB)', 'Instituto do Patrimônio Histórico do Paraná'],
-        answer: 2,
-        feedback: 'A Fundação Cultural Suábio-Brasileira (FCSB), criada em 2001, coordena a preservação do patrimônio cultural suábio, incluindo festivais, gastronomia e arquitetura enxaimel.'
+        q: 'Segundo pesquisa de 2024 publicada na revista Biological Conservation, qual é o percentual restante da Floresta com Araucária no Brasil?',
+        opts: ['Menos de 1%', '4,3%', '12,6%', '25%'],
+        answer: 1,
+        feedback: 'Restam apenas 4,3% da cobertura original da Floresta com Araucária — cerca de 1,2 milhão de hectares. Por isso, a preservação de vegetação nativa em Entre Rios é ainda mais valiosa para o ecossistema paranaense.'
       },
     ];
 
@@ -584,7 +577,8 @@
     g.beginPath();g.moveTo(0,H-BORDER);g.lineTo(TW,H-BORDER);g.stroke();
   })();
 
-  function reset(){ lane=1;targetLane=1;tractorY=laneY(1);speed=SPEED_INIT;elapsed=0;lastTs=null;moveCd=0;spawnCd=SPAWN_MIN;trees=[];dusts=[];bgOff=0;state='playing'; }
+  let doubleSpawnNext=false,lastDoubleTick=0;
+  function reset(){ lane=1;targetLane=1;tractorY=laneY(1);speed=SPEED_INIT;elapsed=0;lastTs=null;moveCd=0;spawnCd=SPAWN_MIN;trees=[];dusts=[];bgOff=0;doubleSpawnNext=false;lastDoubleTick=0;state='playing'; }
   function spawnTree(){
     if(trees.length>=MAX_TREES)return;
     const used=new Set(trees.map(t=>t.lane));
@@ -669,7 +663,12 @@
       }
       tractorY=lerp(tractorY,laneY(targetLane),.16);
       trees.forEach(t=>{t.x-=speed;});trees=trees.filter(t=>t.x>-TREE_S-10);
-      if(spawnCd<=0&&trees.length<MAX_TREES)spawnTree();
+      if(spawnCd<=0&&trees.length<MAX_TREES){
+        const tick=Math.floor(elapsed/10);
+        if(tick>lastDoubleTick){ doubleSpawnNext=true; lastDoubleTick=tick; }
+        spawnTree();
+        if(doubleSpawnNext&&trees.length<MAX_TREES){ spawnTree(); doubleSpawnNext=false; }
+      }
       if(hitTest()){state='dead';best=Math.max(best,Math.floor(elapsed));hudBest.textContent=`${best}s`;}
       hudTime.textContent=`${Math.floor(elapsed)}s`;
     }
