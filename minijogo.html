@@ -659,9 +659,8 @@
         if((keys['ArrowDown']||keys['s']||keys['S'])&&targetLane<LANES-1){targetLane++;moveCd=MOVE_CD_SEC;addDust(TRACTOR_X,tractorY);}
       }
       tractorY=lerp(tractorY,laneY(targetLane),.16);
-      trees.forEach(t=>{t.x-=speed;});trees=trees.filter(t=>t.x>-TREE_S-10);
+      trees.forEach(t=>{t.x-=speed;});trees=trees.filter(t=>t.x>-(TREE_S*1.9/2));
       if(spawnCd<=0){
-        trees=[];
         const sx=W+TREE_S+10;
         spawnTree(sx);
         spawnTree(sx);
