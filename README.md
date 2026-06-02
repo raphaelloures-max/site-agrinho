@@ -52,7 +52,7 @@ O projeto é composto por cinco páginas HTML:
 ### 🎮 MiniJogo (`minijogo.html`)
 - Seletor de abas para alternar entre os dois jogos
 - **Quiz educativo** com 7 perguntas sobre história, meio ambiente e curiosidades de Entre Rios, com feedback explicativo em cada resposta e pontuação final
-- **Jogo do Trator** — runner no qual o jogador desvia de árvores usando as teclas ⬆️⬇️ / W / S ou toque na tela; velocidade aumenta progressivamente; sempre 2 árvores por rodada
+- **Jogo do Trator** — runner no qual o jogador desvia de árvores usando as teclas ⬆️⬇️ / W / S ou toque na tela; velocidade aumenta progressivamente; sempre 2 ou 1 árvores por rodada
 
 ### 📋 Sobre o Projeto (`projeto.html`)
 - Apresentação do projeto, motivação e base na ODS 2
