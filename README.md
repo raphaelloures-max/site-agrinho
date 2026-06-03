@@ -144,6 +144,26 @@ O conteúdo do site aborda práticas relacionadas ao equilíbrio entre produçã
 - `IntersectionObserver` para animações de entrada
 - Controle de estado de elementos interativos
 
+## 🤖 Prompts Genéricos de IA Utilizados
+🌾 Primeiro modelo utilizado como base para o site
+
+Contexto: Atue como um Desenvolvedor Full-Stack focado em UX e Acessibilidade. Crie um modelo de um site MPA (Multi page Website) sobre "Entre Rios: tradição agrícola e sustentabilidade".
+Arquitetura de Arquivos: Entregue o código dividido em três arquivos: index.html, style.css e script.js. No HTML, use tags semânticas (header, main, section, article, footer) e atributos ARIA.
+Design System (CSS): Use Variáveis CSS (:root) para definir a paleta de cores, espaçamentos e arredondamentos (--radius). O layout deve ser Responsivo (Mobile-First) usando CSS Grid e Flexbox. Adicione um modo de Alto Contraste acionado por uma classe .high-contrast no body.Implemente animações de entrada suaves (Scroll Reveal) para as seções.
+Camada de Inteligência (JS): Gestão de Dados: Não escreva o conteúdo repetitivo (como cards ou itens de galeria) direto no HTML. Crie um array de objetos no JavaScript e renderize-os dinamicamente. Acessibilidade: Implemente funções para aumentar/diminuir o tamanho da fonte globalmente. Componentes: Crie um carrossel funcional e um sistema de abas ou acordeões (expandables).
+Instrução de Edição (Flexibilidade): O código deve ser modular. Comente as seções do CSS para que eu possa localizar facilmente onde mudar o grid-template-columns ou as cores primárias. Entregue primeiro a estrutura do HTML, depois o CSS e por fim o JS.
+Desenvolva uma barra de navegação superior moderna, responsiva e fixa no topo da página (sticky navbar). A barra deve possuir um design limpo e organizado, com os links de navegação centralizados horizontalmente. Os links devem redirecionar para diferentes páginas internas do mesmo site, sendo elas:
+Início
+História
+MiniJogo (esta página deve permanecer vazia, sem conteúdo visível)
+Sobre o Autor A navegação deve apresentar efeito visual ao passar o cursor sobre os links (hover effect), além de indicar claramente qual página está ativa no momento.
+
+
+🌱 Prototipo do jogo do trator
+
+CCrie o jogo do zero seguinto as seguintes caractéristicas: O personagem principal deve ser um emoji de trator 🚜. Os obstáculos devem ser emojis de árvores 🌳 posicionados aleatoriamente no caminho, porém com um intervalo para que aparecem de uma fluida, com no máximo 2 obstáculos por vez. O fundo do jogo deve ser inspirado em um grande campo agrícola de trigo visto de cima, com tons naturais, áreas de plantação, terra e vegetação. O cenário deve se mover continuamente para criar sensação de velocidade e progresso. O jogador deve controlar o trator desviando das árvores utilizando as teclas S/W ou setas esquerda/direita. O jogo deve aumentar gradualmente a velocidade conforme o tempo passa. Adicione sistema de pontuação baseado no tempo sobrevivido. Inclua tela de “Game Over” com botão de reiniciar. O jogo deve iniciar com um botão de inicio Utilize canvas ou elementos HTML animados para criar a movimentação do jogo. O estilo visual deve ter temática rural usando emojis. O jogo deverá ser estilo horizontal, incluindo as linhas que o trator que ele deverá andar. O números de caminhos deverá ser 3.
+
+
 ## 👨‍🎓 Autoria
 
 **Aluno:** Raphael Loures  
