@@ -3,208 +3,12 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="MiniJogo – Quiz e Jogo do Trator sobre Entre Rios, Guarapuava, Paraná."/>
   <title>MiniJogo – Entre Rios</title>
   <link rel="stylesheet" href="style.css"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet"/>
-  <style>
-
-    .minijogo-section {
-      background: var(--color-cream, #f5f0e8);
-      padding: 2rem 0 5rem;
-      min-height: 80vh;
-    }
-    .minijogo-wrapper {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 1.2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-    }
-    .minijogo-header { text-align: center; }
-    .minijogo-header h1 {
-      font-family: var(--font-display, 'Playfair Display', serif);
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      color: var(--color-earth, #3a2510);
-      margin: .3rem 0 .4rem;
-    }
-    .minijogo-header p { color: var(--color-bark, #5a3e28); font-size: .95rem; }
-
-    .game-tabs {
-      display: flex;
-      gap: .5rem;
-      background: #e8dcc8;
-      padding: .35rem;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 420px;
-    }
-    .game-tab {
-      flex: 1;
-      padding: .6rem 1rem;
-      border: none;
-      border-radius: 9px;
-      background: transparent;
-      font-family: 'Playfair Display', serif;
-      font-size: .95rem;
-      color: #5a3e28;
-      cursor: pointer;
-      transition: background .2s, color .2s, box-shadow .2s;
-      font-weight: 600;
-    }
-    .game-tab.active {
-      background: #fff;
-      color: #3a2510;
-      box-shadow: 0 2px 10px rgba(58,37,16,.12);
-    }
-    .game-tab:hover:not(.active) { background: rgba(255,255,255,.5); }
-
-    .game-panel { display: none; width: 100%; }
-    .game-panel.active { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-
-    .game-subheader { text-align: center; }
-    .game-subheader h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.3rem, 3vw, 1.8rem);
-      color: #3a2510;
-      margin: 0 0 .2rem;
-    }
-    .game-subheader p { font-size: .88rem; color: #5a3e28; }
-    .game-hud { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
-    .hud-box {
-      background: var(--color-earth, #3a2510);
-      color: #f5f0e8;
-      border-radius: 8px;
-      padding: .35rem 1.2rem;
-      font-family: var(--font-display, 'Playfair Display', serif);
-      font-size: .9rem;
-      min-width: 110px;
-      text-align: center;
-    }
-    .hud-box span { display: block; font-size: 1.4rem; font-weight: 700; color: #c8973a; line-height: 1.2; }
-    #game-container {
-      position: relative;
-      width: 100%;
-      max-width: 760px;
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 12px 48px rgba(58,37,16,.35);
-      border: 3px solid #c8973a;
-    }
-    #gameCanvas { display: block; width: 100%; height: auto; cursor: default; }
-    #start-overlay {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(20,12,4,.72); border-radius: 11px;
-    }
-    #start-card { text-align: center; padding: 2rem 2.5rem; }
-    #btn-start {
-      background: #c8973a; color: #fff; border: none; border-radius: 9px;
-      padding: .6rem 2rem; font-family: 'Playfair Display', serif;
-      font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s;
-    }
-    #btn-start:hover:not(:disabled) { background: #e0a940; }
-    #btn-start:disabled { background: #7a6040; cursor: not-allowed; opacity: .7; }
-    .game-tip { font-size: .82rem; color: var(--color-bark, #5a3e28); opacity: .7; text-align: center; }
-
-    .quiz-progress { width: 100%; display: flex; flex-direction: column; gap: .4rem; }
-    .quiz-progress__bar-bg {
-      width: 100%; height: 8px; background: #d9cfc0;
-      border-radius: 99px; overflow: hidden;
-    }
-    .quiz-progress__bar-fill {
-      height: 100%; background: #c8973a;
-      border-radius: 99px; transition: width .4s ease;
-    }
-    .quiz-progress__label { font-size: .8rem; color: #5a3e28; opacity: .75; text-align: right; }
-    .quiz-card {
-      width: 100%; background: #fff; border-radius: 16px;
-      box-shadow: 0 8px 40px rgba(58,37,16,.13);
-      border: 2px solid #e8dcc8; padding: 2rem 2rem 1.6rem;
-      animation: fadeUp .35s ease;
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .quiz-card__num { font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #c8973a; margin-bottom: .7rem; }
-    .quiz-card__question { font-family: 'Playfair Display', serif; font-size: clamp(1.05rem, 2.5vw, 1.3rem); color: #3a2510; line-height: 1.5; margin-bottom: 1.5rem; }
-    .quiz-options { display: flex; flex-direction: column; gap: .7rem; }
-    .quiz-opt {
-      width: 100%; text-align: left; background: #faf7f2;
-      border: 2px solid #e0d5c4; border-radius: 10px;
-      padding: .75rem 1.1rem; font-family: 'Source Serif 4', serif;
-      font-size: .95rem; color: #3a2510; cursor: pointer;
-      transition: border-color .18s, background .18s, transform .12s;
-      display: flex; align-items: center; gap: .7rem;
-    }
-    .quiz-opt:hover:not(:disabled) { border-color: #c8973a; background: #fdf6e8; transform: translateX(3px); }
-    .quiz-opt .opt-letter {
-      min-width: 28px; height: 28px; border-radius: 50%;
-      background: #e8dcc8; color: #5a3e28; font-weight: 700;
-      font-size: .82rem; display: flex; align-items: center;
-      justify-content: center; flex-shrink: 0; transition: background .18s, color .18s;
-    }
-    .quiz-opt.correct { border-color: #3a8a2f; background: #edfae9; }
-    .quiz-opt.correct .opt-letter { background: #3a8a2f; color: #fff; }
-    .quiz-opt.wrong { border-color: #c0392b; background: #fdecea; }
-    .quiz-opt.wrong .opt-letter { background: #c0392b; color: #fff; }
-    .quiz-opt:disabled { cursor: default; transform: none; }
-    .quiz-feedback {
-      margin-top: 1.1rem; padding: .85rem 1.1rem; border-radius: 10px;
-      font-size: .9rem; line-height: 1.5; display: none;
-    }
-    .quiz-feedback.show { display: block; animation: fadeUp .25s ease; }
-    .quiz-feedback.correct-fb { background: #edfae9; border-left: 4px solid #3a8a2f; color: #1e5219; }
-    .quiz-feedback.wrong-fb   { background: #fdecea; border-left: 4px solid #c0392b; color: #7a1e1e; }
-    .quiz-next {
-      display: none; margin-top: 1.2rem; width: 100%;
-      background: #c8973a; color: #fff; border: none; border-radius: 10px;
-      padding: .75rem 1.5rem; font-family: 'Playfair Display', serif;
-      font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s;
-    }
-    .quiz-next.show { display: block; animation: fadeUp .25s ease; }
-    .quiz-next:hover { background: #e0a940; }
-    .quiz-start {
-      width: 100%; background: #fff; border-radius: 16px;
-      box-shadow: 0 8px 40px rgba(58,37,16,.13);
-      border: 2px solid #e8dcc8; padding: 2.5rem 2rem; text-align: center;
-    }
-    .quiz-start__icon { font-size: 3rem; margin-bottom: .8rem; }
-    .quiz-start h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: #3a2510; margin-bottom: .6rem; }
-    .quiz-start p { color: #5a3e28; font-size: .95rem; margin-bottom: 1.5rem; line-height: 1.6; }
-    .quiz-start__meta { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
-    .quiz-start__meta span { background: #faf7f2; border: 1px solid #e0d5c4; border-radius: 8px; padding: .4rem .9rem; font-size: .85rem; color: #5a3e28; }
-    .btn-quiz-start {
-      background: #c8973a; color: #fff; border: none; border-radius: 10px;
-      padding: .75rem 2.5rem; font-family: 'Playfair Display', serif;
-      font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: background .2s;
-    }
-    .btn-quiz-start:hover { background: #e0a940; }
-    .quiz-result {
-      width: 100%; background: #fff; border-radius: 16px;
-      box-shadow: 0 8px 40px rgba(58,37,16,.13);
-      border: 2px solid #e8dcc8; padding: 2.5rem 2rem; text-align: center;
-      animation: fadeUp .35s ease;
-    }
-    .quiz-result__emoji { font-size: 3.5rem; margin-bottom: .6rem; }
-    .quiz-result h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #3a2510; margin-bottom: .5rem; }
-    .quiz-result__score { font-size: 3rem; font-weight: 700; color: #c8973a; font-family: 'Playfair Display', serif; line-height: 1.1; }
-    .quiz-result__score span { font-size: 1.2rem; color: #5a3e28; }
-    .quiz-result__msg { color: #5a3e28; font-size: .95rem; margin: .8rem 0 1.5rem; line-height: 1.6; }
-    .quiz-result__breakdown { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
-    .quiz-result__breakdown div { background: #faf7f2; border: 1px solid #e0d5c4; border-radius: 10px; padding: .6rem 1.2rem; font-size: .88rem; color: #5a3e28; }
-    .quiz-result__breakdown strong { display: block; font-size: 1.4rem; color: #3a2510; }
-    .btn-quiz-restart {
-      background: #c8973a; color: #fff; border: none; border-radius: 10px;
-      padding: .75rem 2.2rem; font-family: 'Playfair Display', serif;
-      font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s;
-    }
-    .btn-quiz-restart:hover { background: #e0a940; }
-  </style>
 </head>
 <body>
 
@@ -219,8 +23,7 @@
       <a href="index.html" class="navbar__logo" aria-label="Início – Entre Rios">
         <span class="logo-text">Entre Rios</span>
       </a>
-      <button class="navbar__toggle" id="nav-toggle" aria-expanded="false"
-              aria-controls="nav-menu" aria-label="Abrir menu de navegação">
+      <button class="navbar__toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menu de navegação">
         <span class="burger-line"></span><span class="burger-line"></span><span class="burger-line"></span>
       </button>
       <nav id="nav-menu" class="navbar__nav" role="navigation" aria-label="Navegação principal">
@@ -236,62 +39,90 @@
   </header>
 
   <main id="main-content">
-    <section class="minijogo-section">
-      <div class="minijogo-wrapper">
 
-        <div class="minijogo-header">
-          <span class="section-tag">MiniJogo</span>
-          <h1>Jogos de Entre Rios</h1>
-          <p>Escolha entre o quiz de conhecimentos ou o jogo do trator</p>
+    <section class="page-hero page-hero--historia" aria-labelledby="minijogo-hero-title">
+      <div class="hero__grain" aria-hidden="true"></div>
+      <div class="page-hero__content">
+        <p class="hero__eyebrow">Aprender & Jogar</p>
+        <h1 id="minijogo-hero-title" class="hero__title hero__title--sm">Jogos de<br/><em>Entre Rios</em></h1>
+        <p class="hero__subtitle">Teste seus conhecimentos sobre a história e o meio ambiente, ou pilote um trator pelos campos das colônias.</p>
+      </div>
+    </section>
+
+    <section class="about section-pad" aria-labelledby="jogos-intro-title">
+      <div class="container">
+        <span class="section-tag" aria-hidden="true">Como jogar</span>
+        <h2 id="jogos-intro-title" class="section-title section-title--center">Escolha seu jogo</h2>
+        <div class="cards-grid" style="margin-top:2rem;" role="list">
+          <article class="card" role="listitem">
+            <div class="card__icon" aria-hidden="true">🌾</div>
+            <h3 class="card__title">Quiz de Conhecimentos</h3>
+            <p class="card__text">
+              São <strong>7 perguntas</strong> sobre a história, o meio ambiente e curiosidades de Entre Rios.
+              Para cada pergunta, você escolhe entre 2 ou 4 alternativas. Após responder, aparece uma
+              explicação detalhada para você aprender mais — mesmo que erre. Ao final, você recebe
+              sua pontuação e uma mensagem de acordo com seu desempenho. Não há limite de tempo,
+              então leia com calma antes de responder!
+            </p>
+            <span class="card__tag">7 perguntas · Explicação em cada resposta</span>
+          </article>
+          <article class="card" role="listitem">
+            <div class="card__icon" aria-hidden="true">🚜</div>
+            <h3 class="card__title">Jogo do Trator</h3>
+            <p class="card__text">
+              Pilote o trator pelos campos de Entre Rios desviando de árvores que aparecem em sua
+              frente. O trator se move em <strong>3 faixas</strong> — use <strong>⬆ ⬇</strong> ou
+              <strong>W / S</strong> no teclado para mudar de faixa. No celular, toque na metade
+              superior da tela para subir ou na inferior para descer. A velocidade aumenta
+              progressivamente com o tempo. Sempre aparecem <strong>2 árvores simultâneas</strong>
+              em faixas diferentes — fique atento e escolha a faixa livre!
+              Pressione <strong>P</strong> para pausar a qualquer momento.
+            </p>
+            <span class="card__tag">Velocidade crescente · 2 obstáculos por vez</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="pillars section-pad" style="background:var(--color-cream-dk,#ece5d4);" aria-label="Área de jogos">
+      <div class="container">
+
+        <div class="tabs" role="tablist" aria-label="Selecionar jogo" style="margin-bottom:2rem;">
+          <div id="tab-buttons" role="tablist" style="display:flex;gap:.5rem;justify-content:center;margin-bottom:1.5rem;"></div>
         </div>
 
-        <div style="display:flex;gap:1rem;width:100%;max-width:700px;flex-wrap:wrap;">
-          <div style="flex:1;min-width:240px;background:#fff;border:2px solid #e8dcc8;border-radius:14px;padding:1.2rem 1.4rem;">
-            <div style="font-size:1.6rem;margin-bottom:.4rem;">🌾</div>
-            <strong style="font-family:'Playfair Display',serif;font-size:1rem;color:#3a2510;display:block;margin-bottom:.4rem;">Quiz — Teste seus conhecimentos</strong>
-            <p style="font-size:.85rem;color:#5a3e28;margin:0;line-height:1.6;">Responda 7 perguntas sobre a história, o meio ambiente e as curiosidades de Entre Rios. Cada resposta vem com uma explicação baseada no conteúdo do site. Ideal para aprender enquanto joga!</p>
+        <div id="panel-quiz" class="game-panel-wrap" role="tabpanel" aria-labelledby="tab-quiz-btn">
+          <div id="quiz-app"></div>
+        </div>
+
+        <div id="panel-trator" class="game-panel-wrap" role="tabpanel" aria-labelledby="tab-trator-btn" style="display:none;">
+          <div style="text-align:center;margin-bottom:1rem;">
+            <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--color-earth,#3a2510);margin-bottom:.3rem;">Trator Entre Rios 🚜</h2>
+            <p style="color:var(--color-bark,#5a3e28);font-size:.9rem;">Desvie das árvores e sobreviva o maior tempo possível!</p>
           </div>
-          <div style="flex:1;min-width:240px;background:#fff;border:2px solid #e8dcc8;border-radius:14px;padding:1.2rem 1.4rem;">
-            <div style="font-size:1.6rem;margin-bottom:.4rem;">🚜</div>
-            <strong style="font-family:'Playfair Display',serif;font-size:1rem;color:#3a2510;display:block;margin-bottom:.4rem;">Jogo do Trator — Desvie e sobreviva</strong>
-            <p style="font-size:.85rem;color:#5a3e28;margin:0;line-height:1.6;">Pilote o trator pelos campos de Entre Rios e desvie das árvores! Use ⬆️⬇️ ou W/S para mudar de faixa. A velocidade aumenta com o tempo — e a cada 10 segundos o perigo dobra!</p>
-          </div>
-        </div>
-
-        <div class="game-tabs" role="tablist">
-          <button class="game-tab active" id="tab-quiz" role="tab" aria-selected="true"  aria-controls="panel-quiz">🌾 Quiz</button>
-          <button class="game-tab"        id="tab-trator" role="tab" aria-selected="false" aria-controls="panel-trator">🚜 Jogo do Trator</button>
-        </div>
-
-        <div class="game-panel active" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz">
-          <div id="quiz-app" style="width:100%"></div>
-        </div>
-
-        <div class="game-panel" id="panel-trator" role="tabpanel" aria-labelledby="tab-trator">
-          <div class="game-subheader">
-            <h2>Trator Entre Rios 🚜</h2>
-            <p>Desvie das árvores e sobreviva o maior tempo possível!</p>
-          </div>
-          <div class="game-hud">
+          <div style="display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem;">
             <div class="hud-box">Tempo<span id="hud-time">0s</span></div>
             <div class="hud-box">Recorde<span id="hud-best">0s</span></div>
           </div>
           <div id="game-container">
             <canvas id="gameCanvas" width="760" height="300"></canvas>
             <div id="start-overlay">
-              <div id="start-card">
-                <div style="font-size:2.5rem">🚜</div>
-                <h2 style="font-family:'Playfair Display',serif;color:#f5f0e8;margin:.5rem 0">Trator Entre Rios</h2>
-                <p style="color:rgba(245,240,232,.7);font-size:.85rem;margin-bottom:1.2rem">Desvie das árvores e sobreviva o maior tempo possível!</p>
+              <div style="text-align:center;padding:2rem 2.5rem;">
+                <div style="font-size:2.5rem;">🚜</div>
+                <h2 style="font-family:'Playfair Display',serif;color:#f5f0e8;margin:.5rem 0 .4rem;">Trator Entre Rios</h2>
+                <p style="color:rgba(245,240,232,.7);font-size:.85rem;margin-bottom:1.2rem;">Desvie das árvores e sobreviva o maior tempo possível!</p>
                 <button id="btn-start">▶&nbsp; Iniciar</button>
               </div>
             </div>
           </div>
-          <p class="game-tip">⬆️ ⬇️ &nbsp;ou&nbsp; <strong>W / S</strong> para mudar de faixa &nbsp;·&nbsp; toque nos lados no mobile</p>
+          <p style="font-size:.82rem;color:var(--color-bark,#5a3e28);opacity:.7;text-align:center;margin-top:.8rem;">
+            ⬆️ ⬇️ &nbsp;ou&nbsp; <strong>W / S</strong> para mudar de faixa &nbsp;·&nbsp; toque na tela no celular &nbsp;·&nbsp; <strong>P</strong> para pausar
+          </p>
         </div>
 
       </div>
     </section>
+
   </main>
 
   <footer class="footer" role="contentinfo">
@@ -313,27 +144,215 @@
     </div>
   </footer>
 
+  <style>
+    .hud-box {
+      background: var(--color-earth,#3a2510);
+      color: #f5f0e8;
+      border-radius: 8px;
+      padding: .35rem 1.2rem;
+      font-family: 'Playfair Display',serif;
+      font-size: .9rem;
+      min-width: 110px;
+      text-align: center;
+    }
+    .hud-box span {
+      display: block;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #c8973a;
+      line-height: 1.2;
+    }
+    #game-container {
+      position: relative;
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 12px 48px rgba(58,37,16,.35);
+      border: 3px solid #c8973a;
+    }
+    #gameCanvas { display: block; width: 100%; height: auto; }
+    #start-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(20,12,4,.72);
+      border-radius: 11px;
+    }
+    #btn-start {
+      background: #c8973a; color: #fff; border: none; border-radius: 9px;
+      padding: .6rem 2rem; font-family: 'Playfair Display',serif;
+      font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s;
+    }
+    #btn-start:hover:not(:disabled) { background: #e0a940; }
+    #btn-start:disabled { background: #7a6040; cursor: not-allowed; opacity: .7; }
+    .quiz-progress { width: 100%; display: flex; flex-direction: column; gap: .4rem; }
+    .quiz-progress__bar-bg {
+      width: 100%; height: 8px; background: #d9cfc0; border-radius: 99px; overflow: hidden;
+    }
+    .quiz-progress__bar-fill {
+      height: 100%; background: #c8973a; border-radius: 99px; transition: width .4s ease;
+    }
+    .quiz-progress__label { font-size: .8rem; color: #5a3e28; opacity: .75; text-align: right; }
+    .quiz-card {
+      width: 100%; background: #fff; border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(58,37,16,.13);
+      border: 2px solid #e8dcc8; padding: 2rem 2rem 1.6rem;
+      animation: fadeUpQ .35s ease;
+    }
+    @keyframes fadeUpQ {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .quiz-card__num {
+      font-size: .78rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: #c8973a; margin-bottom: .7rem;
+    }
+    .quiz-card__question {
+      font-family: 'Playfair Display',serif;
+      font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+      color: #3a2510; line-height: 1.5; margin-bottom: 1.5rem;
+    }
+    .quiz-badge {
+      display: inline-block;
+      background: #e8f4fd;
+      border: 1px solid #aad4f5;
+      color: #1a5276;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      padding: .18rem .6rem;
+      border-radius: 4px;
+      margin-bottom: .8rem;
+    }
+    .quiz-badge.vf { background: #fdf2e9; border-color: #f0a868; color: #7d3c00; }
+    .quiz-options { display: flex; flex-direction: column; gap: .7rem; }
+    .quiz-options.vf-opts { flex-direction: row; justify-content: center; gap: 1rem; }
+    .quiz-opt {
+      width: 100%; text-align: left; background: #faf7f2;
+      border: 2px solid #e0d5c4; border-radius: 10px;
+      padding: .75rem 1.1rem; font-family: 'Source Serif 4',serif;
+      font-size: .95rem; color: #3a2510; cursor: pointer;
+      transition: border-color .18s, background .18s, transform .12s;
+      display: flex; align-items: center; gap: .7rem;
+    }
+    .quiz-options.vf-opts .quiz-opt {
+      width: auto; flex: 1; max-width: 180px;
+      justify-content: center; font-size: 1.1rem; font-weight: 700;
+      padding: 1rem;
+    }
+    .quiz-opt:hover:not(:disabled) { border-color: #c8973a; background: #fdf6e8; transform: translateX(3px); }
+    .quiz-options.vf-opts .quiz-opt:hover:not(:disabled) { transform: translateY(-3px); }
+    .quiz-opt .opt-letter {
+      min-width: 28px; height: 28px; border-radius: 50%;
+      background: #e8dcc8; color: #5a3e28; font-weight: 700;
+      font-size: .82rem; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background .18s, color .18s;
+    }
+    .quiz-opt.correct { border-color: #3a8a2f; background: #edfae9; }
+    .quiz-opt.correct .opt-letter { background: #3a8a2f; color: #fff; }
+    .quiz-opt.wrong { border-color: #c0392b; background: #fdecea; }
+    .quiz-opt.wrong .opt-letter { background: #c0392b; color: #fff; }
+    .quiz-opt:disabled { cursor: default; transform: none; }
+    .quiz-feedback {
+      margin-top: 1.1rem; padding: .85rem 1.1rem; border-radius: 10px;
+      font-size: .9rem; line-height: 1.5; display: none;
+    }
+    .quiz-feedback.show { display: block; animation: fadeUpQ .25s ease; }
+    .quiz-feedback.correct-fb { background: #edfae9; border-left: 4px solid #3a8a2f; color: #1e5219; }
+    .quiz-feedback.wrong-fb   { background: #fdecea; border-left: 4px solid #c0392b; color: #7a1e1e; }
+    .quiz-next {
+      display: none; margin-top: 1.2rem; width: 100%;
+      background: #c8973a; color: #fff; border: none; border-radius: 10px;
+      padding: .75rem 1.5rem; font-family: 'Playfair Display',serif;
+      font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s;
+    }
+    .quiz-next.show { display: block; animation: fadeUpQ .25s ease; }
+    .quiz-next:hover { background: #e0a940; }
+    .quiz-start-card {
+      width: 100%; background: #fff; border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(58,37,16,.13);
+      border: 2px solid #e8dcc8; padding: 2.5rem 2rem; text-align: center;
+    }
+    .quiz-start-card h2 { font-family: 'Playfair Display',serif; font-size: 1.6rem; color: #3a2510; margin: .6rem 0 .5rem; }
+    .quiz-start-card p { color: #5a3e28; font-size: .95rem; margin-bottom: 1.5rem; line-height: 1.6; }
+    .quiz-start-meta { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
+    .quiz-start-meta span { background: #faf7f2; border: 1px solid #e0d5c4; border-radius: 8px; padding: .4rem .9rem; font-size: .82rem; color: #5a3e28; }
+    .btn-quiz-start {
+      background: #c8973a; color: #fff; border: none; border-radius: 10px;
+      padding: .8rem 2.5rem; font-family: 'Playfair Display',serif;
+      font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: background .2s;
+    }
+    .btn-quiz-start:hover { background: #e0a940; }
+    .quiz-result-card {
+      width: 100%; background: #fff; border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(58,37,16,.13);
+      border: 2px solid #e8dcc8; padding: 2.5rem 2rem; text-align: center;
+      animation: fadeUpQ .35s ease;
+    }
+    .quiz-result-card h2 { font-family: 'Playfair Display',serif; font-size: 1.8rem; color: #3a2510; margin-bottom: .4rem; }
+    .quiz-result-score { font-size: 3rem; font-weight: 700; color: #c8973a; font-family: 'Playfair Display',serif; }
+    .quiz-result-score span { font-size: 1.2rem; color: #5a3e28; }
+    .quiz-result-msg { color: #5a3e28; font-size: .95rem; margin: .8rem 0 1.5rem; line-height: 1.6; }
+    .quiz-result-breakdown { display: flex; justify-content: center; gap: 1.2rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
+    .quiz-result-breakdown div { background: #faf7f2; border: 1px solid #e0d5c4; border-radius: 10px; padding: .6rem 1.2rem; font-size: .88rem; color: #5a3e28; }
+    .quiz-result-breakdown strong { display: block; font-size: 1.4rem; color: #3a2510; }
+    .btn-quiz-restart {
+      background: #c8973a; color: #fff; border: none; border-radius: 10px;
+      padding: .75rem 2.2rem; font-family: 'Playfair Display',serif;
+      font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s;
+    }
+    .btn-quiz-restart:hover { background: #e0a940; }
+    .game-tab-btn {
+      padding: .65rem 1.6rem;
+      border: 2px solid #c8973a;
+      border-radius: 9px;
+      background: transparent;
+      font-family: 'Playfair Display',serif;
+      font-size: .95rem;
+      color: #c8973a;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background .2s, color .2s;
+    }
+    .game-tab-btn.active { background: #c8973a; color: #fff; }
+    .game-tab-btn:hover:not(.active) { background: #fdf6e8; }
+  </style>
+
   <script src="script.js"></script>
 
   <script>
   (function(){
-    const tabQuiz   = document.getElementById('tab-quiz');
-    const tabTrator = document.getElementById('tab-trator');
+    const btnQuiz   = document.createElement('button');
+    const btnTrator = document.createElement('button');
+    btnQuiz.className   = 'game-tab-btn active';
+    btnTrator.className = 'game-tab-btn';
+    btnQuiz.id   = 'tab-quiz-btn';
+    btnTrator.id = 'tab-trator-btn';
+    btnQuiz.textContent   = '🌾 Quiz';
+    btnTrator.textContent = '🚜 Jogo do Trator';
+
+    const tabContainer = document.getElementById('tab-buttons');
+    tabContainer.appendChild(btnQuiz);
+    tabContainer.appendChild(btnTrator);
+
     const panelQuiz   = document.getElementById('panel-quiz');
     const panelTrator = document.getElementById('panel-trator');
 
-    function switchTab(tab) {
-      const isQuiz = tab === 'quiz';
-      tabQuiz.classList.toggle('active', isQuiz);
-      tabTrator.classList.toggle('active', !isQuiz);
-      tabQuiz.setAttribute('aria-selected', isQuiz);
-      tabTrator.setAttribute('aria-selected', !isQuiz);
-      panelQuiz.classList.toggle('active', isQuiz);
-      panelTrator.classList.toggle('active', !isQuiz);
+    function switchTo(which) {
+      const isQuiz = which === 'quiz';
+      btnQuiz.classList.toggle('active', isQuiz);
+      btnTrator.classList.toggle('active', !isQuiz);
+      panelQuiz.style.display   = isQuiz ? '' : 'none';
+      panelTrator.style.display = isQuiz ? 'none' : '';
     }
 
-    tabQuiz.addEventListener('click',   () => switchTab('quiz'));
-    tabTrator.addEventListener('click', () => switchTab('trator'));
+    btnQuiz.addEventListener('click',   () => switchTo('quiz'));
+    btnTrator.addEventListener('click', () => switchTo('trator'));
   })();
   </script>
 
@@ -341,12 +360,14 @@
   (function(){
     const QUESTIONS = [
       {
+        type: 'mc',
         q: 'Em que ano as primeiras famílias suábias chegaram à região de Guarapuava para fundar Entre Rios?',
         opts: ['1945', '1951', '1962', '1970'],
         answer: 1,
         feedback: 'Em maio de 1951, cerca de 500 famílias suábias chegaram à região delimitada pelos rios Jordão e Pinhão, fundando as cinco colônias que formam o distrito.'
       },
       {
+        type: 'mc',
         q: 'Quais são as cinco colônias que formam o distrito de Entre Rios?',
         opts: [
           'Vitória, Cachoeira, Jordãozinho, Samambaia e Socorro',
@@ -355,42 +376,41 @@
           'Cachoeira, Palmas, Vitória, Jordão e Samambaia'
         ],
         answer: 0,
-        feedback: 'As cinco colônias são: Vitória, Cachoeira, Jordãozinho, Samambaia e Socorro. Cada uma preserva traços da cultura suábia trazida da Europa.'
+        feedback: 'As cinco colônias são Vitória, Cachoeira, Jordãozinho, Samambaia e Socorro. Cada uma preserva traços da cultura suábia trazida da Europa pelos imigrantes.'
       },
       {
+        type: 'mc',
         q: 'Em que ano o distrito de Entre Rios foi oficialmente criado por lei estadual?',
         opts: ['1951', '1957', '1962', '1975'],
         answer: 2,
-        feedback: 'O distrito foi criado oficialmente em 27 de junho de 1962, pela lei estadual nº 4.583, sendo anexado ao município de Guarapuava.'
+        feedback: 'O distrito foi criado em 27 de junho de 1962 pela lei estadual nº 4.583, sendo anexado ao município de Guarapuava.'
       },
       {
+        type: 'mc',
         q: 'Em que década técnicos da AGRÁRIA e agricultores de Entre Rios foram pioneiros no plantio direto no Brasil?',
-        opts: ['1950s', '1960s', '1970s', '1980s'],
+        opts: ['Anos 1950', 'Anos 1960', 'Anos 1970', 'Anos 1980'],
         answer: 2,
-        feedback: 'Na década de 1970, a AGRÁRIA e agricultores locais desenvolveram o plantio direto — técnica que evita revolver o solo, reduz erosão e sequestra carbono. Hoje cobre mais de 33 milhões de hectares no Brasil (IBGE, 2017).'
+        feedback: 'Na década de 1970, a AGRÁRIA e agricultores locais desenvolveram o plantio direto — técnica que evita revolver o solo, reduz erosão e sequestra carbono. Segundo o IBGE (Censo Agropecuário 2017), hoje cobre mais de 33 milhões de hectares no Brasil.'
       },
       {
-        q: 'Que percentual da área de Entre Rios é coberto por vegetação nativa, superando o mínimo do Código Florestal?',
+        type: 'mc',
+        q: 'Que percentual da área de Entre Rios é coberto por vegetação nativa, superando o mínimo do Código Florestal Brasileiro?',
         opts: ['Mais de 10%', 'Mais de 20%', 'Mais de 30%', 'Mais de 50%'],
         answer: 2,
-        feedback: 'Mais de 30% da área do distrito é coberta por vegetação nativa. O Código Florestal Brasileiro exige apenas 20% — Entre Rios vai além, funcionando como corredor ecológico para a Floresta com Araucária.'
+        feedback: 'Mais de 30% da área do distrito é coberta por vegetação nativa. O Código Florestal exige apenas 20% — Entre Rios vai além, funcionando como corredor ecológico para a Floresta com Araucária.'
       },
       {
-        q: 'Qual é a curiosidade sobre a Agrária Malte, unidade industrial da Cooperativa AGRÁRIA?',
-        opts: [
-          'É o maior moinho de trigo da América do Sul',
-          'É a maior maltaria da América Latina, responsável por ~30% do malte nacional',
-          'É a única fábrica de cerveja artesanal do Paraná',
-          'Exporta 100% da sua produção para a Europa'
-        ],
-        answer: 1,
-        feedback: 'A Agrária Malte, localizada em Grandes Rios (PR), é a maior maltaria da América Latina e abastece as principais cervejarias do Brasil, sendo responsável por cerca de 30% da demanda nacional de malte.'
+        type: 'vf',
+        q: 'A Agrária Malte, unidade industrial da Cooperativa AGRÁRIA localizada em Grandes Rios (PR), é a maior maltaria da América Latina e abastece cerca de 30% da demanda nacional de malte das cervejarias brasileiras.',
+        answer: true,
+        feedback: 'Verdadeiro! A Agrária Malte é de fato a maior maltaria da América Latina. Ela transforma a cevada cultivada nas colônias em malte e fornece para as principais cervejarias do país, sendo responsável por aproximadamente 30% do malte nacional.'
       },
       {
-        q: 'Segundo pesquisa de 2024 publicada na revista Biological Conservation, qual é o percentual restante da Floresta com Araucária no Brasil?',
+        type: 'mc',
+        q: 'Segundo pesquisa publicada na revista Biological Conservation em 2024, qual é o percentual restante da Floresta com Araucária no Brasil?',
         opts: ['Menos de 1%', '4,3%', '12,6%', '25%'],
         answer: 1,
-        feedback: 'Restam apenas 4,3% da cobertura original da Floresta com Araucária — cerca de 1,2 milhão de hectares. Por isso, a preservação de vegetação nativa em Entre Rios é ainda mais valiosa para o ecossistema paranaense.'
+        feedback: 'Restam apenas 4,3% da cobertura original da Floresta com Araucária — cerca de 1,2 milhão de hectares. Por isso, a preservação de vegetação nativa em Entre Rios é ainda mais valiosa para o ecossistema paranaense e para o Brasil.'
       },
     ];
 
@@ -400,25 +420,28 @@
 
     function getResultData(s, total) {
       const pct = s / total;
-      if (pct === 1)   return { emoji:'🏆', title:'Perfeito!',           msg:'Você domina a história de Entre Rios! Conhecimento completo sobre os suábios, a AGRÁRIA e a agricultura sustentável.' };
-      if (pct >= 0.75) return { emoji:'🌾', title:'Muito bem!',          msg:'Ótimo conhecimento sobre Entre Rios! Revise alguns detalhes para alcançar a pontuação máxima.' };
-      if (pct >= 0.5)  return { emoji:'📚', title:'Bom começo!',         msg:'Você sabe bastante! Explore a aba História para aprender mais sobre os suábios e a AGRÁRIA.' };
-      return               { emoji:'🌱', title:'Continue aprendendo!', msg:'Entre Rios tem uma história rica. Explore o site para conhecer mais sobre os suábios e a AGRÁRIA!' };
+      if (pct === 1)   return { emoji:'🏆', title:'Perfeito!',           msg:'Você domina a história e a cultura de Entre Rios! Conhecimento completo sobre os suábios, a AGRÁRIA e a natureza do distrito.' };
+      if (pct >= 0.75) return { emoji:'🌾', title:'Muito bem!',          msg:'Ótimo resultado! Você sabe bastante sobre Entre Rios. Revise os detalhes históricos e ambientais para alcançar a pontuação máxima.' };
+      if (pct >= 0.5)  return { emoji:'📚', title:'Bom começo!',         msg:'Você acertou mais da metade! Explore as abas História e Meio Ambiente para aprofundar seus conhecimentos sobre o distrito.' };
+      return               { emoji:'🌱', title:'Continue aprendendo!', msg:'Entre Rios tem uma história rica e muita coisa a descobrir. Navegue pelo site e volte para tentar novamente!' };
     }
 
     function renderStart() {
-      app.innerHTML = `
-        <div class="quiz-start">
-          <div class="quiz-start__icon">🌾</div>
-          <h2>Quanto você sabe sobre Entre Rios?</h2>
-          <p>Responda ${QUESTIONS.length} perguntas sobre a história, agricultura e cultura dos Suábios do Danúbio no Paraná.</p>
-          <div class="quiz-start__meta">
-            <span>📋 ${QUESTIONS.length} perguntas</span>
-            <span>🏆 1 ponto por acerto</span>
-            <span>💡 Explicação em cada resposta</span>
-          </div>
-          <button class="btn-quiz-start" id="btn-begin">▶ &nbsp;Começar Quiz</button>
-        </div>`;
+      app.innerHTML = '';
+      const div = document.createElement('div');
+      div.className = 'quiz-start-card';
+      div.innerHTML = `
+        <div style="font-size:3rem;margin-bottom:.5rem;">🌾</div>
+        <h2>Quanto você sabe sobre Entre Rios?</h2>
+        <p>Responda ${QUESTIONS.length} perguntas sobre a história, a natureza e as curiosidades do distrito. Leia com calma — cada resposta traz uma explicação para você aprender mais!</p>
+        <div class="quiz-start-meta">
+          <span>📋 ${QUESTIONS.length} perguntas</span>
+          <span>☑️ Múltipla escolha e Verdadeiro/Falso</span>
+          <span>💡 Explicação em cada resposta</span>
+          <span>🏆 1 ponto por acerto</span>
+        </div>
+        <button class="btn-quiz-start" id="btn-begin">▶ &nbsp;Começar Quiz</button>`;
+      app.appendChild(div);
       document.getElementById('btn-begin').addEventListener('click', () => {
         current = 0; score = 0; answered = false; wrongCount = 0;
         renderQuestion();
@@ -426,33 +449,70 @@
     }
 
     function renderQuestion() {
+      answered = false;
       const q = QUESTIONS[current];
       const total = QUESTIONS.length;
-      answered = false;
-      app.innerHTML = `
-        <div class="quiz-progress">
-          <div class="quiz-progress__bar-bg">
-            <div class="quiz-progress__bar-fill" style="width:${(current/total)*100}%"></div>
-          </div>
-          <div class="quiz-progress__label">Pergunta ${current+1} de ${total}</div>
+      const pct = (current / total) * 100;
+      const isVF = q.type === 'vf';
+
+      app.innerHTML = '';
+
+      const progWrap = document.createElement('div');
+      progWrap.className = 'quiz-progress';
+      progWrap.innerHTML = `
+        <div class="quiz-progress__bar-bg">
+          <div class="quiz-progress__bar-fill" style="width:${pct}%"></div>
         </div>
-        <div class="quiz-card">
-          <div class="quiz-card__num">Pergunta ${current+1} / ${total}</div>
-          <div class="quiz-card__question">${q.q}</div>
-          <div class="quiz-options" id="opts">
-            ${q.opts.map((opt,i) => `
-              <button class="quiz-opt" data-i="${i}">
-                <span class="opt-letter">${LETTERS[i]}</span>${opt}
-              </button>`).join('')}
-          </div>
-          <div class="quiz-feedback" id="feedback"></div>
-          <button class="quiz-next" id="btn-next">
-            ${current+1 < total ? 'Próxima pergunta →' : 'Ver resultado →'}
+        <div class="quiz-progress__label">Pergunta ${current + 1} de ${total}</div>`;
+      app.appendChild(progWrap);
+
+      const card = document.createElement('div');
+      card.className = 'quiz-card';
+
+      const badge = isVF
+        ? '<span class="quiz-badge vf">Verdadeiro ou Falso</span>'
+        : '<span class="quiz-badge">Múltipla escolha</span>';
+
+      let optsHTML = '';
+      if (isVF) {
+        optsHTML = `<div class="quiz-options vf-opts">
+          <button class="quiz-opt" data-val="true">
+            <span class="opt-letter">V</span>Verdadeiro
+          </button>
+          <button class="quiz-opt" data-val="false">
+            <span class="opt-letter">F</span>Falso
           </button>
         </div>`;
-      document.querySelectorAll('.quiz-opt').forEach(btn => {
-        btn.addEventListener('click', () => handleAnswer(parseInt(btn.dataset.i)));
-      });
+      } else {
+        optsHTML = `<div class="quiz-options">
+          ${q.opts.map((opt, i) => `
+            <button class="quiz-opt" data-i="${i}">
+              <span class="opt-letter">${LETTERS[i]}</span>${opt}
+            </button>`).join('')}
+        </div>`;
+      }
+
+      card.innerHTML = `
+        ${badge}
+        <div class="quiz-card__num">Pergunta ${current + 1} / ${total}</div>
+        <div class="quiz-card__question">${q.q}</div>
+        ${optsHTML}
+        <div class="quiz-feedback" id="feedback"></div>
+        <button class="quiz-next" id="btn-next">
+          ${current + 1 < total ? 'Próxima pergunta →' : 'Ver resultado →'}
+        </button>`;
+      app.appendChild(card);
+
+      if (isVF) {
+        card.querySelectorAll('.quiz-opt').forEach(btn => {
+          btn.addEventListener('click', () => handleAnswerVF(btn.dataset.val === 'true'));
+        });
+      } else {
+        card.querySelectorAll('.quiz-opt').forEach(btn => {
+          btn.addEventListener('click', () => handleAnswerMC(parseInt(btn.dataset.i)));
+        });
+      }
+
       document.getElementById('btn-next').addEventListener('click', () => {
         current++;
         if (current < QUESTIONS.length) renderQuestion();
@@ -460,45 +520,67 @@
       });
     }
 
-    function handleAnswer(chosen) {
-      if (answered) return;
-      answered = true;
-      const q = QUESTIONS[current];
+    function revealFeedback(isCorrect, correctLabel) {
       const feedback = document.getElementById('feedback');
       const nextBtn  = document.getElementById('btn-next');
-      document.querySelectorAll('.quiz-opt').forEach((btn, i) => {
-        btn.disabled = true;
-        if (i === q.answer) btn.classList.add('correct');
-        if (i === chosen && chosen !== q.answer) btn.classList.add('wrong');
-      });
-      if (chosen === q.answer) {
+      const q = QUESTIONS[current];
+      if (isCorrect) {
         score++;
         feedback.className = 'quiz-feedback correct-fb show';
         feedback.innerHTML = `<strong>✅ Correto!</strong> ${q.feedback}`;
       } else {
         wrongCount++;
         feedback.className = 'quiz-feedback wrong-fb show';
-        feedback.innerHTML = `<strong>❌ Incorreto.</strong> A resposta certa é <strong>${LETTERS[q.answer]} – ${q.opts[q.answer]}</strong>. ${q.feedback}`;
+        feedback.innerHTML = `<strong>❌ Incorreto.</strong> A resposta certa é <strong>${correctLabel}</strong>. ${q.feedback}`;
       }
       nextBtn.classList.add('show');
+    }
+
+    function handleAnswerMC(chosen) {
+      if (answered) return;
+      answered = true;
+      const q = QUESTIONS[current];
+      document.querySelectorAll('.quiz-opt').forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === q.answer) btn.classList.add('correct');
+        if (i === chosen && chosen !== q.answer) btn.classList.add('wrong');
+      });
+      const correctLabel = `${LETTERS[q.answer]} – ${q.opts[q.answer]}`;
+      revealFeedback(chosen === q.answer, correctLabel);
+    }
+
+    function handleAnswerVF(chosen) {
+      if (answered) return;
+      answered = true;
+      const q = QUESTIONS[current];
+      document.querySelectorAll('.quiz-opt').forEach(btn => {
+        btn.disabled = true;
+        const val = btn.dataset.val === 'true';
+        if (val === q.answer) btn.classList.add('correct');
+        if (val === chosen && chosen !== q.answer) btn.classList.add('wrong');
+      });
+      const correctLabel = q.answer ? 'Verdadeiro' : 'Falso';
+      revealFeedback(chosen === q.answer, correctLabel);
     }
 
     function renderResult() {
       const total = QUESTIONS.length;
       const res = getResultData(score, total);
-      app.innerHTML = `
-        <div class="quiz-result">
-          <div class="quiz-result__emoji">${res.emoji}</div>
-          <h2>${res.title}</h2>
-          <div class="quiz-result__score">${score}<span> / ${total}</span></div>
-          <p class="quiz-result__msg">${res.msg}</p>
-          <div class="quiz-result__breakdown">
-            <div><strong style="color:#3a8a2f">${score}</strong> acertos</div>
-            <div><strong style="color:#c0392b">${wrongCount}</strong> erros</div>
-            <div><strong style="color:#c8973a">${Math.round((score/total)*100)}%</strong> aproveitamento</div>
-          </div>
-          <button class="btn-quiz-restart" id="btn-restart">↺ &nbsp;Tentar novamente</button>
-        </div>`;
+      app.innerHTML = '';
+      const div = document.createElement('div');
+      div.className = 'quiz-result-card';
+      div.innerHTML = `
+        <div style="font-size:3.5rem;margin-bottom:.5rem;">${res.emoji}</div>
+        <h2>${res.title}</h2>
+        <div class="quiz-result-score">${score}<span> / ${total}</span></div>
+        <p class="quiz-result-msg">${res.msg}</p>
+        <div class="quiz-result-breakdown">
+          <div><strong style="color:#3a8a2f">${score}</strong> acertos</div>
+          <div><strong style="color:#c0392b">${wrongCount}</strong> erros</div>
+          <div><strong style="color:#c8973a">${Math.round((score / total) * 100)}%</strong> aproveitamento</div>
+        </div>
+        <button class="btn-quiz-restart" id="btn-restart">↺ &nbsp;Tentar novamente</button>`;
+      app.appendChild(div);
       document.getElementById('btn-restart').addEventListener('click', renderStart);
     }
 
@@ -525,14 +607,14 @@
   const TREE_S    = 40;
   function laneY(l){ return BORDER + l * LANE_H + LANE_H/2; }
 
-  const LANE_COLORS  = ['#d9a825','#c99618','#d9a825'];
-  const BORDER_COLOR = '#4d8a1a';
-  const DIVIDER_COLOR= '#8a6010';
-  const SPEED_INIT   = 4.0;
-  const SPEED_INC    = 0.018;
-  const MAX_TREES    = 3;
-  const SPAWN_MIN    = 90;
-  const MOVE_CD_SEC  = 0.13;
+  const LANE_COLORS   = ['#d9a825','#c99618','#d9a825'];
+  const BORDER_COLOR  = '#4d8a1a';
+  const DIVIDER_COLOR = '#8a6010';
+  const SPEED_INIT    = 4.0;
+  const SPEED_INC     = 0.018;
+  const MAX_TREES     = 3;
+  const SPAWN_MIN     = 90;
+  const MOVE_CD_SEC   = 0.13;
 
   let state='idle', lane=1, targetLane=1;
   let tractorY=laneY(1), speed=SPEED_INIT;
@@ -578,6 +660,7 @@
   })();
 
   function reset(){ lane=1;targetLane=1;tractorY=laneY(1);speed=SPEED_INIT;elapsed=0;lastTs=null;moveCd=0;spawnCd=SPAWN_MIN;trees=[];dusts=[];bgOff=0;state='playing'; }
+
   function spawnTree(x){
     const used=new Set(trees.map(t=>t.lane));
     const avail=[0,1,2].filter(l=>!used.has(l));
@@ -585,6 +668,7 @@
     const l=avail[Math.floor(Math.random()*avail.length)];
     trees.push({lane:l,x:x,y:laneY(l)});
   }
+
   function addDust(x,y){ for(let i=0;i<5;i++) dusts.push({x:x+(Math.random()-.5)*16,y:y+(Math.random()-.5)*16,vx:-(Math.random()*1.2+.4),vy:(Math.random()-.5)*.8,life:1,r:Math.random()*4+2}); }
   function lerp(a,b,t){return a+(b-a)*t;}
 
@@ -609,7 +693,7 @@
     cx.globalAlpha=1;
     const sw=TRACTOR_S*2.4,sh=TRACTOR_S*1.8;
     cx.fillStyle='rgba(0,0,0,0.28)';cx.beginPath();cx.ellipse(x+2,y+sh*.38,sw*.42,sh*.10,0,0,Math.PI*2);cx.fill();
-    if(IMG_TRACTOR.complete&&IMG_TRACTOR.naturalWidth>0){cx.drawImage(IMG_TRACTOR,x-sw/2,y-sh/2,sw,sh);}
+    if(IMG_TRACTOR.complete&&IMG_TRACTOR.naturalWidth>0) cx.drawImage(IMG_TRACTOR,x-sw/2,y-sh/2,sw,sh);
   }
   function drawTrees(){
     cx.globalAlpha=1;
@@ -659,8 +743,9 @@
         if((keys['ArrowDown']||keys['s']||keys['S'])&&targetLane<LANES-1){targetLane++;moveCd=MOVE_CD_SEC;addDust(TRACTOR_X,tractorY);}
       }
       tractorY=lerp(tractorY,laneY(targetLane),.16);
-      trees.forEach(t=>{t.x-=speed;});trees=trees.filter(t=>t.x>-(TREE_S*1.9/2));
+      trees.forEach(t=>{t.x-=speed;});trees=trees.filter(t=>t.x>-TREE_S-10);
       if(spawnCd<=0){
+        trees=[];
         const sx=W+TREE_S+10;
         spawnTree(sx);
         spawnTree(sx);
@@ -669,8 +754,10 @@
       if(hitTest()){state='dead';best=Math.max(best,Math.floor(elapsed));hudBest.textContent=`${best}s`;}
       hudTime.textContent=`${Math.floor(elapsed)}s`;
     }
-    cx.globalAlpha=1;drawBG();cx.globalAlpha=1;tickDust();cx.globalAlpha=1;drawTrees();cx.globalAlpha=1;drawTractor(TRACTOR_X,tractorY);cx.globalAlpha=1;drawHUD();cx.globalAlpha=1;
-    if(state==='dead')drawDead();if(state==='paused')drawPaused();cx.globalAlpha=1;
+    cx.globalAlpha=1;drawBG();tickDust();drawTrees();drawTractor(TRACTOR_X,tractorY);drawHUD();
+    if(state==='dead')drawDead();
+    if(state==='paused')drawPaused();
+    cx.globalAlpha=1;
   }
 
   window.addEventListener('keydown',e=>{
@@ -679,12 +766,14 @@
     if((e.key==='p'||e.key==='P')&&(state==='playing'||state==='paused'))togglePause();
   });
   window.addEventListener('keyup',e=>{keys[e.key]=false;});
+
   function handleClick(px,py){
     if(_btn&&px>=_btn.x&&px<=_btn.x+_btn.w&&py>=_btn.y&&py<=_btn.y+_btn.h){
       if(state==='dead')reset(); else if(state==='paused')togglePause(); return;
     }
     if(state==='playing'){const mid=H/2;if(py<mid&&targetLane>0){targetLane--;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}if(py>=mid&&targetLane<LANES-1){targetLane++;addDust(TRACTOR_X,tractorY);moveCd=MOVE_CD_SEC;}}
   }
+
   CV.addEventListener('click',e=>{const r=CV.getBoundingClientRect();handleClick((e.clientX-r.left)*(W/r.width),(e.clientY-r.top)*(H/r.height));});
   let swipeY=null;
   CV.addEventListener('touchstart',e=>{e.preventDefault();swipeY=e.touches[0].clientY;const r=CV.getBoundingClientRect();handleClick((e.touches[0].clientX-r.left)*(W/r.width),(e.touches[0].clientY-r.top)*(H/r.height));},{passive:false});
@@ -697,5 +786,6 @@
   });
   })();
   </script>
+
 </body>
 </html>
