@@ -503,11 +503,11 @@ body.high-contrast .btn-secondary { border-color: #000; color: #000; }
 }
 
 .page-hero--historia {
-  background: #1a0f08 url('img/img_imigrantes.png') center 30% / cover no-repeat;
+  background: #2a1a3a url('img/banner_arcade.jpg') center center / cover no-repeat;
 }
 
-.page-hero--minijogo {
-  background: #2a1a3a url('img/banner_arcade.jpg') center center / cover no-repeat;
+.page-hero--historia-bg {
+  background: #1a0f08 url('img/img_imigrantes.png') center 30% / cover no-repeat;
 }
 
 .page-hero--ambiente {
