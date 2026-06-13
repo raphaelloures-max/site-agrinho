@@ -1,590 +1,1171 @@
-'use strict';
+:root {
 
-const STATS_DATA = [
-  { number: '~9.000', label: 'habitantes' },
-  { number: '5',      label: 'colônias' },
-  { number: '1951',   label: 'ano de fundação' },
-  { number: '74+',    label: 'anos de história' },
-];
+  --color-earth:      #3d2b1f;  
+  --color-wheat:      #c8973a;  
+  --color-wheat-lt:   #f0d48a;  
+  --color-green:      #3a5c3e;  
+  --color-green-lt:   #6b9c6f;  
+  --color-cream:      #faf5ea;  
+  --color-paper:      #f2ead6;  
+  --color-bark:       #7a5c44;  
+  --color-fog:        #e8dfc8;  
 
-const CARDS_DATA = [
-  {
-    icon: '🌱',
-    title: 'Plantio Direto',
-    text: 'A AGRÁRIA foi pioneira no Brasil na adoção do sistema de plantio direto, desenvolvido nos anos 1970, que conserva o solo, reduz a erosão e hoje abrange milhões de hectares no país.',
-    tag: 'Solo',
-  },
-  {
-    icon: '🌾',
-    title: 'Cevada e Malte',
-    text: 'Entre Rios é o principal polo de cevada do Brasil. A Agrária Malte, localizada em Grandes Rios (PR), é a maior maltaria da América Latina, abastecendo as principais cervejarias do país.',
-    tag: 'Produção',
-  },
-  {
-    icon: '🌿',
-    title: 'Pesquisa Agropecuária',
-    text: 'A FAPA (Fundação Agrária de Pesquisa Agropecuária) desenvolve variedades adaptadas ao clima subtropical de Guarapuava, elevando a produtividade de trigo, soja, milho e cevada.',
-    tag: 'Pesquisa',
-  },
-  {
-    icon: '💧',
-    title: 'Preservação Hídrica',
-    text: 'Corredores de vegetação nativa protegem as nascentes dos rios Jordão e Pinhão, que delimitam o distrito. O uso racional da água é monitorado em toda a cadeia produtiva da cooperativa.',
-    tag: 'Água',
-  },
-  {
-    icon: '🌳',
-    title: 'Mata Nativa',
-    text: 'Mais de 30% da área do distrito é coberta por vegetação nativa, superando as exigências do Código Florestal. O horto florestal da Agrária, ativo desde 1992, distribui mudas para toda a região.',
-    tag: 'Biodiversidade',
-  },
-  {
-    icon: '🤝',
-    title: 'Cooperativismo',
-    text: 'A Cooperativa Agrária distribui resultados entre os associados e mantém serviços de saúde, educação e cultura para toda a comunidade das cinco colônias de Entre Rios.',
-    tag: 'Comunidade',
-  },
-];
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Source Serif 4', Georgia, serif;
+  --fs-base:  1rem;       
+  --fs-sm:    0.875rem;
+  --fs-lg:    1.125rem;
+  --fs-xl:    1.375rem;
+  --fs-2xl:   1.75rem;
+  --fs-3xl:   2.375rem;
+  --fs-4xl:   3.25rem;
+  --fs-hero:  clamp(2.5rem, 6vw, 5rem);
+  --lh-tight: 1.2;
+  --lh-body:  1.7;
 
-const CAROUSEL_DATA = [
-  {
-    img: 'img/img_trigo.png',
-    title: 'Colheita do Trigo',
-    caption: 'Colheitadeira percorre os campos dourados da Colônia Vitória – Entre Rios, Guarapuava.',
-  },
-  {
-    img: 'img/img_soja.png',
-    title: 'Colheita de Soja',
-    caption: 'Soja e trigo são as principais culturas da Cooperativa AGRÁRIA em Guarapuava.',
-  },
-  {
-    img: 'img/img_gado.png',
-    title: 'Pecuária nas Colônias',
-    caption: 'Gado leiteiro pasta nas colinas verdes, com a paisagem serrana de Entre Rios ao fundo.',
-  },
-  {
-    img: 'img/img_arquitetura.png',
-    title: 'Arquitetura Suábia',
-    caption: 'Casas com estrutura enxaimel preservam a identidade arquitetônica dos imigrantes nas colônias.',
-  },
-  {
-    img: 'img/img_dancas.png',
-    title: 'Festival Cultural',
-    caption: 'Danças folclóricas suábias reúnem centenas de pessoas no Centro de Eventos AGRÁRIA.',
-  },
-  {
-    img: 'img/img_moagem.png',
-    title: 'Moagem AGRÁRIA',
-    caption: 'A Agrária Farinhas processa trigo produzido nas colônias, abastecendo o mercado nacional.',
-  },
-  {
-    img: 'img/img_mata.png',
-    title: 'Floresta de Eucaliptos',
-    caption: 'O horto florestal da Cooperativa AGRÁRIA preserva e distribui espécies nativas desde 1992.',
-  },
-  {
-    img: 'img/Museu.png',
-    title: 'Museu da Imigração Suábio-Brasileira',
-    caption: 'O museu da Colônia Vitória preserva fotografias, documentos e objetos dos primeiros colonizadores suábios.',
-  },
-  {
-    img: 'img/Agraria75anos.png',
-    title: '75 Anos de Entre Rios',
-    caption: 'Em 2026, Entre Rios celebra 75 anos de história, tradição agrícola e preservação cultural no Paraná.',
-  },
-];
+  --space-xs:  0.25rem;
+  --space-sm:  0.5rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
 
-const PILLARS_DATA = [
-  {
-    id: 'pilar-1',
-    label: '🌾 Agricultura',
-    icon: '🌾',
-    title: 'Excelência Agrícola',
-    text: 'Entre Rios é um dos maiores polos produtores de trigo e cevada do Brasil. A AGRÁRIA introduziu variedades adaptadas ao clima subtropical de Guarapuava, combinando genética avançada com rotação de culturas e saúde do solo. As culturas principais são soja, milho, trigo e cevada.',
-  },
-  {
-    id: 'pilar-2',
-    label: '🏘️ As Colônias',
-    icon: '🏘️',
-    title: 'As Cinco Colônias',
-    text: 'O distrito de Entre Rios é formado por cinco colônias eslavo-germânicas: Vitória (sede da Cooperativa Agrária), Jordãozinho, Cachoeira, Socorro e Samambaia. Cada uma preserva sua identidade, dialeto e tradições trazidas da Europa pelos 500 famílias pioneiras.',
-  },
-  {
-    id: 'pilar-3',
-    label: '🌿 Meio Ambiente',
-    icon: '🌿',
-    title: 'Compromisso Ambiental',
-    text: 'Mais de 30% da área do distrito é coberta por vegetação nativa, superando as exigências do Código Florestal. O distrito é delimitado pelos rios Jordão e Pinhão, e o horto florestal da Agrária, ativo desde 1992, já recebeu doações de espécies de todo o Brasil e da Europa.',
-  },
-  {
-    id: 'pilar-4',
-    label: '🎭 Cultura',
-    icon: '🎭',
-    title: 'Identidade Cultural',
-    text: 'Os festivais tradicionais, a gastronomia suábia (Schnitzel, Maultaschen, Strudel), a arquitetura enxaimel e o dialeto Donauschwäbisch dos mais velhos mantêm viva a memória de um povo que reconstruiu sua vida nas terras do Paraná. A Fundação Cultural Suábio-Brasileira (FCSB), criada em 2001, coordena essa preservação.',
-  },
-];
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+  --radius-full: 9999px;
 
-const TIMELINE_DATA = [
-  {
-    year: '1945–1950',
-    title: 'A diáspora suábia',
-    text: 'Com o fim da Segunda Guerra, o regime comunista expulsou os suábios do leste europeu (Hungria, Croácia, Romênia). Acolhidos na Áustria, após sete anos em campos de refugiados, a "Ajuda Suíça à Europa" negocia sua vinda ao Brasil. O engenheiro agrônomo Michael Moor lidera a seleção das famílias e das terras em Guarapuava.',
-  },
-  {
-    year: 'Maio de 1951',
-    title: 'Chegada e fundação',
-    text: 'As primeiras 500 famílias suábias chegam à região de Guarapuava, delimitada pelos rios Jordão e Pinhão. Encontram mata fechada e campos nativos. Antes mesmo de construir as casas, fundam a Cooperativa Agrária Mista de Entre Rios, presidida por Michael Moor. As cinco colônias — Vitória, Jordãozinho, Cachoeira, Socorro e Samambaia — começam a ser formadas.',
-  },
-  {
-    year: '1962',
-    title: 'Criação oficial do distrito',
-    text: 'Pela lei estadual nº 4.583, de 27 de junho de 1962, o distrito de Entre Rios é oficialmente criado e anexado ao município de Guarapuava, situado a 18 km da sede municipal.',
-  },
-  {
-    year: '1970s',
-    title: 'Revolução do plantio direto',
-    text: 'Técnicos da AGRÁRIA e agricultores locais são pioneiros do sistema de plantio direto no Brasil, técnica que hoje está presente em dezenas de milhões de hectares no país. A soja se consolida como cultura principal ao lado do trigo.',
-  },
-  {
-    year: '1980s–1990s',
-    title: 'Diversificação e cevada',
-    text: 'A cooperativa expande para a cevada, abastecendo cervejarias, e inaugura a Agrária Malte, que se tornará a maior maltaria da América Latina, responsável por cerca de 30% da demanda nacional de malte.',
-  },
-  {
-    year: '2001 – hoje',
-    title: 'Cultura, pesquisa e sustentabilidade',
-    text: 'Criação da Fundação Cultural Suábio-Brasileira (FCSB) em Vitória para preservar o patrimônio suábio. A FAPA (Fundação Agrária de Pesquisa Agropecuária) posiciona Entre Rios como referência em pesquisa agrícola no Brasil, com certificações internacionais e agricultura de precisão.',
-  },
-];
+  --shadow-sm:  0 1px 3px rgba(61,43,31,.10);
+  --shadow-md:  0 4px 16px rgba(61,43,31,.12);
+  --shadow-lg:  0 12px 40px rgba(61,43,31,.15);
 
-const ACCORDION_DATA = [
-  {
-    id: 'acc-1',
-    title: '🌍 Por que Entre Rios é um exemplo nacional',
-    content: 'Entre Rios é reconhecida como uma das comunidades agrícolas mais sustentáveis do Brasil. Desde a chegada dos colonos suábios em 1951, a região desenvolveu um modelo único que combina alta produtividade com preservação ambiental e coesão social. A Cooperativa AGRÁRIA integra toda a cadeia produtiva — da semente à mesa — garantindo renda aos agricultores, preservação do solo e segurança alimentar para o país. Esse modelo está alinhado diretamente à ODS 2 da ONU: Fome Zero e Agricultura Sustentável, que propõe acabar com a fome, alcançar segurança alimentar, melhorar a nutrição e promover a agricultura sustentável até 2030.',
-  },
-  {
-    id: 'acc-2',
-    title: '🌱 Plantio direto e conservação do solo',
-    content: 'A AGRÁRIA foi pioneira no Brasil na adoção do sistema de plantio direto, desenvolvido nas suas próprias áreas experimentais na década de 1970. A técnica consiste em semear sem revolver o solo, mantendo a palha da cultura anterior na superfície. Isso reduz drasticamente a erosão, conserva a umidade, aumenta a matéria orgânica e sequestra carbono. Hoje, essa prática é obrigatória para todos os associados da cooperativa e está presente em dezenas de milhões de hectares em todo o Brasil, sendo considerada uma das maiores contribuições brasileiras à agricultura sustentável mundial.',
-  },
-  {
-    id: 'acc-3',
-    title: '📋 Regras e práticas internas da AGRÁRIA',
-    content: 'A Cooperativa AGRÁRIA estabelece normas técnicas e ambientais rigorosas para todos os seus associados:<br/><br/><strong>• Rotação de culturas obrigatória:</strong> os agricultores alternam soja, milho, trigo e cevada nas mesmas áreas, evitando o esgotamento do solo e reduzindo o uso de defensivos.<br/><strong>• Análise de solo periódica:</strong> cada talhão é analisado regularmente para que a adubação seja feita de forma precisa, sem desperdício de insumos.<br/><strong>• Preservação de matas ciliares:</strong> faixas de vegetação nativa ao longo de rios e nascentes são obrigatórias, protegendo os recursos hídricos.<br/><strong>• Assistência técnica contínua:</strong> engenheiros agrônomos acompanham as propriedades ao longo do ano, orientando boas práticas e prevenindo problemas.<br/><strong>• Uso responsável de defensivos:</strong> a AGRÁRIA orienta e fiscaliza a aplicação de agroquímicos, priorizando produtos de menor impacto ambiental e respeitando os períodos de carência.',
-  },
-  {
-    id: 'acc-4',
-    title: '🔬 Pesquisa, inovação e cevada',
-    content: 'A FAPA (Fundação Agrária de Pesquisa Agropecuária), criada pela cooperativa, desenvolve variedades de trigo, cevada, soja e milho adaptadas ao clima subtropical de Guarapuava. Esse trabalho contínuo de melhoramento genético permite aumentar a produtividade sem ampliar a área plantada — conceito central da agricultura sustentável. A cevada cultivada em Entre Rios abastece a Agrária Malte, em Grandes Rios (PR), a maior maltaria da América Latina, que fornece malte para as principais cervejarias do Brasil. Toda a cadeia — da pesquisa ao processamento — acontece de forma integrada e sustentável dentro do modelo cooperativista.',
-  },
-];
+  --ease-out: cubic-bezier(.16,1,.3,1);
+  --dur-fast: 150ms;
+  --dur-med:  300ms;
+  --dur-slow: 600ms;
 
-const TECH_CARDS_DATA = [
-  { icon: '📄', title: 'HTML5 Semântico', text: 'Tags semânticas e atributos ARIA para máxima acessibilidade e SEO.', tag: 'Estrutura' },
-  { icon: '🎨', title: 'CSS3 Moderno', text: 'Variables, Grid, Flexbox, animações, mobile-first e alto contraste.', tag: 'Design' },
-  { icon: '⚙️', title: 'JavaScript ES6+', text: 'Módulos, array methods, DOM dinâmico, Intersection Observer API.', tag: 'Lógica' },
-  { icon: '♿', title: 'Acessibilidade WCAG', text: 'Foco visível, ARIA roles, labels e controles de fonte e contraste.', tag: 'A11y' },
-  { icon: '📱', title: 'Design Responsivo', text: 'Layout adaptável a mobile, tablet e desktop com breakpoints claros.', tag: 'UX' },
-  { icon: '🚀', title: 'Zero dependências', text: 'Sem frameworks externos – HTML, CSS e JS puros para máxima performance.', tag: 'Performance' },
-];
-
-function createElement(tag, attrs = {}, innerHTML = '') {
-  const el = document.createElement(tag);
-  Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
-  if (innerHTML) el.innerHTML = innerHTML;
-  return el;
+  --navbar-h:  70px;
+  --navbar-bg: rgba(250,245,234,.92);
 }
 
-const $ = (sel, ctx = document) => ctx.querySelector(sel);
-const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-(function initA11y() {
+html {
+  font-size: var(--fs-base);
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
 
-  const FONT_KEY    = 'er_fontSize';
-  const CONTRAST_KEY = 'er_contrast';
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  color: var(--color-earth);
+  background-color: var(--color-cream);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
 
-  let fontLevel = parseInt(localStorage.getItem(FONT_KEY) || '0', 10);
-  const FONT_STEP  = 2;
-  const FONT_MIN   = -4;
-  const FONT_MAX   = 8;
-  const BASE_SIZE  = 16;
+img, svg { display: block; max-width: 100%; }
 
-  function applyFont() {
-    document.documentElement.style.fontSize = (BASE_SIZE + fontLevel) + 'px';
-    localStorage.setItem(FONT_KEY, fontLevel);
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--dur-fast) ease;
+}
+
+ul, ol { list-style: none; }
+
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+:focus-visible {
+  outline: 3px solid var(--color-wheat);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+body.high-contrast {
+  --color-earth:    #000000;
+  --color-wheat:    #ffcc00;
+  --color-wheat-lt: #ffee66;
+  --color-green:    #00aa44;
+  --color-cream:    #ffffff;
+  --color-paper:    #f0f0f0;
+  --color-bark:     #333333;
+  --color-fog:      #aaaaaa;
+  --navbar-bg:      rgba(255,255,255,.98);
+}
+
+body.high-contrast .hero__overlay,
+body.high-contrast .page-hero::after {
+  background: rgba(0,0,0,.75) !important;
+}
+
+body.high-contrast .btn-primary { background: #000; color: #ffcc00; border-color: #000; }
+body.high-contrast .btn-secondary { border-color: #000; color: #000; }
+
+.a11y-bar {
+  position: fixed;
+  top: 0; right: 0;
+  z-index: 9999;
+  display: flex;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-earth);
+  border-bottom-left-radius: var(--radius-md);
+}
+
+.a11y-btn {
+  background: transparent;
+  color: var(--color-wheat-lt);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  transition: background var(--dur-fast);
+  letter-spacing: .03em;
+}
+
+.a11y-btn:hover, .a11y-btn:focus-visible {
+  background: rgba(255,255,255,.15);
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: var(--navbar-h);
+  background: var(--navbar-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-fog);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--dur-med) ease;
+}
+
+.navbar.scrolled { box-shadow: var(--shadow-md); }
+
+.navbar__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 0 var(--space-lg);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.navbar__logo {
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logo-mark {
+  font-size: 1.6rem;
+  color: var(--color-wheat);
+  line-height: 1;
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--color-earth);
+  letter-spacing: -.02em;
+}
+
+.navbar__nav {
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.nav__list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.nav__link {
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--color-bark);
+  padding: var(--space-xs) 0;
+  position: relative;
+  transition: color var(--dur-fast) ease;
+}
+
+.nav__link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 2px;
+  background: var(--color-wheat);
+  border-radius: var(--radius-full);
+  transition: width var(--dur-med) var(--ease-out);
+}
+
+.nav__link:hover { color: var(--color-earth); }
+.nav__link:hover::after { width: 100%; }
+
+.nav__link.active {
+  color: var(--color-wheat);
+}
+.nav__link.active::after { width: 100%; }
+
+.navbar__toggle {
+  grid-column: 3;
+  justify-self: end;
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: background var(--dur-fast);
+}
+
+.navbar__toggle:hover { background: var(--color-fog); }
+
+.burger-line {
+  display: block;
+  width: 22px; height: 2px;
+  background: var(--color-earth);
+  border-radius: var(--radius-full);
+  transition: transform var(--dur-med) var(--ease-out), opacity var(--dur-fast);
+}
+
+.navbar__toggle[aria-expanded="true"] .burger-line:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.navbar__toggle[aria-expanded="true"] .burger-line:nth-child(2) {
+  opacity: 0;
+}
+.navbar__toggle[aria-expanded="true"] .burger-line:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.container--narrow {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.section-pad { padding: var(--space-3xl) 0; }
+
+.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr;  
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;  
+  gap: var(--space-lg);
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--color-wheat);
+  margin-bottom: var(--space-sm);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: var(--color-earth);
+  margin-bottom: var(--space-lg);
+}
+
+.section-title--center { text-align: center; }
+
+.section-title em {
+  font-style: italic;
+  color: var(--color-wheat);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--color-wheat);
+  color: var(--color-earth);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-wheat);
+  transition: background var(--dur-med), color var(--dur-med), transform var(--dur-fast);
+  box-shadow: 0 4px 14px rgba(200,151,58,.35);
+}
+
+.btn-primary:hover, .btn-primary:focus-visible {
+  background: var(--color-earth);
+  color: var(--color-wheat-lt);
+  transform: translateY(-2px);
+}
+
+.btn-primary--light {
+  background: var(--color-cream);
+  color: var(--color-earth);
+  border-color: var(--color-cream);
+  box-shadow: none;
+}
+
+.btn-primary--light:hover {
+  background: var(--color-wheat);
+  border-color: var(--color-wheat);
+  color: var(--color-earth);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: transparent;
+  color: var(--color-earth);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: .04em;
+  padding: var(--space-sm) 0;
+  border-bottom: 2px solid var(--color-wheat);
+  transition: color var(--dur-fast), border-color var(--dur-fast);
+}
+
+.btn-secondary:hover { color: var(--color-wheat); }
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+  padding: var(--space-3xl) var(--space-lg);
+  padding-top: calc(var(--navbar-h) + var(--space-3xl));
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  background: #2e1f0e;
+  z-index: 0;
+}
+
+.hero__bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('img/img_colheita.png') center center / cover no-repeat;
+  z-index: 0;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(61,43,31,.7) 0%, rgba(61,43,31,.1) 100%);
+  z-index: 1;
+}
+
+.hero__grain {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: .45;
+  pointer-events: none;
+}
+
+.hero__particles { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+
+.wheat-particle {
+  position: absolute;
+  font-size: 1.2rem;
+  opacity: 0;
+  animation: floatUp var(--dur, 8s) var(--delay, 0s) infinite ease-in-out;
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: .4; }
+  90%  { opacity: .15; }
+  100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+}
+
+.hero__content {
+  position: relative;
+  z-index: 3;
+  max-width: 680px;
+}
+
+.hero__eyebrow {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--color-wheat-lt);
+  margin-bottom: var(--space-md);
+  opacity: .85;
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-hero);
+  font-weight: 700;
+  line-height: 1.05;
+  color: #fff;
+  margin-bottom: var(--space-lg);
+}
+
+.hero__title em {
+  font-style: italic;
+  color: var(--color-wheat-lt);
+}
+
+.hero__title--sm { font-size: clamp(2rem, 5vw, 3.5rem); }
+
+.hero__subtitle {
+  font-size: var(--fs-lg);
+  color: rgba(255,255,255,.82);
+  max-width: 560px;
+  margin-bottom: var(--space-xl);
+  line-height: var(--lh-body);
+}
+
+.hero__scroll-hint {
+  position: absolute;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  color: rgba(255,255,255,.5);
+}
+
+.scroll-line {
+  display: block;
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,.5));
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+.scroll-text {
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: .3; transform: scaleY(1); }
+  50%       { opacity: 1;  transform: scaleY(1.1); }
+}
+
+.page-hero {
+  position: relative;
+  min-height: 50vh;
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-3xl) var(--space-lg) var(--space-2xl);
+  padding-top: calc(var(--navbar-h) + var(--space-3xl));
+  overflow: hidden;
+}
+
+.page-hero--historia {
+  background: #1a0f08 url('img/img_imigrantes.png') center 30% / cover no-repeat;
+}
+
+.page-hero--minijogo {
+  background: #2a1a3a url('img/banner1.jpg') center center / cover no-repeat;
+}
+
+.page-hero--ambiente {
+  background: #0a1a08 url('img/img_mata.png') center 40% / cover no-repeat;
+}
+
+.page-hero--autor {
+  background: #0a0d1a url('img/banner2.jpg') center center / cover no-repeat;
+}
+
+.page-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  z-index: 1;
+}
+
+.page-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+
+.stats-band {
+  background: var(--color-earth);
+  padding: var(--space-xl) 0;
+}
+
+.stats-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: var(--space-lg);
+}
+
+.stat-item {
+  text-align: center;
+  padding: var(--space-md);
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: var(--color-wheat);
+  line-height: 1;
+  display: block;
+}
+
+.stat-label {
+  font-size: var(--fs-sm);
+  color: rgba(255,255,255,.65);
+  letter-spacing: .06em;
+  margin-top: var(--space-xs);
+  display: block;
+}
+
+.about {
+  background: var(--color-cream);
+}
+
+.about__text p {
+  color: var(--color-bark);
+  margin-bottom: var(--space-md);
+  font-size: var(--fs-lg);
+}
+
+.about__visual { width: 100%; }
+
+.about__img-frame {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  aspect-ratio: 4/3;
+}
+
+.img-placeholder {
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+}
+
+.img-placeholder--golden {
+  background: linear-gradient(135deg, #c8973a 0%, #8a6835 50%, #4a3520 100%);
+}
+.img-placeholder--earth {
+  background: linear-gradient(135deg, #4a3520 0%, #7a5c44 60%, #c8973a 100%);
+}
+.img-placeholder--forest {
+  background: linear-gradient(135deg, #3a5c3e 0%, #6b9c6f 60%, #c8973a 100%);
+}
+
+.about__caption {
+  font-size: var(--fs-sm);
+  color: var(--color-bark);
+  text-align: center;
+  margin-top: var(--space-sm);
+  font-style: italic;
+  opacity: .75;
+}
+
+.pillars { background: var(--color-paper); }
+
+#tab-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+.tab-btn {
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--color-bark);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-fog);
+  background: transparent;
+  transition: all var(--dur-med) ease;
+}
+
+.tab-btn:hover {
+  border-color: var(--color-wheat);
+  color: var(--color-earth);
+}
+
+.tab-btn.active, .tab-btn[aria-selected="true"] {
+  background: var(--color-wheat);
+  border-color: var(--color-wheat);
+  color: var(--color-earth);
+}
+
+.tabs__panels { position: relative; }
+
+.tab-panel {
+  display: none;
+  animation: fadeSlideIn var(--dur-med) var(--ease-out);
+}
+
+.tab-panel.active { display: grid; }
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.tab-panel__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  align-items: center;
+  padding: var(--space-xl);
+  background: var(--color-cream);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.tab-panel__icon {
+  font-size: 3.5rem;
+  text-align: center;
+}
+
+.tab-panel__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  color: var(--color-earth);
+  margin-bottom: var(--space-sm);
+}
+
+.tab-panel__text {
+  color: var(--color-bark);
+  font-size: var(--fs-lg);
+  line-height: var(--lh-body);
+}
+
+.gallery { background: var(--color-earth); }
+.gallery .section-tag { color: var(--color-wheat-lt); }
+.gallery .section-title { color: #fff; }
+
+.carousel { position: relative; overflow: hidden; }
+
+.carousel__track {
+  display: flex;
+  transition: transform var(--dur-slow) var(--ease-out);
+  will-change: transform;
+}
+
+.carousel__slide {
+  flex: 0 0 100%;
+  padding: 0 var(--space-sm);
+}
+
+.carousel__img-wrap {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 16/9;
+}
+
+.carousel__img-placeholder {
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+.carousel__caption {
+  padding: var(--space-md) var(--space-sm) 0;
+  color: rgba(255,255,255,.7);
+  font-size: var(--fs-sm);
+  text-align: center;
+  font-style: italic;
+}
+
+.carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+
+.carousel__btn {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-full);
+  border: 2px solid rgba(255,255,255,.3);
+  color: #fff;
+  font-size: var(--fs-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--dur-fast);
+  background: rgba(255,255,255,.08);
+}
+
+.carousel__btn:hover, .carousel__btn:focus-visible {
+  background: var(--color-wheat);
+  border-color: var(--color-wheat);
+  color: var(--color-earth);
+}
+
+.carousel__dots { display: flex; gap: var(--space-sm); }
+
+.carousel__dot {
+  width: 8px; height: 8px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,.3);
+  border: none;
+  transition: all var(--dur-med);
+  cursor: pointer;
+}
+
+.carousel__dot.active {
+  background: var(--color-wheat);
+  width: 24px;
+}
+
+.sustentabilidade { background: var(--color-cream); }
+
+.card {
+  background: var(--color-paper);
+  border: 1px solid var(--color-fog);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  transition: transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med);
+  role: listitem;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card__icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: var(--space-sm);
+}
+
+.card__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--color-earth);
+}
+
+.card__text {
+  font-size: var(--fs-base);
+  color: var(--color-bark);
+  line-height: var(--lh-body);
+  flex: 1;
+}
+
+.card__tag {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--color-green);
+  background: rgba(58,92,62,.1);
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  align-self: flex-start;
+}
+
+.cta-band {
+  background: var(--color-green);
+  padding: var(--space-2xl) 0;
+}
+
+.cta-band__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  align-items: flex-start;
+}
+
+.cta-band__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: var(--lh-tight);
+}
+
+.cta-band__sub {
+  color: rgba(255,255,255,.75);
+  font-size: var(--fs-lg);
+  margin-top: var(--space-sm);
+}
+
+.timeline-section { background: var(--color-paper); }
+
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-lg) 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: var(--color-fog);
+}
+
+.timeline__item {
+  position: relative;
+  padding-left: 56px;
+  margin-bottom: var(--space-2xl);
+  animation: revealIn var(--dur-slow) var(--ease-out) both;
+}
+
+.timeline__item::before {
+  content: '';
+  position: absolute;
+  left: 10px; top: 6px;
+  width: 18px; height: 18px;
+  border-radius: var(--radius-full);
+  background: var(--color-wheat);
+  border: 3px solid var(--color-cream);
+  box-shadow: 0 0 0 2px var(--color-wheat);
+  z-index: 1;
+}
+
+.timeline__year {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--color-wheat);
+  letter-spacing: .1em;
+  margin-bottom: var(--space-xs);
+}
+
+.timeline__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--color-earth);
+  margin-bottom: var(--space-sm);
+}
+
+.timeline__text {
+  color: var(--color-bark);
+  line-height: var(--lh-body);
+}
+
+.accordion-section { background: var(--color-cream); }
+
+.about__credits {
+  margin-top: var(--space-xl);
+  padding: var(--space-lg);
+  background: var(--color-fog);
+  border-left: 4px solid var(--color-wheat);
+  border-radius: var(--radius-sm);
+}
+.about__credits p {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-bark);
+  line-height: 1.8;
+}
+.about__credits strong {
+  color: var(--color-earth);
+}
+
+.accordion__item {
+  border: 1px solid var(--color-fog);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-sm);
+  overflow: hidden;
+  transition: box-shadow var(--dur-fast);
+}
+
+.accordion__item:hover { box-shadow: var(--shadow-sm); }
+
+.accordion__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-paper);
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--color-earth);
+  transition: background var(--dur-fast), color var(--dur-fast);
+  gap: var(--space-md);
+}
+
+.accordion__trigger[aria-expanded="true"] {
+  background: var(--color-earth);
+  color: var(--color-wheat-lt);
+}
+
+.accordion__icon {
+  font-size: var(--fs-xl);
+  font-weight: 300;
+  flex-shrink: 0;
+  transition: transform var(--dur-med) var(--ease-out);
+  font-style: normal;
+}
+
+.accordion__trigger[aria-expanded="true"] .accordion__icon {
+  transform: rotate(45deg);
+}
+
+.accordion__panel {
+  display: none;
+  padding: var(--space-lg);
+  background: var(--color-cream);
+  color: var(--color-bark);
+  line-height: var(--lh-body);
+  font-size: var(--fs-base);
+  border-top: 1px solid var(--color-fog);
+  animation: fadeSlideIn var(--dur-med) var(--ease-out);
+}
+
+.footer {
+  background: var(--color-earth);
+  padding: var(--space-2xl) 0 var(--space-xl);
+}
+
+.footer__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.footer__brand .logo-text { color: var(--color-wheat-lt); }
+.footer__brand .logo-mark { color: var(--color-wheat); }
+
+.footer__tagline {
+  font-size: var(--fs-sm);
+  color: rgba(255,255,255,.5);
+  margin-top: var(--space-xs);
+}
+
+.footer__nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md) var(--space-lg);
+}
+
+.footer__nav a {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.55);
+  transition: color var(--dur-fast);
+}
+
+.footer__nav a:hover { color: var(--color-wheat); }
+
+.footer__copy {
+  font-size: var(--fs-sm);
+  color: rgba(255,255,255,.3);
+  letter-spacing: .04em;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal > *:nth-child(2) { transition-delay: 80ms; }
+.reveal > *:nth-child(3) { transition-delay: 160ms; }
+.reveal > *:nth-child(4) { transition-delay: 240ms; }
+
+@keyframes revealIn {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@media (min-width: 640px) {
+
+  .grid-2col { grid-template-columns: 1fr 1fr; }
+
+  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+
+  .cta-band__inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  function applyContrast() {
-    const on = localStorage.getItem(CONTRAST_KEY) === '1';
-    document.body.classList.toggle('high-contrast', on);
+  .timeline::before { left: 50%; transform: translateX(-50%); }
+
+  .timeline__item {
+    width: 50%;
+    padding-left: 0;
+    padding-right: var(--space-2xl);
+    text-align: right;
   }
 
-  applyFont();
-  applyContrast();
-
-  const btnInc = $('#btn-font-inc');
-  const btnDec = $('#btn-font-dec');
-  const btnCon = $('#btn-contrast');
-
-  btnInc && btnInc.addEventListener('click', () => {
-    if (fontLevel < FONT_MAX) { fontLevel += FONT_STEP; applyFont(); }
-  });
-
-  btnDec && btnDec.addEventListener('click', () => {
-    if (fontLevel > FONT_MIN) { fontLevel -= FONT_STEP; applyFont(); }
-  });
-
-  btnCon && btnCon.addEventListener('click', () => {
-    const on = document.body.classList.toggle('high-contrast');
-    localStorage.setItem(CONTRAST_KEY, on ? '1' : '0');
-  });
-})();
-
-(function initNavbar() {
-  const toggle = $('#nav-toggle');
-  const nav    = $('#nav-menu');
-  const navbar = $('.navbar');
-
-  if (toggle && nav) {
-    toggle.addEventListener('click', () => {
-      const expanded = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!expanded));
-      nav.classList.toggle('open', !expanded);
-    });
-
-    $$('.nav__link', nav).forEach(link => {
-      link.addEventListener('click', () => {
-        toggle.setAttribute('aria-expanded', 'false');
-        nav.classList.remove('open');
-      });
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        toggle.setAttribute('aria-expanded', 'false');
-        nav.classList.remove('open');
-        toggle.focus();
-      }
-    });
+  .timeline__item:nth-child(even) {
+    margin-left: 50%;
+    padding-right: 0;
+    padding-left: var(--space-2xl);
+    text-align: left;
   }
 
-  if (navbar) {
-    const observer = new IntersectionObserver(
-      ([entry]) => navbar.classList.toggle('scrolled', !entry.isIntersecting),
-      { rootMargin: '-1px 0px 0px 0px', threshold: 0 }
-    );
-    const sentinel = createElement('div', { style: 'height:1px;position:absolute;top:0;left:0;right:0;' });
-    document.body.prepend(sentinel);
-    observer.observe(sentinel);
-  }
-})();
-
-const revealObserver = (() => {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
-
-  $$('.reveal').forEach(el => observer.observe(el));
-
-  return { observe: (el) => observer.observe(el) };
-})();
-
-(function initParticles() {
-  const container = $('#hero-particles');
-  if (!container) return;
-
-  const EMOJIS = ['🌾', '✦', '·'];
-  const COUNT  = 18;
-
-  for (let i = 0; i < COUNT; i++) {
-    const p = createElement('span', { class: 'wheat-particle', 'aria-hidden': 'true' });
-    p.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
-    p.style.setProperty('--dur',   `${6 + Math.random() * 8}s`);
-    p.style.setProperty('--delay', `${Math.random() * 12}s`);
-    p.style.left  = `${Math.random() * 100}%`;
-    p.style.bottom = `${Math.random() * 20}%`;
-    container.appendChild(p);
-  }
-})();
-
-(function renderStats() {
-  const container = $('#stats-container');
-  if (!container) return;
-
-  STATS_DATA.forEach(stat => {
-    const item = createElement('div', { class: 'stat-item', role: 'listitem' });
-    item.innerHTML = `
-      <span class="stat-number" aria-label="${stat.number} ${stat.label}">${stat.number}</span>
-      <span class="stat-label" aria-hidden="true">${stat.label}</span>
-    `;
-    container.appendChild(item);
-  });
-})();
-
-(function renderCards() {
-
-  const sustContainer = $('#cards-container');
-  if (sustContainer) {
-    CARDS_DATA.forEach(card => {
-      sustContainer.appendChild(buildCard(card));
-    });
+  .timeline__item::before {
+    left: auto;
+    right: -9px;
   }
 
-  const techContainer = $('#tech-cards');
-  if (techContainer) {
-    TECH_CARDS_DATA.forEach(card => {
-      techContainer.appendChild(buildCard(card));
-    });
+  .timeline__item:nth-child(even)::before {
+    left: -9px;
+    right: auto;
   }
 
-  function buildCard({ icon, title, text, tag }) {
-    const el = createElement('article', { class: 'card', role: 'listitem' });
-    el.innerHTML = `
-      <div class="card__icon" aria-hidden="true">${icon}</div>
-      <h3 class="card__title">${title}</h3>
-      <p class="card__text">${text}</p>
-      <span class="card__tag">${tag}</span>
-    `;
-    return el;
-  }
-})();
+  .footer__inner { grid-template-columns: 1fr 1fr; }
+}
 
-(function initTabs() {
-  const btnContainer   = $('#tab-buttons');
-  const panelContainer = $('#tab-panels');
-  if (!btnContainer || !panelContainer) return;
+@media (min-width: 960px) {
 
-  PILLARS_DATA.forEach((pilar, i) => {
+  .navbar__toggle { display: none; }
 
-    const btn = createElement('button', {
-      class:           `tab-btn${i === 0 ? ' active' : ''}`,
-      role:            'tab',
-      'aria-selected': i === 0 ? 'true' : 'false',
-      'aria-controls': pilar.id,
-      id:              `${pilar.id}-tab`,
-    }, pilar.label);
-    btnContainer.appendChild(btn);
-
-    const panel = createElement('div', {
-      id:               pilar.id,
-      class:            `tab-panel${i === 0 ? ' active' : ''}`,
-      role:             'tabpanel',
-      'aria-labelledby': `${pilar.id}-tab`,
-      tabindex:         '0',
-    });
-    panel.innerHTML = `
-      <div class="tab-panel__inner">
-        <div class="tab-panel__icon" aria-hidden="true">${pilar.icon}</div>
-        <div>
-          <h3 class="tab-panel__title">${pilar.title}</h3>
-          <p class="tab-panel__text">${pilar.text}</p>
-        </div>
-      </div>
-    `;
-    panelContainer.appendChild(panel);
-  });
-
-  const buttons = $$('.tab-btn', btnContainer);
-
-  buttons.forEach((btn, i) => {
-    btn.addEventListener('click', () => activateTab(i));
-
-    btn.addEventListener('keydown', e => {
-      let target = -1;
-      if (e.key === 'ArrowRight') target = (i + 1) % buttons.length;
-      if (e.key === 'ArrowLeft')  target = (i - 1 + buttons.length) % buttons.length;
-      if (target >= 0) { buttons[target].focus(); activateTab(target); }
-    });
-  });
-
-  function activateTab(index) {
-    buttons.forEach((b, i) => {
-      b.classList.toggle('active', i === index);
-      b.setAttribute('aria-selected', i === index ? 'true' : 'false');
-    });
-    $$('.tab-panel', panelContainer).forEach((p, i) => {
-      p.classList.toggle('active', i === index);
-    });
-  }
-})();
-
-(function initCarousel() {
-  const track      = $('#carousel-track');
-  const dotsEl     = $('#carousel-dots');
-  const prevBtn    = $('#carousel-prev');
-  const nextBtn    = $('#carousel-next');
-  if (!track) return;
-
-  let current  = 0;
-  let autoTimer = null;
-  const VISIBLE = getVisibleCount();
-
-  CAROUSEL_DATA.forEach((slide, i) => {
-    const el = createElement('div', {
-      class: 'carousel__slide',
-      role:  'group',
-      'aria-label': `Slide ${i + 1} de ${CAROUSEL_DATA.length}: ${slide.title}`,
-      'aria-roledescription': 'slide',
-    });
-    el.innerHTML = `
-      <div class="carousel__img-wrap">
-        <img
-          src="${slide.img}"
-          alt="${slide.title}"
-          style="width:100%;height:100%;object-fit:cover;display:block;"
-          loading="lazy"
-        />
-      </div>
-      <p class="carousel__caption">${slide.caption}</p>
-    `;
-    track.appendChild(el);
-  });
-
-  function getVisibleCount() {
-    return window.innerWidth >= 960 ? 3 : 1;
+  .navbar__nav {
+    position: static;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
   }
 
-  function buildDots() {
-    if (!dotsEl) return;
-    dotsEl.innerHTML = '';
-    const positions = CAROUSEL_DATA.length - getVisibleCount() + 1;
-    for (let i = 0; i < positions; i++) {
-      const dot = createElement('button', {
-        class: `carousel__dot${i === 0 ? ' active' : ''}`,
-        role:  'tab',
-        'aria-label': `Ir para posição ${i + 1}`,
-        'aria-selected': i === 0 ? 'true' : 'false',
-      });
-      dot.addEventListener('click', () => goTo(i));
-      dotsEl.appendChild(dot);
-    }
+  .nav__list { flex-direction: row; }
+
+  .cards-grid { grid-template-columns: repeat(3, 1fr); }
+
+  .tab-panel__inner { grid-template-columns: 1fr 2fr; }
+
+  .carousel__slide { flex: 0 0 33.333%; }
+
+  .footer__inner { grid-template-columns: 2fr 1fr 1fr; }
+}
+
+@media (max-width: 959px) {
+  .navbar__inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 0;
   }
 
-  buildDots();
-
-  function goTo(index) {
-    const max = CAROUSEL_DATA.length - getVisibleCount();
-    current = Math.max(0, Math.min(index, max));
-    track.style.transform = `translateX(-${current * (100 / getVisibleCount())}%)`;
-    updateDots();
-    updateAriaLive();
+  .navbar__toggle {
+    display: flex;
+    grid-column: unset;
+    justify-self: unset;
   }
 
-  function updateDots() {
-    const dots = $$('.carousel__dot', dotsEl);
-    dots.forEach((d, i) => {
-      const active = i === current;
-      d.classList.toggle('active', active);
-      d.setAttribute('aria-selected', active ? 'true' : 'false');
-    });
+  .navbar__nav {
+    grid-column: unset;
+    position: absolute;
+    top: var(--navbar-h);
+    left: 0; right: 0;
+    background: var(--navbar-bg);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--color-fog);
+    box-shadow: var(--shadow-md);
+    padding: var(--space-lg);
+
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    pointer-events: none;
+    transition: clip-path var(--dur-med) var(--ease-out);
   }
 
-  function updateAriaLive() {
-    const region = $('.carousel');
-    if (region) region.setAttribute('aria-label', `Carrossel – slide ${current + 1} de ${CAROUSEL_DATA.length}`);
+  .navbar__nav.open {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    pointer-events: all;
   }
 
-  function startAuto() {
-    stopAuto();
-    autoTimer = setInterval(() => goTo((current + 1) % CAROUSEL_DATA.length), 5000);
+  .nav__list {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
   }
 
-  function stopAuto() {
-    clearInterval(autoTimer);
-  }
+  .nav__link { font-size: var(--fs-base); }
+}
 
-  prevBtn && prevBtn.addEventListener('click', () => { goTo(current - 1); stopAuto(); });
-  nextBtn && nextBtn.addEventListener('click', () => { goTo(current + 1); stopAuto(); });
-
-  const carousel = $('.carousel');
-  carousel && carousel.addEventListener('mouseenter', stopAuto);
-  carousel && carousel.addEventListener('mouseleave', startAuto);
-
-  let touchStartX = 0;
-  track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-  track.addEventListener('touchend',   e => {
-    const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) diff > 0 ? goTo(current + 1) : goTo(current - 1);
-    stopAuto();
-  });
-
-  window.addEventListener('resize', () => { buildDots(); goTo(current); });
-
-  startAuto();
-})();
-
-(function initAccordion() {
-  const container = $('#accordion-container');
-  if (!container) return;
-
-  ACCORDION_DATA.forEach((item, i) => {
-    const isFirst = i === 0;
-    const el = createElement('div', { class: 'accordion__item', role: 'listitem' });
-    el.innerHTML = `
-      <button
-        class="accordion__trigger"
-        id="${item.id}-btn"
-        aria-expanded="${isFirst ? 'true' : 'false'}"
-        aria-controls="${item.id}-panel"
-      >
-        ${item.title}
-        <em class="accordion__icon" aria-hidden="true">+</em>
-      </button>
-      <div
-        id="${item.id}-panel"
-        class="accordion__panel"
-        role="region"
-        aria-labelledby="${item.id}-btn"
-        aria-hidden="${isFirst ? 'false' : 'true'}"
-        style="${isFirst ? 'display:block;' : 'display:none;'}"
-      >
-        ${item.content}
-      </div>
-    `;
-    container.appendChild(el);
-  });
-
-  $$('.accordion__trigger', container).forEach(btn => {
-    btn.addEventListener('click', () => {
-      const expanded = btn.getAttribute('aria-expanded') === 'true';
-      const panelId  = btn.getAttribute('aria-controls');
-      const panel    = document.getElementById(panelId);
-
-      $$('.accordion__trigger', container).forEach(b => {
-        b.setAttribute('aria-expanded', 'false');
-        const p = document.getElementById(b.getAttribute('aria-controls'));
-        if (p) { p.style.display = 'none'; p.setAttribute('aria-hidden', 'true'); }
-      });
-
-      if (!expanded) {
-        btn.setAttribute('aria-expanded', 'true');
-        if (panel) { panel.style.display = 'block'; panel.setAttribute('aria-hidden', 'false'); }
-      }
-    });
-  });
-})();
-
-(function renderTimeline() {
-  const list = $('#timeline-list');
-  if (!list) return;
-
-  TIMELINE_DATA.forEach((item, i) => {
-    const li = createElement('li', {
-      class: 'timeline__item',
-      style: `animation-delay:${i * 120}ms`,
-    });
-    li.innerHTML = `
-      <time class="timeline__year" datetime="${item.year}">${item.year}</time>
-      <h3 class="timeline__title">${item.title}</h3>
-      <p class="timeline__text">${item.text}</p>
-    `;
-    list.appendChild(li);
-  });
-})();
+@media print {
+  .navbar, .a11y-bar, .hero__particles, .hero__scroll-hint { display: none; }
+  body { font-size: 12pt; color: #000; background: #fff; }
+  a { text-decoration: underline; }
+}
