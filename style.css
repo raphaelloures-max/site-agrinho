@@ -507,7 +507,7 @@ body.high-contrast .btn-secondary { border-color: #000; color: #000; }
 }
 
 .page-hero--minijogo {
-  background: #2a1a3a url('img/banner1.jpg') center center / cover no-repeat;
+  background: #2a1a3a url('img/banner_arcade.jpg') center center / cover no-repeat;
 }
 
 .page-hero--ambiente {
@@ -515,7 +515,7 @@ body.high-contrast .btn-secondary { border-color: #000; color: #000; }
 }
 
 .page-hero--autor {
-  background: #0a0d1a url('img/banner2.jpg') center center / cover no-repeat;
+  background: #0a0d1a url('img/banner_codigo.jpg') center center / cover no-repeat;
 }
 
 .page-hero::after {
