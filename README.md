@@ -108,9 +108,12 @@ O projeto foi desenvolvido utilizando apenas tecnologias básicas de front-end:
     ├── img_colheita.png
     ├── img_gado.png
     ├── img_arquitetura.png
+    ├── ExcelênciaAgrícola.jpg
+    ├── Maibaumfest.png
+    ├── banner_arcade.jpg
+    ├── banner_codigo.jpg
     └── img_ods2.png
 ```
-
 ## ▶️ Como Executar o Projeto
 
 1. Baixe ou clone este repositório
