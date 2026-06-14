@@ -857,7 +857,7 @@ body.high-contrast .btn-secondary { border-color: #000; color: #000; }
   margin-top: var(--space-sm);
 }
 
-.timeline-section { background: var(--color-paper); }
+.timeline-section { background: var(--color-cream); }
 
 .timeline {
   position: relative;
@@ -872,7 +872,7 @@ body.high-contrast .btn-secondary { border-color: #000; color: #000; }
   left: 18px;
   top: 0; bottom: 0;
   width: 2px;
-  background: var(--color-fog);
+  background: var(--color-paper);
 }
 
 .timeline__item {
