@@ -84,7 +84,7 @@
     </section>
 
     <section class="about section-pad" aria-labelledby="ref-title">
-      <div class="container container--narrow">
+      <div class="container container--narrow reveal">
         <span class="section-tag" aria-hidden="true">Fontes</span>
         <h2 id="ref-title" class="section-title section-title--center">Referências</h2>
         <ol class="referencias-list" style="list-style:decimal;padding-left:1.5rem;display:flex;flex-direction:column;gap:1rem;margin-top:2rem;">
@@ -159,5 +159,31 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+  (function () {
+    var style = document.createElement('style');
+    style.textContent = '.reveal{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease;}.reveal.visible{opacity:1;transform:translateY(0);}';
+    document.head.appendChild(style);
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    function observe() {
+      document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', observe);
+    } else {
+      observe();
+    }
+  })();
+  </script>
 </body>
 </html>
