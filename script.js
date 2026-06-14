@@ -281,20 +281,7 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
   }
 })();
 
-const revealObserver = (() => {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
-
-  $$('.reveal').forEach(el => observer.observe(el));
-
-  return { observe: (el) => observer.observe(el) };
-})();
+let revealObserver;
 
 (function initParticles() {
   const container = $('#hero-particles');
@@ -587,4 +574,23 @@ const revealObserver = (() => {
     `;
     list.appendChild(li);
   });
+})();
+
+(function initReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
+
+  function observeAll() {
+    $$('.reveal:not(.visible)').forEach(el => observer.observe(el));
+  }
+
+  observeAll();
+
+  revealObserver = { observe: (el) => observer.observe(el), refresh: observeAll };
 })();
