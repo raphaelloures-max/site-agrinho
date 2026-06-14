@@ -98,28 +98,32 @@ const PILLARS_DATA = [
   {
     id: 'pilar-1',
     label: '🌾 Agricultura',
-    icon: '🌾',
+    img: 'img/ExcelênciaAgrícola.jpg',
+    imgAlt: 'Excelência Agrícola em Entre Rios',
     title: 'Excelência Agrícola',
     text: 'Entre Rios é um dos maiores polos produtores de trigo e cevada do Brasil. A AGRÁRIA introduziu variedades adaptadas ao clima subtropical de Guarapuava, combinando genética avançada com rotação de culturas e saúde do solo. As culturas principais são soja, milho, trigo e cevada.',
   },
   {
     id: 'pilar-2',
-    label: '🏘️ As Colônias',
-    icon: '🏘️',
+    label: 'As Colônias',
+    img: null,
+    imgAlt: null,
     title: 'As Cinco Colônias',
     text: 'O distrito de Entre Rios é formado por cinco colônias eslavo-germânicas: Vitória (sede da Cooperativa Agrária), Jordãozinho, Cachoeira, Socorro e Samambaia. Cada uma preserva sua identidade, dialeto e tradições trazidas da Europa pelos 500 famílias pioneiras.',
   },
   {
     id: 'pilar-3',
     label: '🌿 Meio Ambiente',
-    icon: '🌿',
+    img: 'img/img_mata.png',
+    imgAlt: 'Mata nativa preservada em Entre Rios',
     title: 'Compromisso Ambiental',
     text: 'Mais de 30% da área do distrito é coberta por vegetação nativa, superando as exigências do Código Florestal. O distrito é delimitado pelos rios Jordão e Pinhão, e o horto florestal da Agrária, ativo desde 1992, já recebeu doações de espécies de todo o Brasil e da Europa.',
   },
   {
     id: 'pilar-4',
     label: '🎭 Cultura',
-    icon: '🎭',
+    img: 'img/img_dancas.png',
+    imgAlt: 'Danças folclóricas suábias em Entre Rios',
     title: 'Identidade Cultural',
     text: 'Os festivais tradicionais, a gastronomia suábia (Schnitzel, Maultaschen, Strudel), a arquitetura enxaimel e o dialeto Donauschwäbisch dos mais velhos mantêm viva a memória de um povo que reconstruiu sua vida nas terras do Paraná. A Fundação Cultural Suábio-Brasileira (FCSB), criada em 2001, coordena essa preservação.',
   },
@@ -281,7 +285,20 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
   }
 })();
 
-let revealObserver;
+const revealObserver = (() => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
+
+  $$('.reveal').forEach(el => observer.observe(el));
+
+  return { observe: (el) => observer.observe(el) };
+})();
 
 (function initParticles() {
   const container = $('#hero-particles');
@@ -361,20 +378,29 @@ let revealObserver;
 
     const panel = createElement('div', {
       id:               pilar.id,
-      class:            `tab-panel${i === 0 ? ' active' : ''}`,
+      class:            `tab-panel${i === 0 ? ' active' : ''}${!pilar.img ? ' tab-panel--centered' : ''}`,
       role:             'tabpanel',
       'aria-labelledby': `${pilar.id}-tab`,
       tabindex:         '0',
     });
-    panel.innerHTML = `
+    panel.innerHTML = pilar.img
+      ? `
       <div class="tab-panel__inner">
-        <div class="tab-panel__icon" aria-hidden="true">${pilar.icon}</div>
+        <div class="tab-panel__img-wrap" aria-hidden="true">
+          <img src="${pilar.img}" alt="${pilar.imgAlt}" class="tab-panel__img" />
+        </div>
         <div>
           <h3 class="tab-panel__title">${pilar.title}</h3>
           <p class="tab-panel__text">${pilar.text}</p>
         </div>
-      </div>
-    `;
+      </div>`
+      : `
+      <div class="tab-panel__inner tab-panel__inner--solo">
+        <div>
+          <h3 class="tab-panel__title">${pilar.title}</h3>
+          <p class="tab-panel__text">${pilar.text}</p>
+        </div>
+      </div>`;
     panelContainer.appendChild(panel);
   });
 
@@ -574,23 +600,4 @@ let revealObserver;
     `;
     list.appendChild(li);
   });
-})();
-
-(function initReveal() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
-
-  function observeAll() {
-    $$('.reveal:not(.visible)').forEach(el => observer.observe(el));
-  }
-
-  observeAll();
-
-  revealObserver = { observe: (el) => observer.observe(el), refresh: observeAll };
 })();
